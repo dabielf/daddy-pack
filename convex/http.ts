@@ -15,6 +15,7 @@ http.route({
     });
 
     if (result.success) {
+      return new Response("Webhook Received", { status: 200 });
     } else {
       return new Response("Webhook Error", { status: 400 });
     }
