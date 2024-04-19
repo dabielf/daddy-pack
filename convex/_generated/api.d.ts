@@ -15,6 +15,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as daddies from "../daddies.js";
+import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as stripe from "../stripe.js";
 import type * as users from "../users.js";
@@ -29,6 +30,7 @@ import type * as users from "../users.js";
  */
 declare const fullApi: ApiFromModules<{
   daddies: typeof daddies;
+  helpers: typeof helpers;
   http: typeof http;
   stripe: typeof stripe;
   users: typeof users;

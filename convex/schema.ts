@@ -3,14 +3,14 @@ import { v } from "convex/values";
 
 export default defineSchema({
   users: defineTable({
-    tokenIdentifier: v.string(),
-    email: v.string(),
+    clerk_id: v.string(),
+    email: v.optional(v.string()),
     name: v.optional(v.string()),
     endsOn: v.optional(v.number()),
     subscriptionId: v.optional(v.string()),
   })
-    .index("by_token", ["tokenIdentifier"])
-    .index("by_subscriptionId", ["subscriptionId"]),
+    .index("by_subscriptionId", ["subscriptionId"])
+    .index("by_clerk_id", ["clerk_id"]),
   // daddies: SA profile link, photo, contact info, location, messaging app (off site), date of initial contact, notes, estimate for per meet earnings, link this to date log, vibe rating over text (can compare this later if/when I meet them in person)
   daddies: defineTable({
     user: v.id("users"),

@@ -74,8 +74,7 @@ function DeleteDaddyButton({
 }
 
 export function DaddiesList() {
-  const user = useQuery(api.users.currentUser, {});
-  const daddies = useQuery(api.daddies.getDaddies, { user: user?._id });
+  const daddies = useQuery(api.daddies.getDaddies);
   return (
     <div>
       <h1 className="text-2xl text-bold mb-4">Daddies</h1>

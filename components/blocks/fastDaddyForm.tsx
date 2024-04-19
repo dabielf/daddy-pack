@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useMutation, useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -25,21 +25,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { getErrorMessage } from "@/lib/utils";
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/utils';
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: 'Name must be at least 2 characters.',
   }),
   vibeRating: z.string(),
 });
@@ -49,30 +49,25 @@ export function NewDaddyButton() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      vibeRating: "3",
+      name: '',
+      vibeRating: '3',
     },
   });
-
-  const user = useQuery(api.users.currentUser, {});
 
   const createDaddy = useMutation(api.daddies.createDaddy);
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!user) return null;
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values, typeof Number(values.vibeRating));
     try {
       const daddyId = createDaddy({
-        user: user._id,
         name: values.name,
         vibeRating: Number(values.vibeRating),
       });
       form.reset();
       toast.success(
-        `New Daddy Created: ${values.name}, Vibe Rating: ${Number(values.vibeRating)}`
+        `New Daddy Created: ${values.name}, Vibe Rating: ${Number(values.vibeRating)}`,
       );
       return daddyId;
     } catch (error) {
