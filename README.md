@@ -1,17 +1,17 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#### Starter with **NextJS**, **Convex**, TailwindCss, ShadCN and **Stripe**
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
 bun dev
+```
+
+In another terminal, run the convex dev server:
+
+```bash
+bunx convex dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -20,17 +20,27 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js](https://nextjs.org/docs) - as base framework
+- [Convex](https://www.convex.dev/) - as BaaS
+- [Clerk](https://clerk.com/) - for authentication management
+- [Tailwind CSS](https://tailwindcss.com/) - for styling
+- [shadcn/ui](https://ui.shadcn.com/) - for ui components
+- [Stripe](https://stripe.com/) - for payment management
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## More ressources
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- [Integrate Convex with Clerk](https://docs.convex.dev/auth/clerk)
+- [Integrate Stripe payments - Youtube video, starts at 29:40 ](https://www.youtube.com/watch?v=bTY0fa8p8D0)
 
-## Deploy on Vercel
+## Todos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [ ] Doc: Be more explicit about the setup steps
+- [ ] Doc: What's included in the starter kit
+- [ ] Dev: Auth with Clerk Api instead of components - [Documentation](https://clerk.com/docs/custom-flows/overview)
+- [ ] Dev: Create user at but (instead of buy being enabled only if user is logged in)
+- [ ] Dev: Create HomePage base and routing to the authenticated app
+- [ ] Dev: Create user settings page
+- [ ] Dev: Create consistent and opinionated styling
+- [ ] Dev: Create useful components
