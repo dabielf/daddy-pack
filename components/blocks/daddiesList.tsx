@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { api } from "@/convex/_generated/api";
-import { useQuery, useMutation } from "convex/react";
-import { Doc, Id } from "@/convex/_generated/dataModel";
-import { motion } from "framer-motion";
+import { api } from '@/convex/_generated/api';
+import { useQuery, useMutation } from 'convex/react';
+import { Doc, Id } from '@/convex/_generated/dataModel';
+import { motion } from 'framer-motion';
 
 import {
   Table,
@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,16 +25,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import animations from '@/constants/animations';
+import { toast } from 'sonner';
 
 function DeleteDaddyButton({
   daddy,
   name,
 }: {
-  daddy: Id<"daddies">;
+  daddy: Id<'daddies'>;
   name: string;
 }) {
   const deleteDaddy = useMutation(api.daddies.deleteDaddy);
@@ -77,7 +78,7 @@ export function DaddiesList() {
   const daddies = useQuery(api.daddies.getDaddies);
   return (
     <div>
-      <h1 className="text-2xl text-bold mb-4">Daddies</h1>
+      <h1 className="text-2xl font-bold mb-4">Daddies</h1>
       {(() => {
         if (!daddies) {
           return (
@@ -89,10 +90,7 @@ export function DaddiesList() {
           );
         } else if (daddies?.length) {
           return (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
+            <motion.div {...animations.appearUp}>
               <Table>
                 <TableCaption></TableCaption>
                 <TableHeader>
@@ -107,7 +105,7 @@ export function DaddiesList() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {daddies.map((daddy) => (
+                  {daddies.map(daddy => (
                     <TableRow key={daddy._id}>
                       <TableCell className="font-medium">
                         {daddy.name}
@@ -137,10 +135,7 @@ export function DaddiesList() {
           );
         } else {
           return (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
+            <motion.div {...animations.appearUp}>
               <p>No daddies yet. Add One</p>
             </motion.div>
           );

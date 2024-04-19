@@ -4,7 +4,7 @@ import {} from './_generated/server';
 export async function getConvexQueryUser(ctx: GenericQueryCtx<any>) {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) {
-    throw new Error('Not authenticated');
+    return null;
   }
 
   const user = await ctx.db
@@ -20,7 +20,7 @@ export async function getConvexQueryUser(ctx: GenericQueryCtx<any>) {
 export async function getConvexMutationUser(ctx: GenericMutationCtx<any>) {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) {
-    throw new Error('Not authenticated');
+    return null;
   }
 
   const user = await ctx.db
@@ -30,7 +30,7 @@ export async function getConvexMutationUser(ctx: GenericMutationCtx<any>) {
 
   if (!user) return null;
 
-  if (user.email && user.name) return user._id;
+  if (user.email && user.name) return user;
 
   if (!user.email && identity.email) {
     await ctx.db.patch(user._id, {
@@ -38,9 +38,9 @@ export async function getConvexMutationUser(ctx: GenericMutationCtx<any>) {
     });
   }
 
-  if (!user.name && identity.name) {
+  if (!user.name && identity.givenName) {
     await ctx.db.patch(user._id, {
-      name: identity.name,
+      name: identity.givenName,
     });
   }
 
