@@ -78,7 +78,7 @@ export function NewDaddyButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-fill">Create New Daddy</Button>
+        <Button className="w-fill">Add a New Daddy</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

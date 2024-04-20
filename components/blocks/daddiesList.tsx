@@ -4,6 +4,7 @@ import { api } from '@/convex/_generated/api';
 import { useQuery, useMutation } from 'convex/react';
 import { Doc, Id } from '@/convex/_generated/dataModel';
 import { motion } from 'framer-motion';
+import { FilePenLine } from 'lucide-react';
 
 import {
   Table,
@@ -30,6 +31,9 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import animations from '@/constants/animations';
 import { toast } from 'sonner';
+import NoDaddyYet from './noDaddyYet';
+import { DaddySheetTrigger } from './daddyDrawerEdit';
+import Link from 'next/link';
 
 function DeleteDaddyButton({
   daddy,
@@ -77,7 +81,7 @@ function DeleteDaddyButton({
 export function DaddiesList() {
   const daddies = useQuery(api.daddies.getDaddies);
   return (
-    <div>
+    <div className="flex flex-grow flex-col">
       <h1 className="text-2xl font-bold mb-4">Daddies</h1>
       {(() => {
         if (!daddies) {
@@ -98,9 +102,10 @@ export function DaddiesList() {
                     <TableHead>Name</TableHead>
                     <TableHead>Number of dates</TableHead>
                     <TableHead>Vibe Rating</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead className="w-[100px] text-center">
-                      Delete
+                    <TableHead>Last Contact</TableHead>
+                    <TableHead>Lifetime Value</TableHead>
+                    <TableHead className="flex flex-row items-center justify-end">
+                      <FilePenLine size={20} />
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -112,31 +117,35 @@ export function DaddiesList() {
                       </TableCell>
                       <TableCell>0</TableCell>
                       <TableCell>{daddy.vibeRating}</TableCell>
-                      <TableCell className="text-right">
-                        ${daddy.lifetimeValue}
-                      </TableCell>
-                      <TableCell className="flex flex-row content-end">
-                        <DeleteDaddyButton
+                      <TableCell>unknokn</TableCell>
+                      <TableCell>${daddy.lifetimeValue}</TableCell>
+                      <TableCell className="flex flex-row items-center justify-end ">
+                        {/* <DeleteDaddyButton
                           daddy={daddy._id}
                           name={daddy.name}
-                        />
+                        /> */}
+                        {/* <DaddySheetTrigger daddy={daddy} /> */}
+                        <Link href={`/daddies/${daddy._id}`}>
+                          <p className="text-primary underline">See More</p>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
-                <TableFooter>
+                {/* <TableFooter>
                   <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell className="text-right">$0</TableCell>
+                    <TableCell colSpan={4}>Total</TableCell>
+                    <TableCell className="font-bold">$0</TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
-                </TableFooter>
+                </TableFooter> */}
               </Table>
             </motion.div>
           );
         } else {
           return (
-            <motion.div {...animations.appearUp}>
-              <p>No daddies yet. Add One</p>
+            <motion.div {...animations.appearUp} className="flex grow">
+              <NoDaddyYet />
             </motion.div>
           );
         }

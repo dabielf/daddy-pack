@@ -6,13 +6,31 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import animations from '@/constants/animations';
 import { api } from '@/convex/_generated/api';
+import { Button } from '@/components/ui/button';
+import { DaddySheetTrigger } from './daddyDrawerEdit';
 
 export const Header = () => {
   const { isLoading, isAuthenticated } = useConvexAuth();
   const user = useQuery(api.users.currentUser);
   console.log({ HeaderUser: user });
 
-  const button = isAuthenticated ? <SignOutButton /> : <SignInButton />;
+  function SignOut() {
+    return (
+      <Button variant="secondary">
+        <SignOutButton />
+      </Button>
+    );
+  }
+
+  function SignIn() {
+    return (
+      <Button>
+        <SignInButton />
+      </Button>
+    );
+  }
+
+  const button = isAuthenticated ? <SignOut /> : <SignIn />;
   return isLoading ? null : (
     <motion.div {...animations.appearDown}>
       <header>
@@ -22,12 +40,15 @@ export const Header = () => {
               src="/logo.svg"
               alt="logo"
               width={150}
-              height={75}
+              height={100}
               priority
             />
-            <p>Hello, {user?.name ? user.name : 'You'} ❤️</p>
+            {user && <p>Hello, {user?.name ? user.name : 'You'}!️</p>}
           </div>
-          {isLoading ? null : button}
+          <div className="flex flex-row gap-4 items-center">
+            {isLoading ? null : button}
+            {!user ? null : <DaddySheetTrigger />}
+          </div>
         </nav>
       </header>
     </motion.div>

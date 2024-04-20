@@ -10,7 +10,12 @@ export function AuthBoundary({
   return (
     <>
       <Authenticated>{children}</Authenticated>
-      <Unauthenticated>Please login to manage your daddies</Unauthenticated>
+      <Unauthenticated>
+        <div className="flex grow justify-center items-center font-black">
+          Please Sign in <br />
+          to manage your daddies
+        </div>
+      </Unauthenticated>
     </>
   );
 }
