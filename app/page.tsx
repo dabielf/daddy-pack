@@ -1,13 +1,13 @@
 'use client';
 
-import { BuyButton } from '@/components/ui/buy-button';
 import { NewDaddyButton } from '@/components/blocks/fastDaddyForm';
 import { DaddiesList } from '@/components/blocks/daddiesList';
+import { Plus } from 'lucide-react';
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
+  // DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -29,34 +29,41 @@ export default function Home() {
   }
   return (
     <>
-      <Drawer>
-        <DrawerTrigger>Open</DrawerTrigger>
-        <DrawerPortal>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-              <DrawerDescription>
+      <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full mb-9">
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button className="w-fit md:hidden flex flex-row items-center gap-1">
+              <Plus size={24} /> ADD
+            </Button>
+          </DrawerTrigger>
+          <DrawerPortal>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>What do you want to add ?</DrawerTitle>
+                {/* <DrawerDescription>
                 This action cannot be undone.
-              </DrawerDescription>
-            </DrawerHeader>
-            <DrawerFooter>
-              <DrawerClose asChild>
-                <Button onClick={toggleDaddyDrawer}>Add a New Daddy</Button>
-              </DrawerClose>
-              <DrawerClose asChild>
-                <Button>Add a New Date</Button>
-              </DrawerClose>
-              <DrawerClose asChild>
-                <Button>Add a New Contact</Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </DrawerPortal>
-      </Drawer>
-      <div className="flex flex-col md:flex-row justify-center gap-4 w-full mb-9">
-        <NewDaddyButton />
-        <Button>Add a New Date</Button>
-        <Button>Add a New Contact</Button>
+              </DrawerDescription> */}
+              </DrawerHeader>
+              <DrawerFooter>
+                <DrawerClose asChild>
+                  <Button onClick={toggleDaddyDrawer}>Add a New Daddy</Button>
+                </DrawerClose>
+                <DrawerClose asChild>
+                  <Button>Add a New Date</Button>
+                </DrawerClose>
+                <DrawerClose asChild>
+                  <Button>Add a New Contact</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </DrawerPortal>
+        </Drawer>
+
+        <div className="hidden md:block">
+          <NewDaddyButton />
+        </div>
+        <Button className="hidden md:block">Add a New Date</Button>
+        <Button className="hidden md:block">Add a New Contact</Button>
       </div>
       <DaddiesList />
     </>
