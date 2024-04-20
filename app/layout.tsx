@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ConvexClientProvider>
-          <Toaster />
+          <Toaster position="top-center" />
           <main className="h-full p-6 md:p-9 flex flex-col">
             <Header />
             <AuthBoundary>{children}</AuthBoundary>
