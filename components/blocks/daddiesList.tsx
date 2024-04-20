@@ -5,6 +5,7 @@ import { useQuery, useMutation } from 'convex/react';
 import { Doc, Id } from '@/convex/_generated/dataModel';
 import { motion } from 'framer-motion';
 import { FilePenLine } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import {
   Table,
@@ -34,7 +35,7 @@ import { toast } from 'sonner';
 import NoDaddyYet from './noDaddyYet';
 import Link from 'next/link';
 
-function DeleteDaddyButton({
+export function DeleteDaddyButton({
   daddy,
   name,
 }: {
@@ -42,10 +43,13 @@ function DeleteDaddyButton({
   name: string;
 }) {
   const deleteDaddy = useMutation(api.daddies.deleteDaddy);
+  const router = useRouter();
 
   function deleteDaddyHandler() {
     deleteDaddy({ daddy });
+
     toast.success(`${name} was successfully ERASED 🎊.`);
+    router.push('/');
   }
 
   return (
