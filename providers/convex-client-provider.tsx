@@ -1,17 +1,54 @@
-"use client";
+'use client';
 
-import { Loading } from "@/components/auth/loading";
-import { ClerkProvider, useAuth } from "@clerk/nextjs";
-import {
-  AuthLoading,
-  Authenticated,
-  ConvexReactClient,
-  Unauthenticated,
-} from "convex/react";
-import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { ClerkProvider, useAuth } from '@clerk/nextjs';
+import { ConvexReactClient } from 'convex/react';
+import { ConvexProviderWithClerk } from 'convex/react-clerk';
+import { createContext, useContext, useState } from 'react';
 
 interface ConvexClientProviderProps {
   children: React.ReactNode;
+}
+
+export interface DrawerState {
+  daddyOpen: boolean;
+  dateOpen: boolean;
+  contactOpen: boolean;
+  deleteDaddyOpen: boolean;
+  deleteDateOpen: boolean;
+  deleteContactOpen: boolean;
+}
+
+const useDrawersState = (initialState: DrawerState) =>
+  useState<DrawerState>(initialState);
+
+export const DrawersContext = createContext<ReturnType<
+  typeof useDrawersState
+> | null>(null);
+
+export const useDrawers = () => {
+  const drawers = useContext(DrawersContext);
+  if (!drawers) {
+    throw new Error('useDrawers must be used within a DrawersProvider');
+  }
+  return drawers;
+};
+
+function initialDrawerState(): DrawerState {
+  let daddyOpen = false;
+  let dateOpen = false;
+  let contactOpen = false;
+  let deleteDaddyOpen = false;
+  let deleteDateOpen = false;
+  let deleteContactOpen = false;
+
+  return {
+    daddyOpen,
+    dateOpen,
+    contactOpen,
+    deleteDaddyOpen,
+    deleteDateOpen,
+    deleteContactOpen,
+  };
 }
 
 const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL!;
@@ -22,15 +59,14 @@ const convex = new ConvexReactClient(convexUrl);
 export const ConvexClientProvider = ({
   children,
 }: ConvexClientProviderProps) => {
+  const initialState = initialDrawerState();
+  const [drawers, setDrawers] = useDrawersState(initialState);
   return (
     <ClerkProvider publishableKey={publishableKey}>
       <ConvexProviderWithClerk useAuth={useAuth} client={convex}>
-        {/* <AuthLoading>
-          <Loading />
-        </AuthLoading> */}
-        {/* <Authenticated>{children}</Authenticated>
-        <Unauthenticated>{children}</Unauthenticated> */}
-        {children}
+        <DrawersContext.Provider value={[drawers, setDrawers]}>
+          {children}
+        </DrawersContext.Provider>
       </ConvexProviderWithClerk>
     </ClerkProvider>
   );

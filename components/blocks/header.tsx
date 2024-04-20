@@ -15,7 +15,7 @@ export const Header = () => {
 
   function SignOut() {
     return (
-      <Button variant="secondary">
+      <Button variant="secondary" asChild>
         <SignOutButton />
       </Button>
     );
@@ -23,7 +23,7 @@ export const Header = () => {
 
   function SignIn() {
     return (
-      <Button>
+      <Button asChild>
         <SignInButton />
       </Button>
     );

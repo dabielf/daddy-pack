@@ -5,7 +5,6 @@ import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { DeleteDaddyButton } from '@/components/blocks/daddiesList';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 
 export default function DaddyPage({
@@ -26,13 +25,15 @@ export default function DaddyPage({
       <div>
         <div
           onClick={goBack}
-          className="text-lg text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-2"
+          className="text-lg text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-4"
         >
           <ChevronLeft size={24} />
           Go back
         </div>
-        <h1>This is the page with only one daddy: {daddy?.name}</h1>
-        <p>His current Vibe rating is : {daddy?.vibeRating}</p>
+        <h1 className="text-xl font-bold mb-2">{daddy?.name}</h1>
+        <ul>
+          <li>Current Vibe Rating: {daddy?.vibeRating}</li>
+        </ul>
       </div>
       <DeleteDaddyButton daddy={daddy._id} name={daddy.name} />
     </div>
