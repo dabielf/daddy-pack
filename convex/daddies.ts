@@ -9,6 +9,13 @@ export const deleteDaddy = mutation({
   },
 });
 
+export const getDaddy = query({
+  args: { daddy: v.id('daddies') },
+  handler: async (ctx, { daddy }) => {
+    return await ctx.db.get(daddy);
+  },
+});
+
 export const getDaddies = query({
   args: {},
   handler: async ctx => {

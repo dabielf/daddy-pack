@@ -7,7 +7,6 @@ import { motion } from 'framer-motion';
 import animations from '@/constants/animations';
 import { api } from '@/convex/_generated/api';
 import { Button } from '@/components/ui/button';
-import { DaddySheetTrigger } from './daddyDrawerEdit';
 
 export const Header = () => {
   const { isLoading, isAuthenticated } = useConvexAuth();
@@ -47,7 +46,6 @@ export const Header = () => {
           </div>
           <div className="flex flex-row gap-4 items-center">
             {isLoading ? null : button}
-            {!user ? null : <DaddySheetTrigger />}
           </div>
         </nav>
       </header>
