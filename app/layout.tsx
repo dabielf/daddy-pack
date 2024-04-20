@@ -9,7 +9,7 @@ import { AuthBoundary } from '@/components/auth/authBoundary';
 const inter = Outfit({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Daddy Pack ❤️',
+  title: 'Daddy Pack',
   description: "Who's your Daddy Today?",
 };
 

@@ -39,9 +39,11 @@ import Link from 'next/link';
 export function DeleteDaddyButton({
   daddy,
   name,
+  buttonText = 'Delete this Daddy',
 }: {
   daddy: Id<'daddies'>;
   name: string;
+  buttonText?: string;
 }) {
   const deleteDaddy = useMutation(api.daddies.deleteDaddy);
   const router = useRouter();
@@ -56,7 +58,7 @@ export function DeleteDaddyButton({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Delete</Button>
+        <Button variant="destructive">{buttonText}</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

@@ -1,7 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Doc } from '@/convex/_generated/dataModel';
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+import { formatDistance } from 'date-fns';
 import Link from 'next/link';
 
 export default function EventLog({
@@ -51,7 +50,7 @@ export default function EventLog({
   function EventDisplayer(event: extendedContact | extendedDate) {
     if (event.eventType === 'contact') {
       return (
-        <div key={event._id} className="flex items-center gap-4">
+        <div key={event._id} className="event flex items-center gap-4">
           <div className="grid gap-1">
             <p className="font-medium leading-none text-cyan-700">Contact</p>
             <p className="text-sm text-muted-foreground">
@@ -68,7 +67,7 @@ export default function EventLog({
       );
     } else {
       return (
-        <div key={event._id} className="flex items-center gap-4">
+        <div key={event._id} className="event flex items-center gap-4">
           <div className="grid gap-1">
             <p className="font-medium leading-none text-emerald-700">Date</p>
             <p className="text-sm text-muted-foreground">
