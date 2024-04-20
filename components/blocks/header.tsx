@@ -32,13 +32,13 @@ export const Header = () => {
   return isLoading ? null : (
     <motion.div {...animations.appearDown}>
       <header className="mb-9">
-        <nav className="flex flex-row justify-between items-center w-full">
+        <div className="flex flex-row justify-between items-center w-full">
           <Image src="/logo.svg" alt="logo" width={150} height={100} priority />
-          <div>{user && <p>Hello, {user?.name ? user.name : 'You'}!️</p>}</div>
-          <div className="flex flex-row gap-4 items-center">
+
+          <div className="hidden md:flex flex-row gap-4 items-center">
             {isLoading ? null : button}
           </div>
-        </nav>
+        </div>
       </header>
     </motion.div>
   );

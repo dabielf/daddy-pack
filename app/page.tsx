@@ -48,12 +48,12 @@ export default function Home() {
     }));
   }
   return (
-    <>
-      <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full mb-9">
+    <div className="h-full">
+      <div className="flex flex-row justify-end items-center  gap-4 w-full mb-9">
         <Drawer>
           <DrawerTrigger asChild>
-            <Button className="w-fit md:hidden flex flex-row items-center gap-1">
-              <Plus size={24} /> ADD
+            <Button className="md:hidden flex flex-row gap-2">
+              <Plus size={20} /> Quick Add
             </Button>
           </DrawerTrigger>
           <DrawerPortal>
@@ -96,6 +96,6 @@ export default function Home() {
       <DaddiesList />
       <ContactList />
       <DateList />
-    </>
+    </div>
   );
 }
