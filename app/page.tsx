@@ -40,13 +40,13 @@ export default function Home() {
               </DrawerDescription>
             </DrawerHeader>
             <DrawerFooter>
-              <DrawerClose>
+              <DrawerClose asChild>
                 <Button onClick={toggleDaddyDrawer}>Add a New Daddy</Button>
               </DrawerClose>
-              <DrawerClose>
+              <DrawerClose asChild>
                 <Button>Add a New Date</Button>
               </DrawerClose>
-              <DrawerClose>
+              <DrawerClose asChild>
                 <Button>Add a New Contact</Button>
               </DrawerClose>
             </DrawerFooter>
