@@ -5,7 +5,14 @@ import { getConvexQueryUser, getConvexMutationUser } from './helpers';
 export const getDate = query({
   args: { date: v.id('dates') },
   handler: async (ctx, { date }) => {
-    return await ctx.db.get(date);
+    const dateData = await ctx.db.get(date);
+    if (!dateData) return null;
+    const daddyData = await ctx.db.get(dateData.daddy);
+
+    return {
+      date: dateData,
+      daddy: daddyData,
+    };
   },
 });
 

@@ -31,18 +31,10 @@ export const Header = () => {
   const button = isAuthenticated ? <SignOut /> : <SignIn />;
   return isLoading ? null : (
     <motion.div {...animations.appearDown}>
-      <header>
-        <nav className="flex flex-row justify-between items-center w-full mb-9">
-          <div className="flex flex-row gap-4 items-center">
-            <Image
-              src="/logo.svg"
-              alt="logo"
-              width={150}
-              height={100}
-              priority
-            />
-            {user && <p>Hello, {user?.name ? user.name : 'You'}!️</p>}
-          </div>
+      <header className="mb-9">
+        <nav className="flex flex-row justify-between items-center w-full">
+          <Image src="/logo.svg" alt="logo" width={150} height={100} priority />
+          <div>{user && <p>Hello, {user?.name ? user.name : 'You'}!️</p>}</div>
           <div className="flex flex-row gap-4 items-center">
             {isLoading ? null : button}
           </div>

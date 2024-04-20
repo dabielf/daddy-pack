@@ -10,7 +10,7 @@ const inter = Outfit({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Daddy Pack ❤️',
-  description: "Who's your Daddy Today ?",
+  description: "Who's your Daddy Today?",
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ConvexClientProvider>
           <Toaster position="top-center" />
-          <main className="h-full p-6 md:p-9 flex flex-col">
+          <main className="h-full px-6 md:px-9 py-4 md:py-6 flex flex-col">
             <Header />
             <AuthBoundary>{children}</AuthBoundary>
           </main>

@@ -1,6 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Doc } from '@/convex/_generated/dataModel';
+import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+import Link from 'next/link';
 
 export default function EventLog({
   contacts,
@@ -13,10 +15,10 @@ export default function EventLog({
   function orderEvents(contacts: Doc<'contacts'>[], dates: Doc<'dates'>[]) {
     // first, map over both arrays and add a type property to each object
     contacts = contacts.map(contact => {
-      return { ...contact, type: 'contact' };
+      return { ...contact, eventType: 'contact' };
     });
     dates = dates.map(date => {
-      return { ...date, type: 'date' };
+      return { ...date, eventType: 'date' };
     });
     const allEvents = [...contacts, ...dates];
     const orderedEvents = allEvents.sort((a, b) => {
@@ -33,34 +35,52 @@ export default function EventLog({
 
   const { incomingEvents, pastEvents } = orderEvents(contacts, dates);
 
-  interface extendedContact extends Doc<'contacts'> {
-    type: 'contact';
-  }
-  interface extendedDate extends Doc<'dates'> {
-    type: 'date';
+  type DaddyEvent = {
+    eventType?: string;
+  };
+
+  function formatEventDate(date: number) {
+    return formatDistance(new Date(date), new Date(), {
+      addSuffix: true,
+    });
   }
 
+  type extendedContact = Doc<'contacts'> & DaddyEvent;
+  type extendedDate = Doc<'dates'> & DaddyEvent;
+
   function EventDisplayer(event: extendedContact | extendedDate) {
-    if (event.type === 'contact') {
+    if (event.eventType === 'contact') {
       return (
         <div key={event._id} className="flex items-center gap-4">
           <div className="grid gap-1">
-            <p className="text-sm font-medium leading-none">
-              {event.daddyName}
+            <p className="font-medium leading-none text-cyan-700">Contact</p>
+            <p className="text-sm text-muted-foreground">
+              {formatEventDate(event.date)}
             </p>
-            <p className="text-sm text-muted-foreground">{event.email}</p>
           </div>
-          <div className="ml-auto font-medium">+{event.amount}</div>
+          <Link
+            className="ml-auto font-medium text-primary underline"
+            href={`/contacts/${event._id}`}
+          >
+            See
+          </Link>
         </div>
       );
     } else {
       return (
         <div key={event._id} className="flex items-center gap-4">
           <div className="grid gap-1">
-            <p className="text-sm font-medium leading-none">{event.name}</p>
-            <p className="text-sm text-muted-foreground">{event.email}</p>
+            <p className="font-medium leading-none text-emerald-700">Date</p>
+            <p className="text-sm text-muted-foreground">
+              {formatEventDate(event.date)}
+            </p>
           </div>
-          <div className="ml-auto font-medium">+{event.amount}</div>
+          <Link
+            className="ml-auto font-medium text-primary underline"
+            href={`/dates/${event._id}`}
+          >
+            See
+          </Link>
         </div>
       );
     }
@@ -69,39 +89,13 @@ export default function EventLog({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Event Log</CardTitle>
+        <CardTitle>History</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-8">
-        <h3 className="text-lg font-bold">Upcoming</h3>
-        {incomingEvents.map(event => {
-          return (
-            <div key={event._id} className="flex items-center gap-4">
-              <div className="grid gap-1">
-                <p className="text-sm font-medium leading-none">
-                  {event.daddyName}
-                </p>
-                <p className="text-sm text-muted-foreground">{event.email}</p>
-              </div>
-              <div className="ml-auto font-medium">+{event.amount}</div>
-            </div>
-          );
-        })}
-        <h3 className="text-lg font-bold">Passed Events</h3>
-        {pastEvents.map(event => {
-          return (
-            <div key={event.id} className="flex items-center gap-4">
-              <Avatar className="hidden h-9 w-9 sm:flex">
-                <AvatarImage src={event.avatar} alt="Avatar" />
-                <AvatarFallback>{event.avatarFallback}</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-1">
-                <p className="text-sm font-medium leading-none">{event.name}</p>
-                <p className="text-sm text-muted-foreground">{event.email}</p>
-              </div>
-              <div className="ml-auto font-medium">+{event.amount}</div>
-            </div>
-          );
-        })}
+        <h3 className="text-lg font-bold ">Upcoming</h3>
+        {incomingEvents.map(EventDisplayer)}
+        <h3 className="text-lg font-bold">Past Events</h3>
+        {pastEvents.map(EventDisplayer)}
       </CardContent>
     </Card>
   );
