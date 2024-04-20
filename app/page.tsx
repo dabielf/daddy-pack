@@ -1,7 +1,10 @@
 'use client';
 
-import { NewDaddyButton } from '@/components/blocks/fastDaddyForm';
+import { NewDaddyButton } from '@/components/blocks/newDaddyDialog';
+import { NewDateButton } from '@/components/blocks/newDateDialog';
+import { NewContactButton } from '@/components/blocks/newContactDialog';
 import { DaddiesList } from '@/components/blocks/daddiesList';
+import { DateList } from '@/components/blocks/dateList';
 import { Plus } from 'lucide-react';
 import {
   Drawer,
@@ -19,6 +22,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useDrawers } from '@/providers/convex-client-provider';
 import animations from '@/constants/animations';
+import { ContactList } from '@/components/blocks/contactList';
 
 export default function Home() {
   const [_drawers, setDrawers] = useDrawers();
@@ -27,6 +31,20 @@ export default function Home() {
     setDrawers(prev => ({
       ...prev,
       daddyOpen: !prev.daddyOpen,
+    }));
+  }
+
+  function toggleDateDrawer() {
+    setDrawers(prev => ({
+      ...prev,
+      dateOpen: !prev.dateOpen,
+    }));
+  }
+
+  function toggleContactDrawer() {
+    setDrawers(prev => ({
+      ...prev,
+      contactOpen: !prev.contactOpen,
     }));
   }
   return (
@@ -52,10 +70,12 @@ export default function Home() {
                     <Button onClick={toggleDaddyDrawer}>Add a New Daddy</Button>
                   </DrawerClose>
                   <DrawerClose asChild>
-                    <Button>Add a New Date</Button>
+                    <Button onClick={toggleDateDrawer}>Add a New Date</Button>
                   </DrawerClose>
                   <DrawerClose asChild>
-                    <Button>Add a New Contact</Button>
+                    <Button onClick={toggleContactDrawer}>
+                      Add a New Contact
+                    </Button>
                   </DrawerClose>
                 </DrawerFooter>
               </motion.div>
@@ -66,10 +86,16 @@ export default function Home() {
         <div className="hidden md:block">
           <NewDaddyButton />
         </div>
-        <Button className="hidden md:block">Add a New Date</Button>
-        <Button className="hidden md:block">Add a New Contact</Button>
+        <div className="hidden md:block">
+          <NewDateButton />
+        </div>
+        <div className="hidden md:block">
+          <NewContactButton />
+        </div>
       </div>
       <DaddiesList />
+      <ContactList />
+      <DateList />
     </>
   );
 }

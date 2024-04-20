@@ -108,7 +108,7 @@ export function NewDaddyButton() {
                   <FormItem>
                     <FormLabel>Daddy&apos;s Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="Name or nickname..." {...field} />
                     </FormControl>
                     {/* <FormDescription>
                 This is your public display name.

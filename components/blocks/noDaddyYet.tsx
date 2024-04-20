@@ -1,4 +1,4 @@
-import { NewDaddyButton } from './fastDaddyForm';
+import { NewDaddyButton } from './newDaddyDialog';
 
 export default function NoDaddyYet() {
   return (

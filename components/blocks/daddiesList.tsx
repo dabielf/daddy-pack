@@ -6,6 +6,7 @@ import { Doc, Id } from '@/convex/_generated/dataModel';
 import { motion } from 'framer-motion';
 import { FilePenLine } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { formatDistance } from 'date-fns';
 
 import {
   Table,
@@ -105,7 +106,8 @@ export function DaddiesList() {
                     <TableHead>Name</TableHead>
                     <TableHead>Number of dates</TableHead>
                     <TableHead>Vibe Rating</TableHead>
-                    <TableHead>Last Contact</TableHead>
+                    <TableHead>Most Recent Date</TableHead>
+                    <TableHead>Most Recent Contact</TableHead>
                     <TableHead>Lifetime Value</TableHead>
                     <TableHead className="flex flex-row items-center justify-end">
                       <FilePenLine size={20} />
@@ -120,7 +122,29 @@ export function DaddiesList() {
                       </TableCell>
                       <TableCell>0</TableCell>
                       <TableCell>{daddy.vibeRating}</TableCell>
-                      <TableCell>unknokn</TableCell>
+                      <TableCell>
+                        {daddy.mostRecentDate
+                          ? formatDistance(
+                              new Date(daddy.mostRecentDate),
+                              new Date(),
+                              {
+                                addSuffix: true,
+                              },
+                            )
+                          : 'none'}
+                      </TableCell>
+
+                      <TableCell>
+                        {daddy.mostRecentContact
+                          ? formatDistance(
+                              new Date(daddy.mostRecentContact),
+                              new Date(),
+                              {
+                                addSuffix: true,
+                              },
+                            )
+                          : 'none'}
+                      </TableCell>
                       <TableCell>${daddy.lifetimeValue}</TableCell>
                       <TableCell className="flex flex-row items-center justify-end ">
                         {/* <DeleteDaddyButton

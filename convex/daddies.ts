@@ -12,7 +12,20 @@ export const deleteDaddy = mutation({
 export const getDaddy = query({
   args: { daddy: v.id('daddies') },
   handler: async (ctx, { daddy }) => {
-    return await ctx.db.get(daddy);
+    const daddyRecord = await ctx.db.get(daddy);
+    const daddyDates = await ctx.db
+      .query('dates')
+      .filter(q => q.eq(q.field('daddy'), daddy))
+      .collect();
+    const daddyContacts = await ctx.db
+      .query('contacts')
+      .filter(q => q.eq(q.field('daddy'), daddy))
+      .collect();
+    return {
+      daddy: daddyRecord,
+      dates: daddyDates,
+      contacts: daddyContacts,
+    };
   },
 });
 

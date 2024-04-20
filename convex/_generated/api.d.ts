@@ -14,7 +14,9 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as contacts from "../contacts.js";
 import type * as daddies from "../daddies.js";
+import type * as dates from "../dates.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as stripe from "../stripe.js";
@@ -29,7 +31,9 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  contacts: typeof contacts;
   daddies: typeof daddies;
+  dates: typeof dates;
   helpers: typeof helpers;
   http: typeof http;
   stripe: typeof stripe;
