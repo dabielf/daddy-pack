@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 export const Header = () => {
   const { isLoading, isAuthenticated } = useConvexAuth();
   const user = useQuery(api.users.currentUser);
-  console.log({ HeaderUser: user });
 
   function SignOut() {
     return (
