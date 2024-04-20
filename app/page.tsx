@@ -14,9 +14,11 @@ import {
   DrawerTrigger,
   DrawerPortal,
 } from '@/components/ui/drawer';
+import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import { useDrawers } from '@/providers/convex-client-provider';
+import animations from '@/constants/animations';
 
 export default function Home() {
   const [_drawers, setDrawers] = useDrawers();
@@ -38,23 +40,25 @@ export default function Home() {
           </DrawerTrigger>
           <DrawerPortal>
             <DrawerContent>
-              <DrawerHeader>
-                <DrawerTitle>What do you want to add ?</DrawerTitle>
-                {/* <DrawerDescription>
+              <motion.div {...animations.appearUp}>
+                <DrawerHeader>
+                  <DrawerTitle>What do you want to add ?</DrawerTitle>
+                  {/* <DrawerDescription>
                 This action cannot be undone.
               </DrawerDescription> */}
-              </DrawerHeader>
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button onClick={toggleDaddyDrawer}>Add a New Daddy</Button>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Button>Add a New Date</Button>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Button>Add a New Contact</Button>
-                </DrawerClose>
-              </DrawerFooter>
+                </DrawerHeader>
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button onClick={toggleDaddyDrawer}>Add a New Daddy</Button>
+                  </DrawerClose>
+                  <DrawerClose asChild>
+                    <Button>Add a New Date</Button>
+                  </DrawerClose>
+                  <DrawerClose asChild>
+                    <Button>Add a New Contact</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </motion.div>
             </DrawerContent>
           </DrawerPortal>
         </Drawer>
