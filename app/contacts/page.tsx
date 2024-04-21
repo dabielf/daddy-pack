@@ -1,7 +1,11 @@
+'use client';
+
+import { ContactList } from '@/components/blocks/contactList';
+
 export default function Contacts() {
   return (
     <div>
-      <h1>Contacts</h1>
+      <ContactList />
     </div>
   );
 }

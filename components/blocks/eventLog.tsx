@@ -50,7 +50,7 @@ export default function EventLog({
   function EventDisplayer(event: extendedContact | extendedDate) {
     if (event.eventType === 'contact') {
       return (
-        <div key={event._id} className="event flex items-center gap-4">
+        <div key={event._id} className="event flex items-center gap-2">
           <div className="grid gap-1">
             <p className="font-medium leading-none text-cyan-700">Contact</p>
             <p className="text-sm text-muted-foreground">
@@ -67,7 +67,7 @@ export default function EventLog({
       );
     } else {
       return (
-        <div key={event._id} className="event flex items-center gap-4">
+        <div key={event._id} className="event flex items-center gap-2">
           <div className="grid gap-1">
             <p className="font-medium leading-none text-emerald-700">Date</p>
             <p className="text-sm text-muted-foreground">
@@ -88,12 +88,12 @@ export default function EventLog({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>History</CardTitle>
+        <CardTitle className="text-xl">Timeline</CardTitle>
       </CardHeader>
-      <CardContent className="grid gap-8">
-        <h3 className="text-lg font-bold ">Upcoming</h3>
+      <CardContent className="flex flex-col gap-1">
+        <h3 className="font-bold mb-2">Upcoming Events</h3>
         {incomingEvents.map(EventDisplayer)}
-        <h3 className="text-lg font-bold">Past Events</h3>
+        <h3 className="font-bold mt-4 mb-1">Past Events</h3>
         {pastEvents.map(EventDisplayer)}
       </CardContent>
     </Card>

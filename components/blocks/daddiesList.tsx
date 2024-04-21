@@ -2,7 +2,7 @@
 
 import { api } from '@/convex/_generated/api';
 import { useQuery, useMutation } from 'convex/react';
-import { Doc, Id } from '@/convex/_generated/dataModel';
+import { Id } from '@/convex/_generated/dataModel';
 import { motion } from 'framer-motion';
 import { FilePenLine } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,6 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,

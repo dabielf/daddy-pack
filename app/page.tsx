@@ -3,8 +3,6 @@
 import { NewDaddyButton } from '@/components/blocks/newDaddyDialog';
 import { NewDateButton } from '@/components/blocks/newDateDialog';
 import { NewContactButton } from '@/components/blocks/newContactDialog';
-import { DaddiesList } from '@/components/blocks/daddiesList';
-import { DateList } from '@/components/blocks/dateList';
 import { Plus } from 'lucide-react';
 import {
   Drawer,
@@ -23,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { useDrawers } from '@/providers/convex-client-provider';
 import animations from '@/constants/animations';
 import { ContactList } from '@/components/blocks/contactList';
+import { Dashboard } from '@/components/blocks/dashboard';
 
 export default function Home() {
   const [_drawers, setDrawers] = useDrawers();
@@ -52,7 +51,7 @@ export default function Home() {
       <div className="flex flex-row justify-end items-center  gap-4 w-full mb-9">
         <Drawer>
           <DrawerTrigger asChild>
-            <Button className="md:hidden flex flex-row gap-2">
+            <Button className="md:hidden w-full flex flex-row gap-2">
               <Plus size={20} /> Quick Add
             </Button>
           </DrawerTrigger>
@@ -93,9 +92,7 @@ export default function Home() {
           <NewContactButton />
         </div>
       </div>
-      <DaddiesList />
-      <ContactList />
-      <DateList />
+      <Dashboard />
     </div>
   );
 }
