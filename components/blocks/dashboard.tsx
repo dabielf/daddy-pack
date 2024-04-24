@@ -20,11 +20,6 @@ export function Dashboard() {
         <GiftedThisMonth dates={dates} />
         <GiftedThisMonth dates={dates} />
         <GiftedThisMonth dates={dates} />
-        <GiftedThisMonth dates={dates} />
-        <GiftedThisMonth dates={dates} />
-        <GiftedThisMonth dates={dates} />
-        <GiftedThisMonth dates={dates} />
-        <GiftedThisMonth dates={dates} />
       </div>
     </div>
   );

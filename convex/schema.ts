@@ -22,44 +22,48 @@ export default defineSchema({
     contactInfo: v.optional(v.string()),
     location: v.optional(v.string()),
     messagingApp: v.optional(v.string()),
-    initialContactDate: v.optional(v.string()),
+    initialContactDate: v.optional(v.number()),
     notes: v.optional(v.string()),
     earningsEstimate: v.optional(v.number()),
     vibeRating: v.number(),
     lifetimeValue: v.number(),
     mostRecentDate: v.optional(v.number()),
     mostRecentContact: v.optional(v.number()),
+    archived: v.optional(v.boolean()),
   })
     .index('by_user', ['user'])
     .index('by_name', ['name'])
-    .index('by_lifetymeValue', ['lifetimeValue']),
+    .index('by_lifetymeValue', ['lifetimeValue'])
+    .index('by_archived', ['archived']),
   // Includes: SD name, date, location, time it starts, time it finishes, comfort level, fun level, sex notes, personality notes, score of how I felt leaving the date (good, not so good), score of how I’d feel about another date, gift amount
   dates: defineTable({
     user: v.id('users'),
     daddy: v.id('daddies'),
-    daddyName: v.string(),
+    daddyName: v.optional(v.string()),
     date: v.number(),
     location: v.optional(v.string()),
-    startTime: v.optional(v.number()),
-    endTime: v.optional(v.number()),
+    dateDuration: v.optional(v.number()),
     comfortLevel: v.optional(v.number()),
     funLevel: v.optional(v.number()),
-    sexNotes: v.optional(v.string()),
-    personalityNotes: v.optional(v.string()),
-    score: v.optional(v.number()),
-    anotherDate: v.optional(v.number()),
+    notes: v.optional(v.string()),
+    dateRating: v.optional(v.number()),
     expectedGiftAmount: v.optional(v.number()),
     giftAmount: v.optional(v.number()),
+    status: v.optional(
+      v.union(
+        v.literal('scheduled'),
+        v.literal('completed'),
+        v.literal('cancelled'),
+      ),
+    ), // status of the date (scheduled, completed, cancelled)
   })
     .index('by_user', ['user'])
     .index('by_daddy', ['daddy'])
     .index('by_date', ['date']),
 
-  // contact: includes dateofcontact user id, daddy id and notes on the contact
   contacts: defineTable({
     user: v.id('users'),
     daddy: v.id('daddies'),
-    daddyName: v.string(),
     date: v.number(),
     notes: v.optional(v.string()),
   })

@@ -2,6 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Doc } from '@/convex/_generated/dataModel';
 import { formatDistance } from 'date-fns';
 import Link from 'next/link';
+import {
+  CalendarFold,
+  MessageSquareMore,
+  FilePenLine,
+  ChevronRight,
+} from 'lucide-react';
+import { Separator } from '../ui/separator';
+import { ScrollArea } from '../ui/scroll-area';
+import { Badge } from '../ui/badge';
 
 export default function EventLog({
   contacts,
@@ -36,6 +45,7 @@ export default function EventLog({
 
   type DaddyEvent = {
     eventType?: string;
+    status?: string;
   };
 
   function formatEventDate(date: number) {
@@ -47,18 +57,71 @@ export default function EventLog({
   type extendedContact = Doc<'contacts'> & DaddyEvent;
   type extendedDate = Doc<'dates'> & DaddyEvent;
 
+  function EventStatus({ event }: { event: extendedContact | extendedDate }) {
+    const past = new Date(event.date).getTime() < new Date().getTime();
+    if (!past) {
+      return (
+        <Badge
+          className="w-fit font-light border-cyan-500 text-cyan-500"
+          variant="outline"
+        >
+          Scheduled
+        </Badge>
+      );
+    } else if (event.status === 'cancelled') {
+      return (
+        <Badge
+          className="w-fit font-light border-red-600 text-red-600"
+          variant="outline"
+        >
+          Cancelled
+        </Badge>
+      );
+    } else if (event.status === 'scheduled' || !event.status) {
+      return (
+        <Badge
+          className="w-fit font-medium border-red-500"
+          variant="destructive"
+        >
+          TO PROCESS
+        </Badge>
+      );
+    } else if (event.status === 'completed') {
+      return (
+        <Badge
+          className="w-fit font-light border-emerald-500 text-emerald-500"
+          variant="outline"
+        >
+          Completed
+        </Badge>
+      );
+    }
+  }
+
   function EventDisplayer(event: extendedContact | extendedDate) {
     if (event.eventType === 'contact') {
       return (
-        <div key={event._id} className="event flex items-center gap-2">
+        <div
+          key={event._id}
+          className="event flex justify-between items-start gap-4"
+        >
           <div className="grid gap-1">
-            <p className="font-medium leading-none text-cyan-700">Contact</p>
-            <p className="text-sm text-muted-foreground">
-              {formatEventDate(event.date)}
+            <p className="font-medium text-lg flex flex-row gap-1 text-cyan-500 items-center">
+              <MessageSquareMore size={16} />
+              <div className="flex flex-row items-baseline gap-2">
+                Contact
+                <span className="text-xs font-light text-muted-foreground">
+                  {formatEventDate(event.date)}
+                </span>
+              </div>
+            </p>
+
+            <p className="text-sm">
+              {event.notes || 'No notes for this contact'}
             </p>
           </div>
           <Link
-            className="ml-auto font-medium text-primary underline"
+            className="font-medium text-secondary-foreground hover:underline -mt-1"
             href={`/contacts/${event._id}`}
           >
             See
@@ -67,18 +130,26 @@ export default function EventLog({
       );
     } else {
       return (
-        <div key={event._id} className="event flex items-center gap-2">
+        <div
+          key={event._id}
+          className="event flex items-start justify-between gap-2"
+        >
           <div className="grid gap-1">
-            <p className="font-medium leading-none text-emerald-700">Date</p>
-            <p className="text-sm text-muted-foreground">
-              {formatEventDate(event.date)}
-            </p>
+            <div className="font-medium text-lg flex flex-row gap-1 text-emerald-700 items-center">
+              <CalendarFold size={16} />
+              <div className="flex flex-row items-baseline gap-2">
+                Date
+                <span className="text-xs font-light text-muted-foreground">
+                  {formatEventDate(event.date)}
+                </span>
+              </div>
+            </div>
+
+            <EventStatus event={event} />
           </div>
-          <Link
-            className="ml-auto font-medium text-primary underline"
-            href={`/dates/${event._id}`}
-          >
-            See
+
+          <Link className="mt-2" href={`/dates/${event._id}`}>
+            <ChevronRight size={20} />
           </Link>
         </div>
       );
@@ -87,15 +158,17 @@ export default function EventLog({
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="shadow-sm">
         <CardTitle className="text-xl">Timeline</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-1">
-        <h3 className="font-bold mb-2">Upcoming Events</h3>
-        {incomingEvents.map(EventDisplayer)}
-        <h3 className="font-bold mt-4 mb-1">Past Events</h3>
-        {pastEvents.map(EventDisplayer)}
-      </CardContent>
+      <ScrollArea className="h-[650px]">
+        <CardContent className="flex flex-col gap-4 -mt-2">
+          <h3 className="font-bold text-lg mt-6">Upcoming Events</h3>
+          {incomingEvents.map(EventDisplayer)}
+          <h3 className="font-bold text-lg mt-2">Past Events</h3>
+          {pastEvents.map(EventDisplayer)}
+        </CardContent>
+      </ScrollArea>
     </Card>
   );
 }

@@ -22,7 +22,7 @@ export const Header = () => {
 
   function SignOut() {
     return (
-      <Button variant="secondary" asChild>
+      <Button variant="outline" asChild>
         <SignOutButton />
       </Button>
     );
@@ -55,7 +55,9 @@ export const Header = () => {
             <ul className="flex flex-row gap-4 items-center">
               {links.map(link => (
                 <li key={link.name}>
-                  <Link href={link.href}>{link.name}</Link>
+                  <Link className="hover:underline" href={link.href}>
+                    {link.name}
+                  </Link>
                 </li>
               ))}
             </ul>

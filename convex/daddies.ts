@@ -15,11 +15,11 @@ export const getDaddy = query({
     const daddyRecord = await ctx.db.get(daddy);
     const daddyDates = await ctx.db
       .query('dates')
-      .filter(q => q.eq(q.field('daddy'), daddy))
+      .withIndex('by_daddy', q => q.eq('daddy', daddy))
       .collect();
     const daddyContacts = await ctx.db
       .query('contacts')
-      .filter(q => q.eq(q.field('daddy'), daddy))
+      .withIndex('by_daddy', q => q.eq('daddy', daddy))
       .collect();
     return {
       daddy: daddyRecord,
@@ -61,5 +61,50 @@ export const createDaddy = mutation({
     });
 
     return daddyId;
+  },
+});
+
+export const updateDaddy = mutation({
+  args: {
+    daddy: v.id('daddies'),
+    name: v.optional(v.string()),
+    profileLink: v.optional(v.string()),
+    imgUrl: v.optional(v.string()),
+    contactInfo: v.optional(v.string()),
+    location: v.optional(v.string()),
+    messagingApp: v.optional(v.string()),
+    initialContactDate: v.optional(v.number()),
+    notes: v.optional(v.string()),
+    earningsEstimate: v.optional(v.number()),
+    vibeRating: v.number(),
+  },
+  handler: async (
+    ctx,
+    {
+      daddy,
+      name,
+      profileLink,
+      imgUrl,
+      contactInfo,
+      location,
+      messagingApp,
+      initialContactDate,
+      notes,
+      earningsEstimate,
+      vibeRating,
+    },
+  ) => {
+    await ctx.db.patch(daddy, {
+      name,
+      profileLink,
+      imgUrl,
+      contactInfo,
+      location,
+      messagingApp,
+      initialContactDate,
+      notes,
+      earningsEstimate,
+      vibeRating,
+    });
   },
 });

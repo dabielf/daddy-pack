@@ -54,12 +54,18 @@ const formSchema = z.object({
   date: z.date(),
 });
 
-export function NewDateButton() {
+export function NewDateButton({
+  daddyId,
+  children = 'Add a New Date',
+}: {
+  daddyId?: Id<'daddies'>;
+  children?: React.ReactNode;
+}) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      daddy: '',
+      daddy: daddyId || '',
       daddyName: '',
       date: new Date(),
     },
@@ -102,47 +108,53 @@ export function NewDateButton() {
   return (
     <Dialog open={drawers.dateOpen} onOpenChange={toggleDateDrawer}>
       <DialogTrigger asChild>
-        <Button className="w-fill">Add a New Date</Button>
+        <Button className="w-fill" size={daddyId ? 'sm' : 'default'}>
+          {children}
+        </Button>
       </DialogTrigger>
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add a new Date</DialogTitle>
+            <DialogTitle>
+              Add a new Date {daddyId ? `with ${getDaddyName(daddyId)}` : ''}
+            </DialogTitle>
             <DialogDescription>
               Click create when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="daddy"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Daddy I got the date with:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose a Daddy" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {daddies?.length
-                          ? daddies.map(daddy => (
-                              <SelectItem key={daddy._id} value={daddy._id}>
-                                {daddy.name}
-                              </SelectItem>
-                            ))
-                          : null}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!daddyId ? (
+                <FormField
+                  control={form.control}
+                  name="daddy"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Daddy I got the date with:</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a Daddy" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {daddies?.length
+                            ? daddies.map(daddy => (
+                                <SelectItem key={daddy._id} value={daddy._id}>
+                                  {daddy.name}
+                                </SelectItem>
+                              ))
+                            : null}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : null}
               <FormField
                 control={form.control}
                 name="date"

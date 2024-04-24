@@ -48,6 +48,7 @@ export const createDate = mutation({
       daddy,
       daddyName,
       date,
+      status: 'scheduled',
     });
 
     await ctx.db.patch(daddy, {
@@ -58,50 +59,56 @@ export const createDate = mutation({
   },
 });
 
-// export const updateDate = mutation({
-//   args: {
-//     dateId: v.id('dates'),
-//     daddy: v.id('daddies'),
-//     daddyName: v.string(),
-//     date: v.number(),
-//     location: v.optional(v.string()),
-//     startTime: v.optional(v.number()),
-//     endTime: v.optional(v.number()),
-//     comfortLevel: v.optional(v.number()),
-//     funLevel: v.optional(v.number()),
-//     sexNotes: v.optional(v.string()),
-//     personalityNotes: v.optional(v.string()),
-//     score: v.optional(v.number()),
-//     anotherDate: v.optional(v.number()),
-//     expectedGiftAmount: v.optional(v.number()),
-//     giftAmount: v.optional(v.number()),
-//   },
-//   handler: async (
-//     ctx,
-//     {
-//       dateId,
-//       daddy,
-//       daddyName,
-//       date,
-//       location,
-//       startTime,
-//       endTime,
-//       comfortLevel,
-//       funLevel,
-//       sexNotes,
-//       personalityNotes,
-//       score,
-//       anotherDate,
-//       expectedGiftAmount,
-//       giftAmount,
-//     },
-//   ) => {
-
-//     await ctx.db.patch(dateId, {
-//       mostRecentDate: date,
-//     });
-//   },
-// });
+export const updateDate = mutation({
+  args: {
+    dateId: v.id('dates'),
+    date: v.number(),
+    location: v.optional(v.string()),
+    dateDuration: v.optional(v.number()),
+    comfortLevel: v.optional(v.number()),
+    funLevel: v.optional(v.number()),
+    notes: v.optional(v.string()),
+    dateRating: v.optional(v.number()),
+    expectedGiftAmount: v.optional(v.number()),
+    giftAmount: v.optional(v.number()),
+    status: v.optional(
+      v.union(
+        v.literal('scheduled'),
+        v.literal('completed'),
+        v.literal('cancelled'),
+      ),
+    ),
+  },
+  handler: async (
+    ctx,
+    {
+      dateId,
+      date,
+      location,
+      dateDuration,
+      comfortLevel,
+      funLevel,
+      notes,
+      dateRating,
+      expectedGiftAmount,
+      giftAmount,
+      status,
+    },
+  ) => {
+    await ctx.db.patch(dateId, {
+      date,
+      location,
+      dateDuration,
+      comfortLevel,
+      funLevel,
+      notes,
+      dateRating,
+      expectedGiftAmount,
+      giftAmount,
+      status,
+    });
+  },
+});
 
 export const deleteDate = mutation({
   args: { date: v.id('dates') },

@@ -35,11 +35,10 @@ export const getContacts = query({
 export const createContact = mutation({
   args: {
     daddy: v.id('daddies'),
-    daddyName: v.string(),
     date: v.number(),
     notes: v.optional(v.string()),
   },
-  handler: async (ctx, { daddy, daddyName, date, notes }) => {
+  handler: async (ctx, { daddy, date, notes }) => {
     const user = await getConvexMutationUser(ctx);
 
     if (!user) return null;
@@ -47,13 +46,28 @@ export const createContact = mutation({
     const contactId = await ctx.db.insert('contacts', {
       user: user._id,
       daddy,
-      daddyName,
       date,
       notes,
     });
 
-    await ctx.db.patch(daddy, {
-      mostRecentContact: date,
+    return contactId;
+  },
+});
+
+export const updateContact = mutation({
+  args: {
+    contact: v.id('contacts'),
+    date: v.number(),
+    notes: v.optional(v.string()),
+  },
+  handler: async (ctx, { contact, date, notes }) => {
+    const user = await getConvexMutationUser(ctx);
+
+    if (!user) return null;
+
+    const contactId = await ctx.db.patch(contact, {
+      date,
+      notes,
     });
 
     return contactId;

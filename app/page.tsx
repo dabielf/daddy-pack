@@ -8,7 +8,6 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  // DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -20,7 +19,6 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useDrawers } from '@/providers/convex-client-provider';
 import animations from '@/constants/animations';
-import { ContactList } from '@/components/blocks/contactList';
 import { Dashboard } from '@/components/blocks/dashboard';
 
 export default function Home() {

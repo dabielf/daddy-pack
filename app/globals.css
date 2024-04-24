@@ -8,6 +8,14 @@ body {
   height: 100%;
 }
 
+body {
+  background: linear-gradient(
+    220.55deg,
+    rgba(255, 133, 112, 0.15) 0%,
+    rgba(65, 140, 183, 0.1) 100%
+  );
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -60,6 +68,6 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 }

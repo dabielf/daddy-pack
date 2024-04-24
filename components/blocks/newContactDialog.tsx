@@ -51,18 +51,23 @@ import { toast } from 'sonner';
 
 const formSchema = z.object({
   daddy: z.string(),
-  daddyName: z.string(),
   date: z.date(),
   notes: z.string().optional(),
 });
 
-export function NewContactButton({ buttonLabel = 'Add a New Contact' }) {
+export function NewContactButton({
+  daddyId,
+  children = 'Add a New Contact',
+}: {
+  daddyId?: Id<'daddies'>;
+  children?: React.ReactNode;
+  contactId?: Id<'contacts'>;
+}) {
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
+  const contactForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      daddy: '',
-      daddyName: '',
+      daddy: daddyId || '',
       date: new Date(),
       notes: '',
     },
@@ -84,11 +89,10 @@ export function NewContactButton({ buttonLabel = 'Add a New Contact' }) {
     try {
       const contactId = await createContact({
         daddy: values.daddy as Id<'daddies'>,
-        daddyName: getDaddyName(values.daddy),
         date: values.date.valueOf(),
         notes: values.notes,
       });
-      form.reset();
+      contactForm.reset();
       toast.success(
         `New Contact Created with ${getDaddyName(values.daddy)} 🎉`,
       );
@@ -108,7 +112,9 @@ export function NewContactButton({ buttonLabel = 'Add a New Contact' }) {
   return (
     <Dialog open={drawers.contactOpen} onOpenChange={toggleContactDrawer}>
       <DialogTrigger asChild>
-        <Button className="w-fill">{buttonLabel}</Button>
+        <Button className="w-fill" size={daddyId ? 'sm' : 'default'}>
+          {children}
+        </Button>
       </DialogTrigger>
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px]">
@@ -118,39 +124,45 @@ export function NewContactButton({ buttonLabel = 'Add a New Contact' }) {
               Click create when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <Form {...contactForm}>
+            <form
+              id="contact-form"
+              onSubmit={contactForm.handleSubmit(onSubmit)}
+              className="space-y-8"
+            >
+              {!daddyId ? (
+                <FormField
+                  control={contactForm.control}
+                  name="daddy"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Daddy I got in touch with:</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a Daddy" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {daddies?.length
+                            ? daddies.map(daddy => (
+                                <SelectItem key={daddy._id} value={daddy._id}>
+                                  {daddy.name}
+                                </SelectItem>
+                              ))
+                            : null}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : null}
               <FormField
-                control={form.control}
-                name="daddy"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Daddy I got in touch with:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose a Daddy" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {daddies?.length
-                          ? daddies.map(daddy => (
-                              <SelectItem key={daddy._id} value={daddy._id}>
-                                {daddy.name}
-                              </SelectItem>
-                            ))
-                          : null}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
+                control={contactForm.control}
                 name="date"
                 render={({ field }) => (
                   <FormItem>
@@ -194,7 +206,7 @@ export function NewContactButton({ buttonLabel = 'Add a New Contact' }) {
                 )}
               />
               <FormField
-                control={form.control}
+                control={contactForm.control}
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
@@ -213,7 +225,9 @@ export function NewContactButton({ buttonLabel = 'Add a New Contact' }) {
               />
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button type="submit">Create</Button>
+                  <Button type="submit" form="contact-form">
+                    Create
+                  </Button>
                 </DialogClose>
               </DialogFooter>
             </form>
