@@ -135,7 +135,11 @@ function EditForm({
     },
   });
 
-  type Status = 'scheduled' | 'completed' | 'cancelled' | undefined;
+  enum Status {
+    scheduled = 'scheduled',
+    completed = 'completed',
+    cancelled = 'cancelled',
+  }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
@@ -151,7 +155,7 @@ function EditForm({
       giftAmount: Number(values.giftAmount || '0'),
       status: (Number(values.giftAmount || '0') > 0
         ? 'completed'
-        : 'scheduled') as Status,
+        : 'scheduled') as Status | undefined,
     };
 
     try {
