@@ -8,9 +8,9 @@ import { Separator } from '../ui/separator';
 import { formatDistance } from 'date-fns';
 
 type DaddyExtendedDada = Doc<'daddies'> & {
-  mostRecentDate: number | null;
-  mostRecentContact: number | null;
-  nextDate: number | null;
+  mostRecentDate: number | undefined;
+  mostRecentContact: number | undefined;
+  nextDate: number | undefined;
   lifetimeValue: number;
   numDates: number;
   numContacts: number;

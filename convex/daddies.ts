@@ -92,9 +92,11 @@ export const getDaddies = query({
 
         return {
           ...daddy,
-          mostRecentDate: mostRecentDate ? mostRecentDate.date : null,
-          mostRecentContact: mostRecentContact ? mostRecentContact.date : null,
-          nextDate: nextDate ? nextDate.date : null,
+          mostRecentDate: mostRecentDate ? mostRecentDate.date : undefined,
+          mostRecentContact: mostRecentContact
+            ? mostRecentContact.date
+            : undefined,
+          nextDate: nextDate ? nextDate.date : undefined,
           lifetimeValue,
           numDates: dates.length,
           numContacts: contacts.length,
