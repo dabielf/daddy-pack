@@ -29,7 +29,7 @@ import { Doc, Id } from '@/convex/_generated/dataModel';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from 'convex/react';
 import { motion } from 'framer-motion';
-import { ChevronLeft } from 'lucide-react';
+import { CalendarFold, ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -51,9 +51,9 @@ const formSchema = z.object({
   giftAmount: z.string().optional(),
   status: z
     .union([
-      z.literal('sheduled'),
+      z.literal('scheduled'),
       z.literal('completed'),
-      z.literal('candelled'),
+      z.literal('cancelled'),
     ])
     .optional(),
 });
@@ -402,6 +402,34 @@ function DateDisplayOrEditForm({
   );
 }
 
+const statusFormSchema = z.object({
+  status: z.enum(['scheduled', 'completed', 'cancelled']),
+});
+
+// function DateStatusManager({
+//   dateData,
+// }: {
+//   dateData: Doc<'dates'>;
+// }) {
+//   const { date } = dateData;
+
+//   const isOwner = user?.uid === daddy.id;
+//   return (
+//     <div className="flex flex-row items-center justify-end gap-2">
+//       {isOwner && (
+//         <Button
+//           variant="secondary"
+//           onClick={() => setEdit(!edit)}
+//           disabled={dateData.status === 'completed'}
+//         >
+//           {edit ? 'Cancel' : 'Edit'}
+//         </Button>
+//       )}
+//       <DateStatus dateData={dateData} />
+//     </div>
+//   );
+// }
+
 export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
   const dateData = useQuery(api.dates.getDate, {
     date: params.id,
@@ -433,8 +461,8 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
               <CardTitle className="flex justify-between items-center">
                 <div className="flex flex-row items-center gap-4">
                   <div>
-                    <h1 className="text-2xl font-bold">
-                      Date with {daddy?.name}{' '}
+                    <h1 className="text-2xl font-bold flex flex-row gap-2 items-center">
+                      <CalendarFold size={20} /> Date with {daddy?.name}{' '}
                       {formatDistance(date.date, new Date(), {
                         addSuffix: true,
                       })}
