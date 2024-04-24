@@ -26,6 +26,7 @@ export default defineSchema({
     notes: v.optional(v.string()),
     earningsEstimate: v.optional(v.number()),
     vibeRating: v.number(),
+    giftingMethod: v.optional(v.string()),
     lifetimeValue: v.number(),
     mostRecentDate: v.optional(v.number()),
     mostRecentContact: v.optional(v.number()),

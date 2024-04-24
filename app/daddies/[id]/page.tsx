@@ -43,6 +43,7 @@ const formSchema = z.object({
   messagingApp: z.string().optional(),
   notes: z.string().optional(),
   earningsEstimate: z.string().optional(),
+  giftingMethod: z.string().optional(),
   vibeRating: z.string(),
 });
 
@@ -63,6 +64,10 @@ function DisplayForm({
           <div className="space-y-1">
             <p>Profile Link</p>
             <p className="text-lg">{daddyData.profileLink || 'N/A'}</p>
+          </div>
+          <div className="space-y-1">
+            <p>Gifting Method</p>
+            <p className="text-lg">{daddyData.giftingMethod || 'N/A'}</p>
           </div>
           <div className="space-y-1">
             <p>Contact Info</p>
@@ -173,22 +178,19 @@ function EditForm({
                     </FormItem>
                   )}
                 />
-                {/* <FormField
-                control={form.control}
-                name="imgUrl"
-                render={({ field }) => (
-                  <FormItem className="grow">
-                    <FormLabel>Image URL</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Link to Daddy's image..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
+                <FormField
+                  control={form.control}
+                  name="giftingMethod"
+                  render={({ field }) => (
+                    <FormItem className="grow">
+                      <FormLabel>Gifting Method</FormLabel>
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="contactInfo"
