@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ConvexClientProvider>
-          <Toaster position="top-center" />
+          <Toaster position="bottom-right" toastOptions={{ duration: 1000 }} />
           <main className="h-full px-6 md:px-9 py-4 md:py-6 flex flex-col">
             <Header />
             <AuthBoundary>{children}</AuthBoundary>
