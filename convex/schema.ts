@@ -60,7 +60,9 @@ export default defineSchema({
   })
     .index('by_user', ['user'])
     .index('by_daddy', ['daddy'])
-    .index('by_date', ['date']),
+    .index('by_date', ['date'])
+    .index('by_status', ['status'])
+    .index('by_giftAmount', ['giftAmount']),
   // Includes: user, daddy, date, notes
   contacts: defineTable({
     user: v.id('users'),

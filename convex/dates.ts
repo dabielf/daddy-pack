@@ -62,7 +62,7 @@ export const createDate = mutation({
 export const updateDate = mutation({
   args: {
     dateId: v.id('dates'),
-    date: v.number(),
+    date: v.optional(v.number()),
     location: v.optional(v.string()),
     dateDuration: v.optional(v.number()),
     comfortLevel: v.optional(v.number()),

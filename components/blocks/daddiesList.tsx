@@ -125,7 +125,7 @@ export function DaddiesList() {
                       <TableCell className="font-medium">
                         {daddy.name}
                       </TableCell>
-                      <TableCell>0</TableCell>
+                      <TableCell>{daddy.numDates}</TableCell>
                       <TableCell>{daddy.vibeRating}</TableCell>
                       <TableCell>
                         {daddy.mostRecentDate

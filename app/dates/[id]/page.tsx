@@ -21,6 +21,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import animations from '@/constants/animations';
@@ -140,8 +151,6 @@ function EditForm({
     completed = 'completed',
     cancelled = 'cancelled',
   }
-
-  // function onCancelDate()
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
@@ -408,40 +417,23 @@ function DateDisplayOrEditForm({
   );
 }
 
-const statusFormSchema = z.object({
-  status: z.enum(['scheduled', 'completed', 'cancelled']),
-});
-
-// function DateStatusManager({
-//   dateData,
-// }: {
-//   dateData: Doc<'dates'>;
-// }) {
-//   const { date } = dateData;
-
-//   const isOwner = user?.uid === daddy.id;
-//   return (
-//     <div className="flex flex-row items-center justify-end gap-2">
-//       {isOwner && (
-//         <Button
-//           variant="secondary"
-//           onClick={() => setEdit(!edit)}
-//           disabled={dateData.status === 'completed'}
-//         >
-//           {edit ? 'Cancel' : 'Edit'}
-//         </Button>
-//       )}
-//       <DateStatus dateData={dateData} />
-//     </div>
-//   );
-// }
-
 export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
   const dateData = useQuery(api.dates.getDate, {
     date: params.id,
   });
+  const updateDate = useMutation(api.dates.updateDate);
   const router = useRouter();
   const [edit, setEdit] = useState(false);
+
+  function onCancelDate(dateId: Id<'dates'>) {
+    try {
+      updateDate({ dateId, date: dateData?.date.date, status: 'cancelled' });
+
+      toast.success('Date has been cancelled.');
+    } catch (error) {
+      toast.error('Error cancelling date');
+    }
+  }
 
   function goBack() {
     router.back();
@@ -480,6 +472,35 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
                   </div>
                 </div>
                 <div className="flex flex-row gap-4">
+                  {date.status !== 'cancelled' && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="outline">CANCEL DATE</Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Do you really want to cancel this date ?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This date will be marked as cancelled and will not
+                            be part of your data anymore.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Abort</AlertDialogCancel>
+                          <AlertDialogAction asChild>
+                            <Button
+                              onClick={() => onCancelDate(date._id)}
+                              disabled={edit}
+                            >
+                              Yes. Cancel!
+                            </Button>
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
                   <Button
                     onClick={() => setEdit(editStatus => !editStatus)}
                     disabled={edit}

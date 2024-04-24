@@ -1,5 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
+import { isBefore } from 'date-fns';
 import { getConvexQueryUser, getConvexMutationUser } from './helpers';
 
 export const deleteDaddy = mutation({
@@ -35,11 +36,46 @@ export const getDaddies = query({
     const user = await getConvexQueryUser(ctx);
 
     if (!user) return null;
+    return await Promise.all(
+      (
+        await ctx.db
+          .query('daddies')
+          .withIndex('by_user', q => q.eq('user', user._id))
+          .collect()
+      ).map(async daddy => {
+        const dates = await ctx.db
+          .query('dates')
+          .withIndex('by_daddy', q => q.eq('daddy', daddy._id))
+          .collect();
 
-    return await ctx.db
-      .query('daddies')
-      .filter(q => q.eq(q.field('user'), user._id))
-      .collect();
+        const contacts = await ctx.db
+          .query('contacts')
+          .withIndex('by_daddy', q => q.eq('daddy', daddy._id))
+          .collect();
+
+        // //filter dates to only include dates that are in the past
+        // dates = dates.filter(date => date.date < Date.now());
+        const mostRecentDate = dates
+          .filter(date => isBefore(new Date(date.date), new Date()))
+          .sort((a, b) => b.date - a.date)[0];
+
+        const mostRecentContact = contacts
+          .filter(date => isBefore(new Date(date.date), new Date()))
+          .sort((a, b) => b.date - a.date)[0];
+
+        const lifetimeValue = dates.reduce((acc, date) => {
+          return acc + (date.giftAmount || 0);
+        }, 0);
+
+        return {
+          ...daddy,
+          mostRecentDate: mostRecentDate ? mostRecentDate.date : null,
+          mostRecentContact: mostRecentContact ? mostRecentContact.date : null,
+          lifetimeValue,
+          numDates: dates.length,
+        };
+      }),
+    );
   },
 });
 
