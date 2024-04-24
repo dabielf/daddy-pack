@@ -35,6 +35,7 @@ import { NewDaddyButton } from './newDaddyDialog';
 import { toast } from 'sonner';
 import NoDaddyYet from './noDaddyYet';
 import Link from 'next/link';
+import DaddyBlock from './daddyBlock';
 
 export function DeleteDaddyButton({
   daddy,
@@ -103,77 +104,84 @@ export function DaddiesList() {
           );
         } else if (daddies?.length) {
           return (
-            <motion.div {...animations.appearUp}>
-              <Table>
-                <TableCaption></TableCaption>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Number of dates</TableHead>
-                    <TableHead>Vibe Rating</TableHead>
-                    <TableHead>Most Recent Date</TableHead>
-                    <TableHead>Most Recent Contact</TableHead>
-                    <TableHead>Lifetime Value</TableHead>
-                    <TableHead className="flex flex-row items-center justify-end">
-                      <FilePenLine size={20} />
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {daddies.map(daddy => (
-                    <TableRow key={daddy._id}>
-                      <TableCell className="font-medium">
-                        {daddy.name}
-                      </TableCell>
-                      <TableCell>{daddy.numDates}</TableCell>
-                      <TableCell>{daddy.vibeRating}</TableCell>
-                      <TableCell>
-                        {daddy.mostRecentDate
-                          ? formatDistance(
-                              new Date(daddy.mostRecentDate),
-                              new Date(),
-                              {
-                                addSuffix: true,
-                              },
-                            )
-                          : 'none'}
-                      </TableCell>
-
-                      <TableCell>
-                        {daddy.mostRecentContact
-                          ? formatDistance(
-                              new Date(daddy.mostRecentContact),
-                              new Date(),
-                              {
-                                addSuffix: true,
-                              },
-                            )
-                          : 'none'}
-                      </TableCell>
-                      <TableCell>${daddy.lifetimeValue}</TableCell>
-                      <TableCell className="flex flex-row items-center justify-end ">
-                        {/* <DeleteDaddyButton
-                          daddy={daddy._id}
-                          name={daddy.name}
-                        /> */}
-                        {/* <DaddySheetTrigger daddy={daddy} /> */}
-                        <Link href={`/daddies/${daddy._id}`}>
-                          <p className="text-primary underline">See More</p>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-                {/* <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={4}>Total</TableCell>
-                    <TableCell className="font-bold">$0</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableFooter> */}
-              </Table>
-            </motion.div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+              {daddies.map(daddy => (
+                <DaddyBlock key={daddy._id} daddy={daddy} />
+              ))}
+            </div>
           );
+          // return (
+          //   <motion.div {...animations.appearUp}>
+          //     <Table>
+          //       <TableCaption></TableCaption>
+          //       <TableHeader>
+          //         <TableRow>
+          //           <TableHead>Name</TableHead>
+          //           <TableHead>Number of dates</TableHead>
+          //           <TableHead>Vibe Rating</TableHead>
+          //           <TableHead>Most Recent Date</TableHead>
+          //           <TableHead>Most Recent Contact</TableHead>
+          //           <TableHead>Lifetime Value</TableHead>
+          //           <TableHead className="flex flex-row items-center justify-end">
+          //             <FilePenLine size={20} />
+          //           </TableHead>
+          //         </TableRow>
+          //       </TableHeader>
+          //       <TableBody>
+          //         {daddies.map(daddy => (
+          //           <TableRow key={daddy._id}>
+          //             <TableCell className="font-medium">
+          //               {daddy.name}
+          //             </TableCell>
+          //             <TableCell>{daddy.numDates}</TableCell>
+          //             <TableCell>{daddy.vibeRating}</TableCell>
+          //             <TableCell>
+          //               {daddy.mostRecentDate
+          //                 ? formatDistance(
+          //                     new Date(daddy.mostRecentDate),
+          //                     new Date(),
+          //                     {
+          //                       addSuffix: true,
+          //                     },
+          //                   )
+          //                 : 'none'}
+          //             </TableCell>
+
+          //             <TableCell>
+          //               {daddy.mostRecentContact
+          //                 ? formatDistance(
+          //                     new Date(daddy.mostRecentContact),
+          //                     new Date(),
+          //                     {
+          //                       addSuffix: true,
+          //                     },
+          //                   )
+          //                 : 'none'}
+          //             </TableCell>
+          //             <TableCell>${daddy.lifetimeValue}</TableCell>
+          //             <TableCell className="flex flex-row items-center justify-end ">
+          //               {/* <DeleteDaddyButton
+          //                 daddy={daddy._id}
+          //                 name={daddy.name}
+          //               /> */}
+          //               {/* <DaddySheetTrigger daddy={daddy} /> */}
+          //               <Link href={`/daddies/${daddy._id}`}>
+          //                 <p className="text-primary underline">See More</p>
+          //               </Link>
+          //             </TableCell>
+          //           </TableRow>
+          //         ))}
+          //       </TableBody>
+          //       {/* <TableFooter>
+          //         <TableRow>
+          //           <TableCell colSpan={4}>Total</TableCell>
+          //           <TableCell className="font-bold">$0</TableCell>
+          //           <TableCell></TableCell>
+          //         </TableRow>
+          //       </TableFooter> */}
+          //     </Table>
+          //   </motion.div>
+          // );
         } else {
           return (
             <motion.div {...animations.appearUp} className="flex grow">

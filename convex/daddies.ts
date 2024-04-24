@@ -1,6 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
-import { isBefore } from 'date-fns';
+import { isBefore, isAfter } from 'date-fns';
 import { getConvexQueryUser, getConvexMutationUser } from './helpers';
 
 export const deleteDaddy = mutation({
@@ -53,11 +53,34 @@ export const getDaddies = query({
           .withIndex('by_daddy', q => q.eq('daddy', daddy._id))
           .collect();
 
+        // count how many dates have the status of 'scheduled'
+        const scheduledDates = dates.filter(
+          date => date.status === 'scheduled' || !date.status,
+        ).length;
+        const completedDates = dates.filter(
+          date => date.status === 'completed',
+        ).length;
+        const canceledDates = dates.filter(
+          date => date.status === 'cancelled',
+        ).length;
+
+        console.log({
+          daddy: daddy.name,
+          dates,
+          scheduledDates,
+          completedDates,
+          canceledDates,
+        });
+
         // //filter dates to only include dates that are in the past
         // dates = dates.filter(date => date.date < Date.now());
         const mostRecentDate = dates
           .filter(date => isBefore(new Date(date.date), new Date()))
           .sort((a, b) => b.date - a.date)[0];
+
+        const nextDate = dates
+          .filter(date => isAfter(new Date(date.date), new Date()))
+          .sort((a, b) => a.date - b.date)[0];
 
         const mostRecentContact = contacts
           .filter(date => isBefore(new Date(date.date), new Date()))
@@ -71,8 +94,13 @@ export const getDaddies = query({
           ...daddy,
           mostRecentDate: mostRecentDate ? mostRecentDate.date : null,
           mostRecentContact: mostRecentContact ? mostRecentContact.date : null,
+          nextDate: nextDate ? nextDate.date : null,
           lifetimeValue,
           numDates: dates.length,
+          numContacts: contacts.length,
+          scheduledDates,
+          completedDates,
+          canceledDates,
         };
       }),
     );
