@@ -49,13 +49,7 @@ const formSchema = z.object({
   dateRating: z.string().optional(),
   expectedGiftAmount: z.string().optional(),
   giftAmount: z.string().optional(),
-  status: z
-    .union([
-      z.literal('scheduled'),
-      z.literal('completed'),
-      z.literal('cancelled'),
-    ])
-    .optional(),
+  status: z.string().optional(),
 });
 
 function DisplayForm({ dateData }: { dateData: Doc<'dates'>; edit: boolean }) {
@@ -141,6 +135,8 @@ function EditForm({
     },
   });
 
+  type Status = 'scheduled' | 'completed' | 'cancelled' | undefined;
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -153,6 +149,9 @@ function EditForm({
       dateRating: Number(values.dateRating || '0'),
       expectedGiftAmount: Number(values.expectedGiftAmount || '0'),
       giftAmount: Number(values.giftAmount || '0'),
+      status: (Number(values.giftAmount || '0') > 0
+        ? 'completed'
+        : 'scheduled') as Status,
     };
 
     try {
@@ -227,10 +226,7 @@ function EditForm({
                     <FormItem className="grow">
                       <FormLabel>Location</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Link to Daddy's profile..."
-                          {...field}
-                        />
+                        <Input placeholder="location..." {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -243,7 +239,11 @@ function EditForm({
                     <FormItem className="grow">
                       <FormLabel>Duration</FormLabel>
                       <FormControl>
-                        <Input placeholder="Contact info..." {...field} />
+                        <Input
+                          type="number"
+                          placeholder="How long was the date..."
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -76,6 +76,7 @@ export const updateDaddy = mutation({
     initialContactDate: v.optional(v.number()),
     notes: v.optional(v.string()),
     earningsEstimate: v.optional(v.number()),
+    giftingMethod: v.optional(v.string()),
     vibeRating: v.number(),
   },
   handler: async (
@@ -91,6 +92,7 @@ export const updateDaddy = mutation({
       initialContactDate,
       notes,
       earningsEstimate,
+      giftingMethod,
       vibeRating,
     },
   ) => {
@@ -104,6 +106,7 @@ export const updateDaddy = mutation({
       initialContactDate,
       notes,
       earningsEstimate,
+      giftingMethod,
       vibeRating,
     });
   },
