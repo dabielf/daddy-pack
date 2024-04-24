@@ -31,6 +31,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import animations from '@/constants/animations';
+import { NewDaddyButton } from './newDaddyDialog';
 import { toast } from 'sonner';
 import NoDaddyYet from './noDaddyYet';
 import Link from 'next/link';
@@ -87,7 +88,10 @@ export function DaddiesList() {
   const daddies = useQuery(api.daddies.getDaddies);
   return (
     <div className="flex flex-grow flex-col">
-      <h1 className="text-2xl font-bold mb-4">Daddies</h1>
+      <div className="flex flex-row justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Daddies</h1>
+        <NewDaddyButton />
+      </div>
       {(() => {
         if (!daddies) {
           return (
