@@ -51,7 +51,7 @@ export default function ContactPage({
   const updateContact = useMutation(api.contacts.updateContact);
   const router = useRouter();
   const formSchema = z.object({
-    date: z.date().optional(),
+    date: z.date(),
     notes: z.string().optional(),
   });
 
