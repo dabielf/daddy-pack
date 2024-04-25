@@ -1,11 +1,11 @@
-import { Users, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Doc } from '@/convex/_generated/dataModel';
+import { formatDistance } from 'date-fns';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Separator } from '../ui/separator';
-import { formatDistance } from 'date-fns';
 
 type DaddyExtendedDada = Doc<'daddies'> & {
   mostRecentDate: number | undefined;

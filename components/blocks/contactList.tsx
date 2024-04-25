@@ -1,6 +1,7 @@
-import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import { formatDistance, formatRelative } from 'date-fns';
+import { useQuery } from 'convex/react';
+import { formatRelative } from 'date-fns';
+import Link from 'next/link';
 
 export function ContactList() {
   const contacts = useQuery(api.contacts.getContacts);
@@ -17,23 +18,23 @@ export function ContactList() {
 
   const orderedContacts = contacts.sort((a, b) => b.date - a.date);
 
+  const filteredContacts = orderedContacts.filter(contact =>
+    daddiesMap.has(contact.daddy),
+  );
+
   function formatDate(date: number) {
-    return (
-      formatDistance(new Date(date), new Date(), {
-        addSuffix: true,
-      }) +
-      ' - ' +
-      formatRelative(new Date(date), new Date())
-    );
+    return formatRelative(new Date(date), new Date());
   }
 
   return (
     <div>
       <h1>Contact List</h1>
       <ul>
-        {orderedContacts.map(contact => (
-          <li key={contact._id}>
-            {daddiesMap.get(contact.daddy).name} - {formatDate(contact.date)}
+        {filteredContacts.map(contact => (
+          <li key={contact._id} className="hover:underline">
+            <Link href={`/contacts/${contact._id}`}>
+              {daddiesMap.get(contact.daddy).name} - {formatDate(contact.date)}
+            </Link>
           </li>
         ))}
       </ul>

@@ -16,10 +16,6 @@ export function Dashboard() {
     <div>
       <div className="grid md:grid md:grid-cols-3 xl:grid-cols-4 gap-6">
         <GiftedThisMonth dates={dates} />
-        <GiftedThisMonth dates={dates} />
-        <GiftedThisMonth dates={dates} />
-        <GiftedThisMonth dates={dates} />
-        <GiftedThisMonth dates={dates} />
       </div>
     </div>
   );

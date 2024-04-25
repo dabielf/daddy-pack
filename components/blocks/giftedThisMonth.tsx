@@ -1,7 +1,7 @@
-import { DollarSign } from 'lucide-react';
-import { Doc } from '@/convex/_generated/dataModel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Doc } from '@/convex/_generated/dataModel';
 import { isSameMonth, subMonths } from 'date-fns';
+import { DollarSign } from 'lucide-react';
 
 export function GiftedThisMonth({ dates }: { dates: Doc<'dates'>[] }) {
   // Filter dates for this month

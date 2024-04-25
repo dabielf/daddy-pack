@@ -1,10 +1,10 @@
+import { AuthBoundary } from '@/components/auth/authBoundary';
+import { Header } from '@/components/blocks/header';
+import { Toaster } from '@/components/ui/sonner';
+import { ConvexClientProvider } from '@/providers/convex-client-provider';
 import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import './globals.css';
-import { ConvexClientProvider } from '@/providers/convex-client-provider';
-import { Toaster } from '@/components/ui/sonner';
-import { Header } from '@/components/blocks/header';
-import { AuthBoundary } from '@/components/auth/authBoundary';
 
 const inter = Outfit({ subsets: ['latin'] });
 

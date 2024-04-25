@@ -1,15 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Doc } from '@/convex/_generated/dataModel';
 import { formatDistance } from 'date-fns';
+import { CalendarFold, ChevronRight, MessageSquareMore } from 'lucide-react';
 import Link from 'next/link';
-import {
-  CalendarFold,
-  MessageSquareMore,
-  FilePenLine,
-  ChevronRight,
-} from 'lucide-react';
-import { ScrollArea } from '../ui/scroll-area';
+import Markdown from 'react-markdown';
 import { Badge } from '../ui/badge';
+import { ScrollArea } from '../ui/scroll-area';
 
 export default function EventLog({
   contacts,
@@ -105,7 +101,7 @@ export default function EventLog({
           className="event flex justify-between items-start gap-4"
         >
           <div className="grid gap-1">
-            <p className="font-medium text-lg flex flex-row gap-1 text-cyan-500 items-center">
+            <div className="font-medium text-lg flex flex-row gap-1 text-cyan-500 items-center">
               <MessageSquareMore size={16} />
               <div className="flex flex-row items-baseline gap-2">
                 Contact
@@ -113,11 +109,11 @@ export default function EventLog({
                   {formatEventDate(event.date)}
                 </span>
               </div>
-            </p>
+            </div>
 
-            <p className="text-sm">
+            <Markdown className="text-sm">
               {event.notes || 'No notes for this contact'}
-            </p>
+            </Markdown>
           </div>
           <Link className="mt-2" href={`/contacts/${event._id}`}>
             <ChevronRight size={20} />

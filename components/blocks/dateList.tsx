@@ -1,6 +1,6 @@
-import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+import { useQuery } from 'convex/react';
+import { formatDistance, formatRelative } from 'date-fns';
 
 export function DateList() {
   const dates = useQuery(api.dates.getDates);

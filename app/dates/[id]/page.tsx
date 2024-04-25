@@ -1,26 +1,6 @@
 'use client';
 
-import { DeleteDaddyButton } from '@/components/blocks/daddiesList';
-import EventLog from '@/components/blocks/eventLog';
-import { NewDateButton } from '@/components/blocks/newDateDialog';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn, getErrorMessage } from '@/lib/utils';
-import { format, formatDistance } from 'date-fns';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import Tiptap from '@/components/blocks/tiptap';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,23 +12,44 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
+import { TimePicker } from '@/components/ui/time-picker';
 import animations from '@/constants/animations';
 import { api } from '@/convex/_generated/api';
 import { Doc, Id } from '@/convex/_generated/dataModel';
+import { cn, getErrorMessage } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from 'convex/react';
+import { format, formatDistance } from 'date-fns';
 import { motion } from 'framer-motion';
-import { CalendarFold, ChevronLeft } from 'lucide-react';
+import {
+  CalendarFold,
+  Calendar as CalendarIcon,
+  ChevronLeft,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Calendar } from '@/components/ui/calendar';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { TimePicker } from '@/components/ui/time-picker';
+import Markdown from 'react-markdown';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 const formSchema = z.object({
   date: z.date(),
@@ -66,54 +67,63 @@ const formSchema = z.object({
 function DisplayForm({ dateData }: { dateData: Doc<'dates'>; edit: boolean }) {
   return (
     <motion.div {...animations.appearUp}>
-      <Card className="p-6 flex flex-row gap-6">
+      <Card className="p-6 grid md:grid-cols-2 gap-6">
         <div className="grow flex flex-col gap-6">
           <div className="space-y-1">
-            <p>Date</p>
-            <p className="text-lg">{format(dateData.date, 'MM/dd/yyyy')}</p>
+            <p className="font-bold text-lg">Date</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{format(dateData.date, 'MM/dd/yyyy')}</p>
           </div>
           <div className="space-y-1">
-            <p>Location</p>
-            <p className="text-lg">{dateData.location || 'N/A'}</p>
+            <p className="font-bold text-lg">Location</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{dateData.location || 'N/A'}</p>
           </div>
           <div className="space-y-1">
-            <p>Duration</p>
-            <p className="text-lg">{dateData.dateDuration || 'N/A'}</p>
+            <p className="font-bold text-lg">Duration</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{dateData.dateDuration || 'N/A'}</p>
           </div>
           <div className="space-y-1">
-            <p>Notes</p>
-            <p className="text-lg">{dateData.notes || 'N/A'}</p>
+            <p className="font-bold text-lg">Notes</p>
+            <Separator className="bg-primary/50" />
+            <Markdown className="pt-2">{dateData.notes || 'N/A'}</Markdown>
           </div>
         </div>
         <div className="grow flex flex-col gap-6">
           <div className="space-y-1">
-            <p>Comfort Rating</p>
-            <p className="text-lg">
+            <p className="font-bold text-lg">Comfort Rating</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">
               {dateData.comfortLevel ? `${dateData.comfortLevel} / 5` : 'N/A'}
             </p>
           </div>
           <div className="space-y-1">
-            <p>Fun Rating</p>
-            <p className="text-lg">
+            <p className="font-bold text-lg">Fun Rating</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">
               {dateData.funLevel ? `${dateData.funLevel} / 5` : 'N/A'}
             </p>
           </div>
           <div className="space-y-1">
-            <p>General Date Rating</p>
-            <p className="text-lg">
+            <p className="font-bold text-lg">General Date Rating</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">
               {dateData.dateRating ? `${dateData.dateRating} / 5` : 'N/A'}
             </p>
           </div>
           <div className="space-y-1">
-            <p>Expected Gift Amount</p>
-            <p className="text-lg">
+            <p className="font-bold text-lg">Expected Gift Amount</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">
               {dateData.expectedGiftAmount
                 ? `$${dateData.expectedGiftAmount}`
                 : 'N/A'}
             </p>
           </div>
           <div className="space-y-1">
-            <p>Received Gift Amount</p>
+            <p className="font-bold text-lg">Received Gift Amount</p>
+            <Separator className="bg-primary/50" />
             <p className="text-lg">
               {dateData.giftAmount ? `$${dateData.giftAmount}` : 'N/A'}
             </p>
@@ -188,7 +198,7 @@ function EditForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-6"
           >
-            <div className="grid grid-cols-2  gap-6">
+            <div className="grid md:grid-cols-2 gap-6">
               <div className="grow flex flex-col gap-6">
                 <FormField
                   control={form.control}
@@ -271,10 +281,9 @@ function EditForm({
                     <FormItem className="grow flex flex-col">
                       <FormLabel>Notes</FormLabel>
                       <FormControl>
-                        <Textarea
-                          className="grow"
-                          placeholder="Notes..."
-                          {...field}
+                        <Tiptap
+                          content={field.value}
+                          onChange={field.onChange}
                         />
                       </FormControl>
                       <FormMessage />
@@ -384,14 +393,14 @@ function EditForm({
                 variant="secondary"
                 onClick={() => setEdit(false)}
               >
-                Cancel
+                CANCEL
               </Button>
               <Button
                 type="submit"
                 variant="default"
                 disabled={!form.formState.isDirty}
               >
-                Save
+                SAVE
               </Button>
             </div>
           </form>
@@ -475,7 +484,9 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
                   {date.status !== 'canceled' && (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button variant="outline">CANCEL DATE</Button>
+                        <Button disabled={edit} variant="outline">
+                          CANCEL DATE
+                        </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>

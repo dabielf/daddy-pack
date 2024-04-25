@@ -1,12 +1,12 @@
 'use client';
 
-import { useConvexAuth, useQuery } from 'convex/react';
-import { SignInButton, SignOutButton } from '@clerk/nextjs';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 import animations from '@/constants/animations';
 import { api } from '@/convex/_generated/api';
-import { Button } from '@/components/ui/button';
+import { SignInButton, SignOutButton } from '@clerk/nextjs';
+import { useConvexAuth, useQuery } from 'convex/react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const links = [

@@ -1,6 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
-import { getConvexQueryUser, getConvexMutationUser } from './helpers';
+import { getConvexMutationUser, getConvexQueryUser } from './helpers';
 
 export const getContact = query({
   args: { contact: v.id('contacts') },
@@ -52,13 +52,20 @@ export const createContact = mutation({
 export const updateContact = mutation({
   args: {
     contact: v.id('contacts'),
-    date: v.number(),
+    date: v.optional(v.number()),
     notes: v.optional(v.string()),
   },
   handler: async (ctx, { contact, date, notes }) => {
     const user = await getConvexMutationUser(ctx);
 
     if (!user) return null;
+
+    if (!date) {
+      const contactId = await ctx.db.patch(contact, {
+        notes,
+      });
+      return contactId;
+    }
 
     const contactId = await ctx.db.patch(contact, {
       date,
@@ -69,7 +76,7 @@ export const updateContact = mutation({
   },
 });
 
-export const deleteDate = mutation({
+export const deleteContact = mutation({
   args: { contact: v.id('contacts') },
   handler: async (ctx, { contact }) => {
     await ctx.db.delete(contact);

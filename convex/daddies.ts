@@ -1,7 +1,7 @@
 import { v } from 'convex/values';
+import { isAfter, isBefore } from 'date-fns';
 import { mutation, query } from './_generated/server';
-import { isBefore, isAfter } from 'date-fns';
-import { getConvexQueryUser, getConvexMutationUser } from './helpers';
+import { getConvexMutationUser, getConvexQueryUser } from './helpers';
 
 export const deleteDaddy = mutation({
   args: { daddy: v.id('daddies') },
@@ -30,6 +30,21 @@ export const getDaddy = query({
   },
 });
 
+export const getArchivedDaddies = query({
+  args: {},
+  handler: async ctx => {
+    const user = await getConvexQueryUser(ctx);
+
+    if (!user) return null;
+
+    return await ctx.db
+      .query('daddies')
+      .withIndex('by_user', q => q.eq('user', user._id))
+      // .filter(q => q.eq('archived', true ))
+      .collect();
+  },
+});
+
 export const getDaddies = query({
   args: {},
   handler: async ctx => {
@@ -41,7 +56,7 @@ export const getDaddies = query({
         await ctx.db
           .query('daddies')
           .withIndex('by_user', q => q.eq('user', user._id))
-          .filter(q => q.eq('archived', false || undefined))
+          // .filter(q => q.eq('archived', false || undefined))
           .collect()
       ).map(async daddy => {
         const dates = await ctx.db
@@ -65,13 +80,13 @@ export const getDaddies = query({
           date => date.status === 'canceled',
         ).length;
 
-        console.log({
-          daddy: daddy.name,
-          dates,
-          scheduledDates,
-          completedDates,
-          canceledDates,
-        });
+        // console.log({
+        //   daddy: daddy.name,
+        //   dates,
+        //   scheduledDates,
+        //   completedDates,
+        //   canceledDates,
+        // });
 
         // //filter dates to only include dates that are in the past
         // dates = dates.filter(date => date.date < Date.now());

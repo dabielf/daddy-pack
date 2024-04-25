@@ -5,9 +5,8 @@ import {
   DeleteDaddyButton,
 } from '@/components/blocks/daddiesList';
 import EventLog from '@/components/blocks/eventLog';
-import { Plus } from 'lucide-react';
-import { NewDateButton } from '@/components/blocks/newDateDialog';
 import { NewContactButton } from '@/components/blocks/newContactDialog';
+import { NewDateButton } from '@/components/blocks/newDateDialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,19 +19,21 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import animations from '@/constants/animations';
 import { api } from '@/convex/_generated/api';
 import { Doc, Id } from '@/convex/_generated/dataModel';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from 'convex/react';
 import { motion } from 'framer-motion';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Markdown from 'react-markdown';
 import { z } from 'zod';
 
+import Tiptap from '@/components/blocks/tiptap';
+import { Separator } from '@/components/ui/separator';
 import { getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -58,45 +59,65 @@ function DisplayForm({
 }) {
   return (
     <motion.div {...animations.appearUp}>
-      <Card className="p-6 flex flex-row gap-6">
+      <Card className="p-6 grid md:grid-cols-2 gap-6">
         <div className="grow flex flex-col gap-6">
           <div className="space-y-1">
-            <p>Name / Nickname</p>
-            <p className="text-lg">{daddyData.name}</p>
+            <p className="font-bold text-lg">Name / Nickname</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{daddyData.name}</p>
           </div>
           <div className="space-y-1">
-            <p>Profile Link</p>
-            <p className="text-lg">{daddyData.profileLink || 'N/A'}</p>
+            <p className="font-bold text-lg">Profile Link</p>
+            <Separator className="bg-primary/50" />
+
+            {daddyData.profileLink ? (
+              <a className="block pt-2 underline" href={daddyData.profileLink}>
+                {daddyData.profileLink}
+              </a>
+            ) : (
+              <p className="pt-2">N/A</p>
+            )}
           </div>
           <div className="space-y-1">
-            <p>Gifting Method</p>
-            <p className="text-lg">{daddyData.giftingMethod || 'N/A'}</p>
+            <p className="font-bold text-lg">Gifting Method</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{daddyData.giftingMethod || 'N/A'}</p>
           </div>
           <div className="space-y-1">
-            <p>Contact Info</p>
-            <p className="text-lg">{daddyData.contactInfo || 'N/A'}</p>
+            <p className="font-bold text-lg">Contact Info</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{daddyData.contactInfo || 'N/A'}</p>
           </div>
           <div className="space-y-1">
-            <p>Location</p>
-            <p className="text-lg">{daddyData.location || 'N/A'}</p>
+            <p className="font-bold text-lg">Location</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{daddyData.location || 'N/A'}</p>
           </div>
         </div>
         <div className="grow flex flex-col gap-6">
           <div className="space-y-1">
-            <p>Messaging App</p>
-            <p className="text-lg">{daddyData.messagingApp || 'N/A'}</p>
+            <p className="font-bold text-lg">Messaging App</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{daddyData.messagingApp || 'N/A'}</p>
           </div>
           <div className="space-y-1">
-            <p>Notes</p>
-            <p className="text-lg">{daddyData.notes || 'N/A'}</p>
+            <p className="font-bold text-lg">Notes</p>
+            <Separator className="bg-primary/50" />
+            <Markdown className="pt-2">
+              {daddyData.notes || 'No notes about this daddy yet'}
+            </Markdown>
           </div>
           <div className="space-y-1">
-            <p>Earnings Estimate / Agreement per Date</p>
-            <p className="text-lg">{`$${daddyData.earningsEstimate}`}</p>
+            <p className="font-bold text-lg">
+              Earnings Estimate / Agreement per Date
+            </p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{`$${daddyData.earningsEstimate}`}</p>
           </div>
           <div className="space-y-1">
-            <p>Vibe Rating</p>
-            <p className="text-lg">{`${daddyData.vibeRating} / 5`}</p>
+            <p className="font-bold text-lg">Vibe Rating</p>
+            <Separator className="bg-primary/50" />
+            <p className="pt-2">{`${daddyData.vibeRating} / 5`}</p>
           </div>
         </div>
       </Card>
@@ -150,7 +171,7 @@ function EditForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-6"
           >
-            <div className="flex flex-row gap-6">
+            <div className="grid md:grid-cols-2 gap-6">
               <div className="grow flex flex-col gap-6">
                 <FormField
                   control={form.control}
@@ -243,7 +264,10 @@ function EditForm({
                     <FormItem>
                       <FormLabel>Notes</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Notes..." {...field} />
+                        <Tiptap
+                          content={field.value}
+                          onChange={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -295,14 +319,14 @@ function EditForm({
                 variant="secondary"
                 onClick={() => setEdit(false)}
               >
-                Cancel
+                CANCEL
               </Button>
               <Button
                 type="submit"
                 variant="default"
                 disabled={!form.formState.isDirty}
               >
-                Save
+                SAVE
               </Button>
             </div>
           </form>
