@@ -13,6 +13,7 @@ const Tiptap = ({
   onChange: (richText: string) => void;
 }) => {
   const editor = useEditor({
+    content: content || '',
     extensions: [
       StarterKit.configure({
         dropcursor: {
@@ -35,9 +36,10 @@ const Tiptap = ({
   if (editor && !editor.storage.markdown.getMarkdown()) {
     if (!content) {
       editor.commands.setContent('');
-      return;
     }
-    editor.commands.setContent(content);
+    if (content) {
+      editor.commands.setContent(content);
+    }
   }
 
   return (
