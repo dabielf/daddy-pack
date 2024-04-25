@@ -41,6 +41,7 @@ export const getDaddies = query({
         await ctx.db
           .query('daddies')
           .withIndex('by_user', q => q.eq('user', user._id))
+          .filter(q => q.eq('archived', false || undefined))
           .collect()
       ).map(async daddy => {
         const dates = await ctx.db
@@ -61,7 +62,7 @@ export const getDaddies = query({
           date => date.status === 'completed',
         ).length;
         const canceledDates = dates.filter(
-          date => date.status === 'cancelled',
+          date => date.status === 'canceled',
         ).length;
 
         console.log({
@@ -130,6 +131,13 @@ export const createDaddy = mutation({
   },
 });
 
+export const archiveDaddy = mutation({
+  args: { daddy: v.id('daddies') },
+  handler: async (ctx, { daddy }) => {
+    await ctx.db.patch(daddy, { archived: true });
+  },
+});
+
 export const updateDaddy = mutation({
   args: {
     daddy: v.id('daddies'),
@@ -143,7 +151,7 @@ export const updateDaddy = mutation({
     notes: v.optional(v.string()),
     earningsEstimate: v.optional(v.number()),
     giftingMethod: v.optional(v.string()),
-    vibeRating: v.number(),
+    vibeRating: v.optional(v.number()),
   },
   handler: async (
     ctx,

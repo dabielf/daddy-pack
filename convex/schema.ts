@@ -54,9 +54,10 @@ export default defineSchema({
       v.union(
         v.literal('scheduled'),
         v.literal('completed'),
-        v.literal('cancelled'),
+        v.literal('canceled'),
       ),
-    ), // status of the date (scheduled, completed, cancelled)
+    ),
+    archived: v.optional(v.boolean()),
   })
     .index('by_user', ['user'])
     .index('by_daddy', ['daddy'])

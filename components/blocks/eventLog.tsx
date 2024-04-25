@@ -67,7 +67,7 @@ export default function EventLog({
           Scheduled
         </Badge>
       );
-    } else if (event.status === 'cancelled') {
+    } else if (event.status === 'canceled') {
       return (
         <Badge
           className="w-fit font-light border-red-600 text-red-600"
@@ -157,7 +157,7 @@ export default function EventLog({
       <CardHeader className="shadow-sm">
         <CardTitle className="text-xl">Timeline</CardTitle>
       </CardHeader>
-      <ScrollArea className="h-[650px]">
+      <ScrollArea className="h-[600px]">
         <CardContent className="flex flex-col gap-4 -mt-2">
           <h3 className="font-bold text-lg mt-6">Upcoming Events</h3>
           {incomingEvents.map(EventDisplayer)}

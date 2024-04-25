@@ -75,7 +75,7 @@ export const updateDate = mutation({
       v.union(
         v.literal('scheduled'),
         v.literal('completed'),
-        v.literal('cancelled'),
+        v.literal('canceled'),
       ),
     ),
     // status: v.optional(v.string()),

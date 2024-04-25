@@ -1,6 +1,9 @@
 'use client';
 
-import { DeleteDaddyButton } from '@/components/blocks/daddiesList';
+import {
+  ArchiveDaddyButton,
+  DeleteDaddyButton,
+} from '@/components/blocks/daddiesList';
 import EventLog from '@/components/blocks/eventLog';
 import { Plus } from 'lucide-react';
 import { NewDateButton } from '@/components/blocks/newDateDialog';
@@ -407,7 +410,8 @@ export default function DaddyPage({
             <CardHeader>
               <CardTitle className="text-destructive">Danger Zone</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-8">
+            <CardContent className="grid gap-2">
+              <ArchiveDaddyButton daddy={daddy._id} name={daddy.name} />
               <DeleteDaddyButton daddy={daddy._id} name={daddy.name} />
             </CardContent>
           </Card>

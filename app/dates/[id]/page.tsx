@@ -149,7 +149,7 @@ function EditForm({
   enum Status {
     scheduled = 'scheduled',
     completed = 'completed',
-    cancelled = 'cancelled',
+    canceled = 'canceled',
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -427,9 +427,9 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
 
   function onCancelDate(dateId: Id<'dates'>) {
     try {
-      updateDate({ dateId, date: dateData?.date.date, status: 'cancelled' });
+      updateDate({ dateId, date: dateData?.date.date, status: 'canceled' });
 
-      toast.success('Date has been cancelled.');
+      toast.success('Date has been canceled.');
     } catch (error) {
       toast.error('Error cancelling date');
     }
@@ -472,7 +472,7 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
                   </div>
                 </div>
                 <div className="flex flex-row gap-4">
-                  {date.status !== 'cancelled' && (
+                  {date.status !== 'canceled' && (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="outline">CANCEL DATE</Button>
@@ -483,8 +483,8 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
                             Do you really want to cancel this date ?
                           </AlertDialogTitle>
                           <AlertDialogDescription>
-                            This date will be marked as cancelled and will not
-                            be part of your data anymore.
+                            This date will be marked as canceled and will not be
+                            part of your data anymore.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

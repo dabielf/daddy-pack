@@ -59,7 +59,9 @@ export function DeleteDaddyButton({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">{buttonText}</Button>
+        <Button variant="destructive" size="sm">
+          {buttonText}
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -78,6 +80,54 @@ export function DeleteDaddyButton({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={deleteDaddyHandler}>
             Delete that bitch!
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
+export function ArchiveDaddyButton({
+  daddy,
+  name,
+  buttonText = 'Archive this Daddy',
+}: {
+  daddy: Id<'daddies'>;
+  name: string;
+  buttonText?: string;
+}) {
+  const archiveDaddy = useMutation(api.daddies.deleteDaddy);
+  const router = useRouter();
+
+  function archiveDaddyHandler() {
+    archiveDaddy({ daddy });
+
+    toast.success(`${name} was successfully ARCHIVED 🎊.`);
+    router.push('/daddies');
+  }
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive" size="sm">
+          {buttonText}
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            <div className="text-black">
+              <p>Archiving a daddy will remove him</p>
+              <p>From your lists and your stats.</p>
+              <p className="font-bold">But you can always restore him later.</p>
+            </div>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={archiveDaddyHandler}>
+            Yup, don&apos;t need him for now!
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
