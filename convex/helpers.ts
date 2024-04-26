@@ -4,7 +4,6 @@ import {} from './_generated/server';
 
 export async function getConvexQueryUser(ctx: GenericQueryCtx<any>) {
   const identity = await ctx.auth.getUserIdentity();
-  console.log('identity', identity);
   if (!identity) {
     // throw new ConvexError('must be logged in');
     return null;

@@ -80,16 +80,6 @@ export const getDaddies = query({
           date => date.status === 'canceled',
         ).length;
 
-        // console.log({
-        //   daddy: daddy.name,
-        //   dates,
-        //   scheduledDates,
-        //   completedDates,
-        //   canceledDates,
-        // });
-
-        // //filter dates to only include dates that are in the past
-        // dates = dates.filter(date => date.date < Date.now());
         const mostRecentDate = dates
           .filter(date => isBefore(new Date(date.date), new Date()))
           .sort((a, b) => b.date - a.date)[0];

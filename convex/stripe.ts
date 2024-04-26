@@ -1,25 +1,25 @@
-import { action, internalAction } from "./_generated/server";
-import { api, internal } from "./_generated/api";
-import Stripe from "stripe";
-import { Id } from "./_generated/dataModel";
-import { v } from "convex/values";
+import { action, internalAction } from './_generated/server';
+import { api, internal } from './_generated/api';
+import Stripe from 'stripe';
+import { Id } from './_generated/dataModel';
+import { v } from 'convex/values';
 
 export const pay = action({
   args: {},
-  handler: async (ctx) => {
+  handler: async ctx => {
     const clerkUser = await ctx.auth.getUserIdentity();
     const user = await ctx.runQuery(api.users.currentUser, {});
 
     if (!clerkUser || !user) {
-      throw new Error("Not authenticated");
+      throw new Error('Not authenticated');
     }
 
     if (!clerkUser.emailVerified) {
-      throw new Error("Email not verified");
+      throw new Error('Email not verified');
     }
 
     const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY!, {
-      apiVersion: "2024-04-10",
+      apiVersion: '2024-04-10',
     });
 
     const domain = process.env.NEXT_PUBLIC_HOSTING_URL!;
@@ -27,7 +27,7 @@ export const pay = action({
     const session: Stripe.Response<Stripe.Checkout.Session> =
       await stripe.checkout.sessions.create({
         // Change the mode line to "payment" if it's a unique payment
-        mode: "subscription",
+        mode: 'subscription',
         line_items: [
           {
             price: process.env.STRIPE_PRICE_ID!,
@@ -46,7 +46,7 @@ export const pay = action({
 });
 
 type Metadata = {
-  userId: Id<"users">;
+  userId: Id<'users'>;
 };
 
 export const fulfill = internalAction({
@@ -54,7 +54,7 @@ export const fulfill = internalAction({
   handler: async (ctx, { signature, payload }) => {
     const { runQuery, runMutation } = ctx;
     const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY!, {
-      apiVersion: "2024-04-10",
+      apiVersion: '2024-04-10',
     });
 
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
@@ -62,16 +62,16 @@ export const fulfill = internalAction({
       const event = await stripe.webhooks.constructEventAsync(
         payload,
         signature,
-        webhookSecret
+        webhookSecret,
       );
 
       const completedEvent = event.data.object as Stripe.Checkout.Session & {
         metadata: Metadata;
       };
 
-      if (event.type === "checkout.session.completed") {
+      if (event.type === 'checkout.session.completed') {
         const subscription = await stripe.subscriptions.retrieve(
-          completedEvent.subscription as string
+          completedEvent.subscription as string,
         );
 
         const userId = completedEvent.metadata.userId;
@@ -83,9 +83,9 @@ export const fulfill = internalAction({
         });
       }
 
-      if (event.type === "invoice.payment_succeeded") {
+      if (event.type === 'invoice.payment_succeeded') {
         const subscription = await stripe.subscriptions.retrieve(
-          completedEvent.subscription as string
+          completedEvent.subscription as string,
         );
 
         await runMutation(internal.users.updateSubscriptionById, {
@@ -96,7 +96,6 @@ export const fulfill = internalAction({
 
       return { success: true };
     } catch (error) {
-      console.log(error);
       return { success: false, error: (error as { message: string }).message };
     }
   },

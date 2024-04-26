@@ -48,8 +48,6 @@ export function NeedSomeLove({ daddies }: NeedSomeLoveProps) {
     );
   });
 
-  console.log({ daddiesNeedLove });
-
   function DisplayDaddy({ daddy }: { daddy: DaddyExtendedData }) {
     return (
       <Link href={`/daddies/${daddy._id}`} className="group flex flex-row">

@@ -86,7 +86,6 @@ export default function ContactPage({
       notes: values.notes,
     });
     setEdit(false);
-    console.log({ values });
   }
 
   if (!contactData) return null;
