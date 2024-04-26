@@ -1,9 +1,12 @@
 import { GenericMutationCtx, GenericQueryCtx } from 'convex/server';
+import { ConvexError } from 'convex/values';
 import {} from './_generated/server';
 
 export async function getConvexQueryUser(ctx: GenericQueryCtx<any>) {
   const identity = await ctx.auth.getUserIdentity();
+  console.log('identity', identity);
   if (!identity) {
+    // throw new ConvexError('must be logged in');
     return null;
   }
 
@@ -12,7 +15,9 @@ export async function getConvexQueryUser(ctx: GenericQueryCtx<any>) {
     .withIndex('by_clerk_id', q => q.eq('clerk_id', identity.subject))
     .unique();
 
-  if (!user) return null;
+  if (!user) {
+    throw new ConvexError('user not found');
+  }
 
   return user;
 }
@@ -20,6 +25,7 @@ export async function getConvexQueryUser(ctx: GenericQueryCtx<any>) {
 export async function getConvexMutationUser(ctx: GenericMutationCtx<any>) {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) {
+    // throw new ConvexError('must be logged in');
     return null;
   }
 
@@ -28,7 +34,9 @@ export async function getConvexMutationUser(ctx: GenericMutationCtx<any>) {
     .withIndex('by_clerk_id', q => q.eq('clerk_id', identity.subject))
     .unique();
 
-  if (!user) return null;
+  if (!user) {
+    throw new ConvexError('user not found');
+  }
 
   if (user.email && user.name) return user;
 

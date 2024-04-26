@@ -48,6 +48,7 @@ import { Id } from '@/convex/_generated/dataModel';
 import { cn, getErrorMessage } from '@/lib/utils';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { toast } from 'sonner';
+import Tiptap from './tiptap';
 
 const formSchema = z.object({
   daddy: z.string(),
@@ -212,12 +213,7 @@ export function NewContactButton({
                   <FormItem>
                     <FormLabel>Notes (optional)</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Write here whatever you need to remember about this
-                        contact 🙂"
-                        className="resize-none"
-                        {...field}
-                      />
+                      <Tiptap content={field.value} onChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

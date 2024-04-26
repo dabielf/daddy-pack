@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Doc } from '@/convex/_generated/dataModel';
 import { isSameMonth, subMonths } from 'date-fns';
 import { DollarSign } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export function GiftedThisMonth({ dates }: { dates: Doc<'dates'>[] }) {
   // Filter dates for this month
@@ -62,14 +63,15 @@ export function GiftedThisMonth({ dates }: { dates: Doc<'dates'>[] }) {
   }
 
   return (
-    <Card>
+    <Card className="h-fit">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-base font-medium">
+        <CardTitle className="text-2xl font-semibold">
           Gifted This Month
         </CardTitle>
-        <DollarSign className="h-4 w-4 text-muted-foreground" />
+        <DollarSign className="h-6 w-6 text-primary" />
       </CardHeader>
       <CardContent>
+        <Separator className="bg-primary/50 mb-4" />
         <div className="text-2xl font-bold">${totalGifted}</div>
 
         <PercentageChange

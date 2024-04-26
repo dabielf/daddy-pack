@@ -128,7 +128,7 @@ export function DaddiesList() {
   return (
     <div className="flex flex-grow flex-col">
       <div className="flex flex-row justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Daddies</h1>
+        <h1 className="text-3xl font-semibold">Daddies</h1>
         <NewDaddyButton />
       </div>
       {(() => {

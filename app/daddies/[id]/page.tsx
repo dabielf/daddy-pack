@@ -405,12 +405,12 @@ export default function DaddyPage({
                 <div className="flex flex-row gap-2">
                   {!edit && (
                     <NewDateButton daddyId={daddy._id}>
-                      <Plus size={16} className="mr-1" /> Date
+                      <Plus size={16} className="mr-1" /> ADD DATE
                     </NewDateButton>
                   )}
                   {!edit && (
                     <NewContactButton daddyId={daddy._id}>
-                      <Plus size={16} className="mr-1" /> Contact
+                      <Plus size={16} className="mr-1" /> ADD CONTACT
                     </NewContactButton>
                   )}
 

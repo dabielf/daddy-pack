@@ -149,7 +149,10 @@ export const createDaddy = mutation({
 export const archiveDaddy = mutation({
   args: { daddy: v.id('daddies') },
   handler: async (ctx, { daddy }) => {
-    await ctx.db.patch(daddy, { archived: true });
+    const user = await getConvexMutationUser(ctx);
+
+    if (!user) return null;
+    return await ctx.db.patch(daddy, { archived: true });
   },
 });
 
@@ -185,7 +188,10 @@ export const updateDaddy = mutation({
       vibeRating,
     },
   ) => {
-    await ctx.db.patch(daddy, {
+    const user = await getConvexMutationUser(ctx);
+
+    if (!user) return null;
+    return await ctx.db.patch(daddy, {
       name,
       profileLink,
       imgUrl,

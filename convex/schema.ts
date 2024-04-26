@@ -10,9 +10,15 @@ export default defineSchema({
     subscriptionId: v.optional(v.string()),
     // variable to stock money earned when a date is deleted but it still earned money
     leftoverEarnings: v.optional(v.number()),
+    archivedDaddiesEarnings: v.optional(v.number()),
+    userSettings: v.optional(v.id('userSettings')),
   })
     .index('by_subscriptionId', ['subscriptionId'])
     .index('by_clerk_id', ['clerk_id']),
+  userSettings: defineTable({
+    daysBeforeContact: v.optional(v.number()),
+  }),
+
   // daddies: SA profile link, photo, contact info, location, messaging app (off site), date of initial contact, notes, estimate for per meet earnings, link this to date log, vibe rating over text (can compare this later if/when I meet them in person)
   daddies: defineTable({
     user: v.id('users'),

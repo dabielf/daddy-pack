@@ -6,18 +6,7 @@ import { formatDistance } from 'date-fns';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Separator } from '../ui/separator';
-
-type DaddyExtendedDada = Doc<'daddies'> & {
-  mostRecentDate: number | undefined;
-  mostRecentContact: number | undefined;
-  nextDate: number | undefined;
-  lifetimeValue: number;
-  numDates: number;
-  numContacts: number;
-  scheduledDates?: number;
-  completedDates?: number;
-  canceledDates?: number;
-};
+import { DaddyExtendedData } from '@/custom-types';
 
 //make a StarRating component that fakes a number of stars based on a stars prop from 1 to 5 , use the star icons from lucide
 function StarRating({ stars = 0 }: { stars: number }) {
@@ -34,7 +23,7 @@ function StarRating({ stars = 0 }: { stars: number }) {
   );
 }
 
-export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedDada }) {
+export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
   return (
     <motion.div className=" hover:bg-slate-100 min-w-[470px] grow">
       <Link href={`/daddies/${daddy._id}`}>

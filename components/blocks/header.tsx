@@ -12,8 +12,9 @@ import Link from 'next/link';
 const links = [
   { name: 'Dashboard', href: '/' },
   { name: 'Daddies', href: '/daddies' },
-  { name: 'Dates', href: '/dates' },
-  { name: 'Contacts', href: '/contacts' },
+  // { name: 'Dates', href: '/dates' },
+  // { name: 'Contacts', href: '/contacts' },
+  { name: 'Settings', href: '/settings' },
 ];
 
 export const Header = () => {
