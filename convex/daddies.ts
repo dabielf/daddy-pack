@@ -40,7 +40,7 @@ export const getArchivedDaddies = query({
     return await ctx.db
       .query('daddies')
       .withIndex('by_user', q => q.eq('user', user._id))
-      // .filter(q => q.eq('archived', true ))
+      .filter(q => q.eq(q.field('archived'), true))
       .collect();
   },
 });
@@ -56,7 +56,7 @@ export const getDaddies = query({
         await ctx.db
           .query('daddies')
           .withIndex('by_user', q => q.eq('user', user._id))
-          // .filter(q => q.eq('archived', false || undefined))
+          .filter(q => q.neq(q.field('archived'), true))
           .collect()
       ).map(async daddy => {
         const dates = await ctx.db

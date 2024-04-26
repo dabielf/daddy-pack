@@ -112,7 +112,11 @@ function DisplayForm({
               Earnings Estimate / Agreement per Date
             </p>
             <Separator className="bg-primary/50" />
-            <p className="pt-2">{`$${daddyData.earningsEstimate}`}</p>
+            <p className="pt-2">
+              {daddyData.earningsEstimate
+                ? `$${daddyData.earningsEstimate}`
+                : 'N/A'}
+            </p>
           </div>
           <div className="space-y-1">
             <p className="font-bold text-lg">Vibe Rating</p>
