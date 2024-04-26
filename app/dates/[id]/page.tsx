@@ -44,6 +44,7 @@ import {
   Calendar as CalendarIcon,
   ChevronLeft,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -469,7 +470,13 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
                 <div className="flex flex-row items-center gap-4">
                   <div>
                     <h1 className="text-2xl font-bold flex flex-row gap-2 items-center">
-                      <CalendarFold size={20} /> Date with {daddy?.name}{' '}
+                      <CalendarFold size={20} /> Date with{' '}
+                      <Link
+                        href={`/daddies/${date.daddy}`}
+                        className="hover:underline decoration-primary"
+                      >
+                        {daddy?.name}
+                      </Link>{' '}
                       {formatDistance(date.date, new Date(), {
                         addSuffix: true,
                       })}
