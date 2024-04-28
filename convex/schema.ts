@@ -37,6 +37,7 @@ export default defineSchema({
     mostRecentDate: v.optional(v.number()),
     mostRecentContact: v.optional(v.number()),
     archived: v.optional(v.boolean()),
+    archivedReason: v.optional(v.string()),
   })
     .index('by_user', ['user'])
     .index('by_name', ['name'])

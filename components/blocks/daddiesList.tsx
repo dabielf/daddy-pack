@@ -5,6 +5,8 @@ import { Id } from '@/convex/_generated/dataModel';
 import { useMutation, useQuery } from 'convex/react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 import {
   AlertDialog,
@@ -125,6 +127,7 @@ export function ArchiveDaddyButton({
 }
 
 export function DaddiesList() {
+  const [hovered, setHovered] = useState<number | null>(null);
   const daddies = useQuery(api.daddies.getDaddies);
   return (
     <div className="flex flex-grow flex-col">
@@ -149,8 +152,22 @@ export function DaddiesList() {
               animate="animate"
               className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4"
             >
-              {daddies.map(daddy => (
-                <DaddyBlock key={daddy._id} daddy={daddy} />
+              {daddies.map((daddy, i) => (
+                <motion.div
+                  variants={stagger}
+                  animate={{
+                    opacity: hovered == i || hovered == null ? 1 : 0.7,
+                    filter:
+                      hovered == i || hovered == null ? 'none' : 'grayscale(1)',
+                  }}
+                  className-=" hover:bg-slate-100 min-w-[470px] grow"
+                  whileHover={{ scale: 1.03, rotate: -0.5 }}
+                  onHoverStart={() => setHovered(i)}
+                  onHoverEnd={() => setHovered(null)}
+                  key={daddy._id}
+                >
+                  <DaddyBlock daddy={daddy} />
+                </motion.div>
               ))}
             </motion.div>
           );
