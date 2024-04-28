@@ -16,4 +16,26 @@ const animations = {
   },
 };
 
+export const staggerUp = {
+  initial: { opacity: 0, y: 10 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+export const staggerUpDaddies = {
+  initial: { opacity: 0, y: 10 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
 export default animations;

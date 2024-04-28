@@ -46,48 +46,53 @@ export default function Home() {
   }
   return (
     <div className="h-full">
-      <div className="flex flex-row justify-end items-center  gap-4 w-full mb-9">
-        <Drawer>
-          <DrawerTrigger asChild>
-            <Button className="md:hidden w-full flex flex-row gap-2">
-              <Plus size={20} /> Quick Add
-            </Button>
-          </DrawerTrigger>
-          <DrawerPortal>
-            <DrawerContent>
-              <motion.div {...animations.appearUp}>
-                <DrawerHeader>
-                  <DrawerTitle>What do you want to add ?</DrawerTitle>
-                  {/* <DrawerDescription>
+      <div className="flex flex-row justify-between items-center mb-4">
+        <h1 className="text-3xl font-semibold">Dashboard</h1>
+        <div className="flex flex-row justify-end items-center gap-4 w-full">
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button className="md:hidden w-full flex flex-row gap-2">
+                <Plus size={20} /> Quick Add
+              </Button>
+            </DrawerTrigger>
+            <DrawerPortal>
+              <DrawerContent>
+                <motion.div {...animations.appearUp}>
+                  <DrawerHeader>
+                    <DrawerTitle>What do you want to add ?</DrawerTitle>
+                    {/* <DrawerDescription>
                 This action cannot be undone.
               </DrawerDescription> */}
-                </DrawerHeader>
-                <DrawerFooter>
-                  <DrawerClose asChild>
-                    <Button onClick={toggleDaddyDrawer}>Add a New Daddy</Button>
-                  </DrawerClose>
-                  <DrawerClose asChild>
-                    <Button onClick={toggleDateDrawer}>Add a New Date</Button>
-                  </DrawerClose>
-                  <DrawerClose asChild>
-                    <Button onClick={toggleContactDrawer}>
-                      Add a New Contact
-                    </Button>
-                  </DrawerClose>
-                </DrawerFooter>
-              </motion.div>
-            </DrawerContent>
-          </DrawerPortal>
-        </Drawer>
+                  </DrawerHeader>
+                  <DrawerFooter>
+                    <DrawerClose asChild>
+                      <Button onClick={toggleDaddyDrawer}>
+                        Add a New Daddy
+                      </Button>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Button onClick={toggleDateDrawer}>Add a New Date</Button>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Button onClick={toggleContactDrawer}>
+                        Add a New Contact
+                      </Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </motion.div>
+              </DrawerContent>
+            </DrawerPortal>
+          </Drawer>
 
-        <div className="hidden md:block">
-          <NewDaddyButton />
-        </div>
-        <div className="hidden md:block">
-          <NewDateButton />
-        </div>
-        <div className="hidden md:block">
-          <NewContactButton />
+          <div className="hidden md:block">
+            <NewDaddyButton />
+          </div>
+          <div className="hidden md:block">
+            <NewDateButton />
+          </div>
+          <div className="hidden md:block">
+            <NewContactButton />
+          </div>
         </div>
       </div>
       <Dashboard />

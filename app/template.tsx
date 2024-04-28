@@ -8,9 +8,5 @@ export default function Template({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <motion.div className="h-full flex flex-col" {...animations.appearUp}>
-      {children}
-    </motion.div>
-  );
+  return <motion.div className="h-full flex flex-col">{children}</motion.div>;
 }

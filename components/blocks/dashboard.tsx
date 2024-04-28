@@ -6,6 +6,8 @@ import { api } from '@/convex/_generated/api';
 import { GiftedThisMonth } from '@/components/blocks/giftedThisMonth';
 import { NeedSomeLove } from '@/components/blocks/needSomeLove';
 import { UpcomingDates } from './upcomingDates';
+import { motion } from 'framer-motion';
+import { staggerUpDaddies as stagger } from '@/constants/animations';
 
 export function Dashboard() {
   const daddies = useQuery(api.daddies.getDaddies);
@@ -15,10 +17,21 @@ export function Dashboard() {
   if (!daddies || !dates || !contacts) return null;
 
   return (
-    <div className="grid md:grid-cols-2  xl:grid-cols-3 gap-6">
-      <UpcomingDates dates={dates} />
-      <NeedSomeLove daddies={daddies} />
-      <GiftedThisMonth dates={dates} />
-    </div>
+    <motion.div
+      className="grid md:grid-cols-2  xl:grid-cols-3 gap-6"
+      variants={stagger}
+      initial="initial"
+      animate="animate"
+    >
+      <motion.div variants={stagger}>
+        <UpcomingDates dates={dates} />
+      </motion.div>
+      <motion.div variants={stagger}>
+        <NeedSomeLove daddies={daddies} />
+      </motion.div>
+      <motion.div variants={stagger}>
+        <GiftedThisMonth dates={dates} />
+      </motion.div>
+    </motion.div>
   );
 }

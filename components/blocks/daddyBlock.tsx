@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Separator } from '../ui/separator';
 import { DaddyExtendedData } from '@/custom-types';
+import { staggerUpDaddies as stagger } from '@/constants/animations';
 
 //make a StarRating component that fakes a number of stars based on a stars prop from 1 to 5 , use the star icons from lucide
 function StarRating({ stars = 0 }: { stars: number }) {
@@ -25,7 +26,10 @@ function StarRating({ stars = 0 }: { stars: number }) {
 
 export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
   return (
-    <motion.div className=" hover:bg-slate-100 min-w-[470px] grow">
+    <motion.div
+      variants={stagger}
+      className=" hover:bg-slate-100 min-w-[470px] grow"
+    >
       <Link href={`/daddies/${daddy._id}`}>
         <Card className="hover:shadow-xl transition-all">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">

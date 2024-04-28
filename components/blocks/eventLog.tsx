@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Markdown from 'react-markdown';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
+import { motion } from 'framer-motion';
+import { staggerUp as stagger } from '@/constants/animations';
 
 export default function EventLog({
   contacts,
@@ -96,54 +98,54 @@ export default function EventLog({
   function EventDisplayer(event: extendedContact | extendedDate) {
     if (event.eventType === 'contact') {
       return (
-        <div
-          key={event._id}
-          className="event flex justify-between items-start gap-4"
-        >
-          <div className="grid gap-1">
-            <div className="font-medium text-lg flex flex-row gap-1 text-cyan-500 items-center">
-              <MessageSquareMore size={16} />
-              <div className="flex flex-row items-baseline gap-2">
-                Contact
-                <span className="text-xs font-light text-muted-foreground">
-                  {formatEventDate(event.date)}
-                </span>
+        <motion.div key={event._id} variants={stagger}>
+          <Link
+            href={`/contacts/${event._id}`}
+            className="event flex justify-between items-start gap-4"
+          >
+            <div className="grid gap-1">
+              <div className="font-medium text-lg flex flex-row gap-1 text-cyan-500 items-center">
+                <MessageSquareMore size={16} />
+                <div className="flex flex-row items-baseline gap-2">
+                  Contact
+                  <span className="text-xs font-light text-muted-foreground">
+                    {formatEventDate(event.date)}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            <Markdown className="text-sm">
-              {event.notes || 'No notes for this contact'}
-            </Markdown>
-          </div>
-          <Link className="mt-2" href={`/contacts/${event._id}`}>
-            <ChevronRight size={20} />
+              <Markdown className="text-sm">
+                {event.notes || 'No notes for this contact'}
+              </Markdown>
+            </div>
+            <ChevronRight className="mt-2" size={20} />
           </Link>
-        </div>
+        </motion.div>
       );
     } else {
       return (
-        <div
-          key={event._id}
-          className="event flex items-start justify-between gap-2"
-        >
-          <div className="grid gap-1">
-            <div className="font-medium text-lg flex flex-row gap-1 text-emerald-700 items-center">
-              <CalendarFold size={16} />
-              <div className="flex flex-row items-baseline gap-2">
-                Date
-                <span className="text-xs font-light text-muted-foreground">
-                  {formatEventDate(event.date)}
-                </span>
+        <motion.div key={event._id} variants={stagger}>
+          <Link
+            href={`/dates/${event._id}`}
+            className="event flex items-start justify-between gap-2"
+          >
+            <div className="grid gap-1">
+              <div className="font-medium text-lg flex flex-row gap-1 text-emerald-700 items-center">
+                <CalendarFold size={16} />
+                <div className="flex flex-row items-baseline gap-2">
+                  Date
+                  <span className="text-xs font-light text-muted-foreground">
+                    {formatEventDate(event.date)}
+                  </span>
+                </div>
               </div>
+
+              <EventStatus event={event} />
             </div>
 
-            <EventStatus event={event} />
-          </div>
-
-          <Link className="mt-2" href={`/dates/${event._id}`}>
-            <ChevronRight size={20} />
+            <ChevronRight className="mt-2" size={20} />
           </Link>
-        </div>
+        </motion.div>
       );
     }
   }
@@ -154,11 +156,22 @@ export default function EventLog({
         <CardTitle className="text-xl">Timeline</CardTitle>
       </CardHeader>
       <ScrollArea className="h-[600px]">
-        <CardContent className="flex flex-col gap-4 -mt-2">
-          <h3 className="font-bold text-lg mt-6">Upcoming Events</h3>
-          {incomingEvents.map(EventDisplayer)}
-          <h3 className="font-bold text-lg mt-2">Past Events</h3>
-          {pastEvents.map(EventDisplayer)}
+        <CardContent>
+          <motion.div
+            variants={stagger}
+            initial="initial"
+            animate="animate"
+            className="flex flex-col gap-4 -mt-2"
+          >
+            <motion.h3 variants={stagger} className="font-bold text-lg mt-6">
+              Upcoming Events
+            </motion.h3>
+            {incomingEvents.map(EventDisplayer)}
+            <motion.h3 variants={stagger} className="font-bold text-lg mt-2">
+              Past Events
+            </motion.h3>
+            {pastEvents.map(EventDisplayer)}
+          </motion.div>
         </CardContent>
       </ScrollArea>
     </Card>

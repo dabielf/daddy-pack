@@ -19,11 +19,12 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import animations from '@/constants/animations';
+import animations, { staggerUp } from '@/constants/animations';
 import { toast } from 'sonner';
 import DaddyBlock from './daddyBlock';
 import { NewDaddyButton } from './newDaddyDialog';
 import NoDaddyYet from './noDaddyYet';
+import { staggerUpDaddies as stagger } from '@/constants/animations';
 
 export function DeleteDaddyButton({
   daddy,
@@ -142,11 +143,16 @@ export function DaddiesList() {
           );
         } else if (daddies?.length) {
           return (
-            <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
+            <motion.div
+              variants={stagger}
+              initial="initial"
+              animate="animate"
+              className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4"
+            >
               {daddies.map(daddy => (
                 <DaddyBlock key={daddy._id} daddy={daddy} />
               ))}
-            </div>
+            </motion.div>
           );
         } else {
           return (

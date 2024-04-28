@@ -51,6 +51,7 @@ import { useForm } from 'react-hook-form';
 import Markdown from 'react-markdown';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { staggerUp as stagger } from '@/constants/animations';
 
 const formSchema = z.object({
   date: z.date(),
@@ -67,71 +68,79 @@ const formSchema = z.object({
 
 function DisplayForm({ dateData }: { dateData: Doc<'dates'>; edit: boolean }) {
   return (
-    <motion.div {...animations.appearUp}>
-      <Card className="p-6 grid md:grid-cols-2 gap-6">
-        <div className="grow flex flex-col gap-6">
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Date</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">{format(dateData.date, 'MM/dd/yyyy')}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Location</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">{dateData.location || 'N/A'}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Duration</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">{dateData.dateDuration || 'N/A'}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Notes</p>
-            <Separator className="bg-primary/50" />
-            <Markdown className="pt-2">{dateData.notes || 'N/A'}</Markdown>
-          </div>
-        </div>
-        <div className="grow flex flex-col gap-6">
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Comfort Rating</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">
-              {dateData.comfortLevel ? `${dateData.comfortLevel} / 5` : 'N/A'}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Fun Rating</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">
-              {dateData.funLevel ? `${dateData.funLevel} / 5` : 'N/A'}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">General Date Rating</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">
-              {dateData.dateRating ? `${dateData.dateRating} / 5` : 'N/A'}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Expected Gift Amount</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">
-              {dateData.expectedGiftAmount
-                ? `$${dateData.expectedGiftAmount}`
-                : 'N/A'}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Received Gift Amount</p>
-            <Separator className="bg-primary/50" />
-            <p className="text-lg">
-              {dateData.giftAmount ? `$${dateData.giftAmount}` : 'N/A'}
-            </p>
-          </div>
-        </div>
-      </Card>
-    </motion.div>
+    <Card className="p-6 grid md:grid-cols-2 gap-6">
+      <motion.div
+        className="grow flex flex-col gap-6"
+        variants={stagger}
+        initial="initial"
+        animate="animate"
+      >
+        <motion.div className="space-y-1" variants={stagger}>
+          <p className="font-bold text-lg">Date</p>
+          <Separator className="bg-primary/50" />
+          <p className="pt-2">{format(dateData.date, 'MM/dd/yyyy')}</p>
+        </motion.div>
+        <motion.div className="space-y-1" variants={stagger}>
+          <p className="font-bold text-lg">Location</p>
+          <Separator className="bg-primary/50" />
+          <p className="pt-2">{dateData.location || 'N/A'}</p>
+        </motion.div>
+        <motion.div className="space-y-1" variants={stagger}>
+          <p className="font-bold text-lg">Duration</p>
+          <Separator className="bg-primary/50" />
+          <p className="pt-2">{dateData.dateDuration || 'N/A'}</p>
+        </motion.div>
+        <motion.div className="space-y-1" variants={stagger}>
+          <p className="font-bold text-lg">Notes</p>
+          <Separator className="bg-primary/50" />
+          <Markdown className="pt-2">{dateData.notes || 'N/A'}</Markdown>
+        </motion.div>
+      </motion.div>
+      <motion.div
+        className="grow flex flex-col gap-6"
+        variants={stagger}
+        initial="initial"
+        animate="animate"
+      >
+        <motion.div className="space-y-1" variants={stagger}>
+          <p className="font-bold text-lg">Comfort Rating</p>
+          <Separator className="bg-primary/50" />
+          <p className="pt-2">
+            {dateData.comfortLevel ? `${dateData.comfortLevel} / 5` : 'N/A'}
+          </p>
+        </motion.div>
+        <motion.div className="space-y-1" variants={stagger}>
+          <p className="font-bold text-lg">Fun Rating</p>
+          <Separator className="bg-primary/50" />
+          <p className="pt-2">
+            {dateData.funLevel ? `${dateData.funLevel} / 5` : 'N/A'}
+          </p>
+        </motion.div>
+        <motion.div className="space-y-1" variants={stagger}>
+          <p className="font-bold text-lg">General Date Rating</p>
+          <Separator className="bg-primary/50" />
+          <p className="pt-2">
+            {dateData.dateRating ? `${dateData.dateRating} / 5` : 'N/A'}
+          </p>
+        </motion.div>
+        <motion.div className="space-y-1" variants={stagger}>
+          <p className="font-bold text-lg">Expected Gift Amount</p>
+          <Separator className="bg-primary/50" />
+          <p className="pt-2">
+            {dateData.expectedGiftAmount
+              ? `$${dateData.expectedGiftAmount}`
+              : 'N/A'}
+          </p>
+        </motion.div>
+        <motion.div className="space-y-1" variants={stagger}>
+          <p className="font-bold text-lg">Received Gift Amount</p>
+          <Separator className="bg-primary/50" />
+          <p className="text-lg">
+            {dateData.giftAmount ? `$${dateData.giftAmount}` : 'N/A'}
+          </p>
+        </motion.div>
+      </motion.div>
+    </Card>
   );
 }
 
@@ -192,15 +201,20 @@ function EditForm({
   }
 
   return (
-    <motion.div {...animations.appearUp}>
-      <Card className="p-6">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
-          >
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="grow flex flex-col gap-6">
+    <Card className="p-6">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-6"
+        >
+          <div className="grid md:grid-cols-2 gap-6">
+            <motion.div
+              className="grow flex flex-col gap-6"
+              variants={stagger}
+              initial="initial"
+              animate="animate"
+            >
+              <motion.div variants={stagger}>
                 <FormField
                   control={form.control}
                   name="date"
@@ -245,6 +259,8 @@ function EditForm({
                     </FormItem>
                   )}
                 />
+              </motion.div>
+              <motion.div variants={stagger}>
                 <FormField
                   control={form.control}
                   name="location"
@@ -258,6 +274,8 @@ function EditForm({
                     </FormItem>
                   )}
                 />
+              </motion.div>
+              <motion.div variants={stagger}>
                 <FormField
                   control={form.control}
                   name="dateDuration"
@@ -275,6 +293,8 @@ function EditForm({
                     </FormItem>
                   )}
                 />
+              </motion.div>
+              <motion.div variants={stagger}>
                 <FormField
                   control={form.control}
                   name="notes"
@@ -291,8 +311,15 @@ function EditForm({
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="grow flex flex-col gap-6">
+              </motion.div>
+            </motion.div>
+            <motion.div
+              className="grow flex flex-col gap-6"
+              variants={stagger}
+              initial="initial"
+              animate="animate"
+            >
+              <motion.div variants={stagger}>
                 <FormField
                   control={form.control}
                   name="comfortLevel"
@@ -312,6 +339,8 @@ function EditForm({
                     </FormItem>
                   )}
                 />
+              </motion.div>
+              <motion.div variants={stagger}>
                 <FormField
                   control={form.control}
                   name="funLevel"
@@ -331,6 +360,8 @@ function EditForm({
                     </FormItem>
                   )}
                 />
+              </motion.div>
+              <motion.div variants={stagger}>
                 <FormField
                   control={form.control}
                   name="dateRating"
@@ -352,6 +383,8 @@ function EditForm({
                     </FormItem>
                   )}
                 />
+              </motion.div>
+              <motion.div variants={stagger}>
                 <FormField
                   control={form.control}
                   name="expectedGiftAmount"
@@ -369,6 +402,8 @@ function EditForm({
                     </FormItem>
                   )}
                 />
+              </motion.div>
+              <motion.div variants={stagger}>
                 <FormField
                   control={form.control}
                   name="giftAmount"
@@ -386,28 +421,28 @@ function EditForm({
                     </FormItem>
                   )}
                 />
-              </div>
-            </div>
-            <div className="flex flex-row items-end justify-end gap-2 grow">
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => setEdit(false)}
-              >
-                CANCEL
-              </Button>
-              <Button
-                type="submit"
-                variant="default"
-                disabled={!form.formState.isDirty}
-              >
-                SAVE
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </Card>
-    </motion.div>
+              </motion.div>
+            </motion.div>
+          </div>
+          <div className="flex flex-row items-end justify-end gap-2 grow">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setEdit(false)}
+            >
+              CANCEL
+            </Button>
+            <Button
+              type="submit"
+              variant="default"
+              disabled={!form.formState.isDirty}
+            >
+              SAVE
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </Card>
   );
 }
 

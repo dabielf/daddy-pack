@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import animations from '@/constants/animations';
+import animations, { staggerUp } from '@/constants/animations';
 import { api } from '@/convex/_generated/api';
 import { Doc, Id } from '@/convex/_generated/dataModel';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,6 +36,7 @@ import Tiptap from '@/components/blocks/tiptap';
 import { Separator } from '@/components/ui/separator';
 import { getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
+import { staggerUp as stagger } from '@/constants/animations';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -58,72 +59,103 @@ function DisplayForm({
   edit: boolean;
 }) {
   return (
-    <motion.div {...animations.appearUp}>
+    <motion.div>
       <Card className="p-6 grid md:grid-cols-2 gap-6">
-        <div className="grow flex flex-col gap-6">
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Name / Nickname</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">{daddyData.name}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Profile Link</p>
-            <Separator className="bg-primary/50" />
+        <motion.div
+          className="grow flex flex-col gap-6"
+          variants={stagger}
+          initial="initial"
+          animate="animate"
+        >
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
+              <p className="font-bold text-lg">Name / Nickname</p>
+              <Separator className="bg-primary/50" />
+              <p className="pt-2">{daddyData.name}</p>
+            </div>
+          </motion.div>
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
+              <p className="font-bold text-lg">Profile Link</p>
+              <Separator className="bg-primary/50" />
 
-            {daddyData.profileLink ? (
-              <a className="block pt-2 underline" href={daddyData.profileLink}>
-                {daddyData.profileLink}
-              </a>
-            ) : (
-              <p className="pt-2">N/A</p>
-            )}
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Gifting Method</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">{daddyData.giftingMethod || 'N/A'}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Contact Info</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">{daddyData.contactInfo || 'N/A'}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Location</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">{daddyData.location || 'N/A'}</p>
-          </div>
-        </div>
-        <div className="grow flex flex-col gap-6">
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Messaging App</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">{daddyData.messagingApp || 'N/A'}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Notes</p>
-            <Separator className="bg-primary/50" />
-            <Markdown className="pt-2">
-              {daddyData.notes || 'No notes about this daddy yet'}
-            </Markdown>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">
-              Earnings Estimate / Agreement per Date
-            </p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">
-              {daddyData.earningsEstimate
-                ? `$${daddyData.earningsEstimate}`
-                : 'N/A'}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-bold text-lg">Vibe Rating</p>
-            <Separator className="bg-primary/50" />
-            <p className="pt-2">{`${daddyData.vibeRating} / 5`}</p>
-          </div>
-        </div>
+              {daddyData.profileLink ? (
+                <a
+                  className="block pt-2 underline"
+                  href={daddyData.profileLink}
+                >
+                  {daddyData.profileLink}
+                </a>
+              ) : (
+                <p className="pt-2">N/A</p>
+              )}
+            </div>
+          </motion.div>
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
+              <p className="font-bold text-lg">Gifting Method</p>
+              <Separator className="bg-primary/50" />
+              <p className="pt-2">{daddyData.giftingMethod || 'N/A'}</p>
+            </div>
+          </motion.div>
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
+              <p className="font-bold text-lg">Contact Info</p>
+              <Separator className="bg-primary/50" />
+              <p className="pt-2">{daddyData.contactInfo || 'N/A'}</p>
+            </div>
+          </motion.div>
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
+              <p className="font-bold text-lg">Location</p>
+              <Separator className="bg-primary/50" />
+              <p className="pt-2">{daddyData.location || 'N/A'}</p>
+            </div>
+          </motion.div>
+        </motion.div>
+        <motion.div
+          className="grow flex flex-col gap-6"
+          variants={stagger}
+          initial="initial"
+          animate="animate"
+        >
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
+              <p className="font-bold text-lg">Messaging App</p>
+              <Separator className="bg-primary/50" />
+              <p className="pt-2">{daddyData.messagingApp || 'N/A'}</p>
+            </div>
+          </motion.div>
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
+              <p className="font-bold text-lg">Notes</p>
+              <Separator className="bg-primary/50" />
+              <Markdown className="pt-2">
+                {daddyData.notes || 'No notes about this daddy yet'}
+              </Markdown>
+            </div>
+          </motion.div>
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
+              <p className="font-bold text-lg">
+                Earnings Estimate / Agreement per Date
+              </p>
+              <Separator className="bg-primary/50" />
+              <p className="pt-2">
+                {daddyData.earningsEstimate
+                  ? `$${daddyData.earningsEstimate}`
+                  : 'N/A'}
+              </p>
+            </div>
+          </motion.div>
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
+              <p className="font-bold text-lg">Vibe Rating</p>
+              <Separator className="bg-primary/50" />
+              <p className="pt-2">{`${daddyData.vibeRating} / 5`}</p>
+            </div>
+          </motion.div>
+        </motion.div>
       </Card>
     </motion.div>
   );
@@ -168,7 +200,7 @@ function EditForm({
   }
 
   return (
-    <motion.div {...animations.appearUp}>
+    <motion.div>
       <Card className="p-6">
         <Form {...form}>
           <form
@@ -176,146 +208,173 @@ function EditForm({
             className="flex flex-col gap-6"
           >
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="grow flex flex-col gap-6">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="grow">
-                      <FormLabel>Daddy&apos;s Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Name or nickname..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="profileLink"
-                  render={({ field }) => (
-                    <FormItem className="grow">
-                      <FormLabel>Profile Link</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Link to Daddy's profile..."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="giftingMethod"
-                  render={({ field }) => (
-                    <FormItem className="grow">
-                      <FormLabel>Gifting Method</FormLabel>
-                      <FormControl>
-                        <Input placeholder="" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="contactInfo"
-                  render={({ field }) => (
-                    <FormItem className="grow">
-                      <FormLabel>Contact Info</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Contact info..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem className="grow">
-                      <FormLabel>Location</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Location..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grow flex flex-col gap-6">
-                <FormField
-                  control={form.control}
-                  name="messagingApp"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Messaging App</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Messaging app..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="notes"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Notes</FormLabel>
-                      <FormControl>
-                        <Tiptap
-                          content={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="earningsEstimate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Earnings Estimate / Agreement per Date
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Earnings estimate..."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="vibeRating"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vibe Rating (min: 1, max: 5)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={1}
-                          max={5}
-                          placeholder="Vibe rating..."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <motion.div
+                className="grow flex flex-col gap-6"
+                variants={stagger}
+                initial="initial"
+                animate="animate"
+              >
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem className="grow">
+                        <FormLabel>Daddy&apos;s Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Name or nickname..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="profileLink"
+                    render={({ field }) => (
+                      <FormItem className="grow">
+                        <FormLabel>Profile Link</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Link to Daddy's profile..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="giftingMethod"
+                    render={({ field }) => (
+                      <FormItem className="grow">
+                        <FormLabel>Gifting Method</FormLabel>
+                        <FormControl>
+                          <Input placeholder="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="contactInfo"
+                    render={({ field }) => (
+                      <FormItem className="grow">
+                        <FormLabel>Contact Info</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Contact info..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem className="grow">
+                        <FormLabel>Location</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Location..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+              </motion.div>
+              <motion.div
+                className="grow flex flex-col gap-6"
+                variants={stagger}
+                initial="initial"
+                animate="animate"
+              >
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="messagingApp"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Messaging App</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Messaging app..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="notes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Notes</FormLabel>
+                        <FormControl>
+                          <Tiptap
+                            content={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="earningsEstimate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Earnings Estimate / Agreement per Date
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Earnings estimate..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="vibeRating"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Vibe Rating (min: 1, max: 5)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={1}
+                            max={5}
+                            placeholder="Vibe rating..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+              </motion.div>
             </div>
             <div className="flex flex-row items-end justify-end gap-2 grow">
               <Button
