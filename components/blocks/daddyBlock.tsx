@@ -29,6 +29,7 @@ export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
     <motion.div
       variants={stagger}
       className=" hover:bg-slate-100 min-w-[470px] grow"
+      whileHover={{ scale: 1.03, rotate: -0.5 }}
     >
       <Link href={`/daddies/${daddy._id}`}>
         <Card className="hover:shadow-xl transition-all">
