@@ -43,7 +43,7 @@ export function ArchivedDaddiesButton() {
               account and remove your data from our servers.
             </DialogDescription>
           </DialogHeader>
-          {archivedDaddies?.length &&
+          {archivedDaddies?.length > 0 &&
             archivedDaddies.map(daddy => {
               return (
                 <div
