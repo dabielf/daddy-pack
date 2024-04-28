@@ -57,7 +57,7 @@ export const getDaddies = query({
         await ctx.db
           .query('daddies')
           .withIndex('by_user_archived', q =>
-            q.eq('user', user._id).eq('archived', false || undefined),
+            q.eq('user', user._id).eq('archived', false),
           )
           .collect()
       ).map(async daddy => {
@@ -144,6 +144,7 @@ export const createDaddy = mutation({
       name,
       vibeRating,
       lifetimeValue: 0,
+      archived: false,
     });
 
     return daddyId;
@@ -157,6 +158,16 @@ export const archiveDaddy = mutation({
 
     if (!user) return null;
     return await ctx.db.patch(daddy, { archived: true });
+  },
+});
+
+export const unarchiveDaddy = mutation({
+  args: { daddy: v.id('daddies') },
+  handler: async (ctx, { daddy }) => {
+    const user = await getConvexMutationUser(ctx);
+
+    if (!user) return null;
+    return await ctx.db.patch(daddy, { archived: false });
   },
 });
 

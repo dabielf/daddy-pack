@@ -9,6 +9,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import { motion } from 'framer-motion';
 import { staggerUp as stagger } from '@/constants/animations';
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 export default function EventLog({
   contacts,
@@ -58,7 +59,7 @@ export default function EventLog({
 
   function EventStatus({ event }: { event: extendedContact | extendedDate }) {
     const past = new Date(event.date).getTime() < new Date().getTime();
-    if (!past) {
+    if (!past && event.status === 'scheduled') {
       return (
         <Badge
           className="w-fit font-light border-cyan-500 text-cyan-500"
@@ -73,7 +74,7 @@ export default function EventLog({
           className="w-fit font-light border-red-600 text-red-600"
           variant="outline"
         >
-          Cancelled
+          Canceled
         </Badge>
       );
     } else if (event.status === 'scheduled' || !event.status) {
@@ -100,7 +101,19 @@ export default function EventLog({
   function EventDisplayer(event: extendedContact | extendedDate) {
     if (event.eventType === 'contact') {
       return (
-        <motion.div key={event._id} variants={stagger}>
+        <motion.div
+          key={event._id}
+          variants={stagger}
+          animate={{
+            opacity: hovered == event._id || hovered == null ? 1 : 0.7,
+            filter:
+              hovered == event._id || hovered == null
+                ? 'none'
+                : 'grayscale(0.7)',
+          }}
+          onHoverStart={() => setHovered(event._id)}
+          onHoverEnd={() => setHovered(null)}
+        >
           <Link
             href={`/contacts/${event._id}`}
             className="event flex justify-between items-start gap-4"
@@ -116,17 +129,40 @@ export default function EventLog({
                 </div>
               </div>
 
-              <Markdown className="text-sm">
+              <Markdown
+                className={cn(
+                  hovered == event._id || hovered == null ? '' : 'opacity-70',
+                  'text-sm transition-all',
+                )}
+              >
                 {event.notes || 'No notes for this contact'}
               </Markdown>
             </div>
-            <ChevronRight className="mt-2" size={20} />
+            <motion.div
+              animate={{
+                scale: hovered == event._id ? 1.5 : 1,
+              }}
+            >
+              <ChevronRight className="mt-2" size={20} />
+            </motion.div>
           </Link>
         </motion.div>
       );
     } else {
       return (
-        <motion.div key={event._id} variants={stagger}>
+        <motion.div
+          key={event._id}
+          variants={stagger}
+          animate={{
+            opacity: hovered == event._id || hovered == null ? 1 : 0.7,
+            filter:
+              hovered == event._id || hovered == null
+                ? 'none'
+                : 'grayscale(0.7)',
+          }}
+          onHoverStart={() => setHovered(event._id)}
+          onHoverEnd={() => setHovered(null)}
+        >
           <Link
             href={`/dates/${event._id}`}
             className="event flex items-start justify-between gap-2"
@@ -145,7 +181,13 @@ export default function EventLog({
               <EventStatus event={event} />
             </div>
 
-            <ChevronRight className="mt-2" size={20} />
+            <motion.div
+              animate={{
+                scale: hovered == event._id ? 1.5 : 1,
+              }}
+            >
+              <ChevronRight className="mt-2" size={20} />
+            </motion.div>
           </Link>
         </motion.div>
       );

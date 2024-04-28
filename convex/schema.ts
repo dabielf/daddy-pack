@@ -32,17 +32,26 @@ export default defineSchema({
     notes: v.optional(v.string()),
     earningsEstimate: v.optional(v.number()),
     vibeRating: v.number(),
+    isFavorite: v.optional(v.boolean()),
     giftingMethod: v.optional(v.string()),
     lifetimeValue: v.number(),
     mostRecentDate: v.optional(v.number()),
     mostRecentContact: v.optional(v.number()),
-    archived: v.optional(v.boolean()),
+    allowance: v.optional(v.boolean()),
+    allowanceAmount: v.optional(v.number()),
+    allowanceInterval: v.optional(v.number()),
+    archived: v.boolean(),
     archivedReason: v.optional(v.string()),
   })
     .index('by_user', ['user'])
     .index('by_name', ['name'])
-    .index('by_lifetymeValue', ['lifetimeValue'])
     .index('by_user_archived', ['user', 'archived']),
+  allowance: defineTable({
+    daddy: v.id('daddies'),
+    amount: v.number(),
+    paid: v.optional(v.boolean()),
+  }).index('by_daddy', ['daddy']),
+
   // Includes: SD name, date, location, time it starts, time it finishes, comfort level, fun level, sex notes, personality notes, score of how I felt leaving the date (good, not so good), score of how I’d feel about another date, gift amount
   dates: defineTable({
     user: v.id('users'),

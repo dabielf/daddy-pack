@@ -427,7 +427,7 @@ export default function DaddyPage({
   const [edit, setEdit] = useState(false);
 
   function goBack() {
-    router.back();
+    router.push('/daddies');
   }
 
   if (!daddyData) return null;
@@ -454,8 +454,8 @@ export default function DaddyPage({
                     <AvatarFallback>{daddy.name.split('')[0]}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <h1 className="text-2xl font-bold">{daddy?.name}</h1>
-                    <p>
+                    <h1 className="text-2xl font-semibold">{daddy?.name}</h1>
+                    <p className="font-medium text-slate-600">
                       {dates.length || 0} Dates - {contacts.length || 0}{' '}
                       Contacts
                     </p>
@@ -473,17 +473,25 @@ export default function DaddyPage({
                     </NewContactButton>
                   )}
 
-                  <Button
+                  {/* <Button
                     onClick={() => setEdit(editStatus => !editStatus)}
                     disabled={edit}
                     size="sm"
                   >
                     EDIT
-                  </Button>
+                  </Button> */}
                 </div>
               </CardTitle>
             </CardHeader>
           </Card>
+          <Button
+            onClick={() => setEdit(editStatus => !editStatus)}
+            disabled={edit}
+            // size="sm"
+            className="rounded-sm"
+          >
+            EDIT
+          </Button>
           <DaddyDisplayOrEditForm
             daddyData={daddy}
             edit={edit}

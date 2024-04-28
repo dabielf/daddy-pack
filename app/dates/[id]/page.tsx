@@ -480,8 +480,8 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
     }
   }
 
-  function goBack() {
-    router.back();
+  function goBack(daddyId: string) {
+    router.push(`/daddies/${daddyId}`);
   }
 
   if (!dateData) return null;
@@ -491,7 +491,7 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
   return (
     <div className="flex w-full h-full flex-col">
       <div
-        onClick={goBack}
+        onClick={() => goBack(daddy?._id || '')}
         className="text-md text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-4"
       >
         <ChevronLeft size={24} />
@@ -504,17 +504,19 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
               <CardTitle className="flex justify-between items-center">
                 <div className="flex flex-row items-center gap-4">
                   <div>
-                    <h1 className="text-2xl font-bold flex flex-row gap-2 items-center">
+                    <h1 className="text-2xl font-semibold flex flex-row gap-2 items-center">
                       <CalendarFold size={20} /> Date with{' '}
                       <Link
                         href={`/daddies/${date.daddy}`}
                         className="hover:underline decoration-primary"
                       >
                         {daddy?.name}
-                      </Link>{' '}
-                      {formatDistance(date.date, new Date(), {
-                        addSuffix: true,
-                      })}
+                      </Link>
+                      <span className="font-medium text-slate-600">
+                        {formatDistance(date.date, new Date(), {
+                          addSuffix: true,
+                        })}
+                      </span>
                     </h1>
                     {/* <p>
                       {dates.length || 0} Dates - {contacts.length || 0}{' '}
@@ -554,16 +556,16 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
                       </AlertDialogContent>
                     </AlertDialog>
                   )}
-                  <Button
-                    onClick={() => setEdit(editStatus => !editStatus)}
-                    disabled={edit}
-                  >
-                    EDIT
-                  </Button>
                 </div>
               </CardTitle>
             </CardHeader>
           </Card>
+          <Button
+            onClick={() => setEdit(editStatus => !editStatus)}
+            disabled={edit}
+          >
+            EDIT
+          </Button>
           <DateDisplayOrEditForm
             dateData={date}
             edit={edit}

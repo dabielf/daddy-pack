@@ -37,6 +37,7 @@ import DaddyBlock from './daddyBlock';
 import { NewDaddyButton } from './newDaddyDialog';
 import NoDaddyYet from './noDaddyYet';
 import { staggerUpDaddies as stagger } from '@/constants/animations';
+import { ArchivedDaddiesButton } from './archivedDaddies';
 
 export function DeleteDaddyButton({
   daddy,
@@ -137,7 +138,7 @@ export function ArchiveDaddyButton({
 }
 
 export function DaddiesList() {
-  const [hovered, setHovered] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
   const [orderType, setOrderType] = useState<string | undefined>(undefined);
   const daddies = useQuery(api.daddies.getDaddies);
 
@@ -221,12 +222,7 @@ export function DaddiesList() {
           </Select>
         </div>
         <div className="flex flex-row gap-4">
-          <Button
-            variant="ghost"
-            className="border border-transparent hover:bg-transparent hover:border-slate-500"
-          >
-            See Archived
-          </Button>
+          <ArchivedDaddiesButton />
 
           <NewDaddyButton />
         </div>
@@ -256,13 +252,15 @@ export function DaddiesList() {
                   value={daddy}
                   variants={stagger}
                   animate={{
-                    opacity: hovered == i || hovered == null ? 1 : 0.7,
+                    opacity: hovered == daddy._id || hovered == null ? 1 : 0.7,
                     filter:
-                      hovered == i || hovered == null ? 'none' : 'grayscale(1)',
+                      hovered == daddy._id || hovered == null
+                        ? 'none'
+                        : 'grayscale(0.6)',
                   }}
                   className-="min-w-[470px] grow"
                   whileHover={{ scale: 1.03, rotate: -0.5 }}
-                  onHoverStart={() => setHovered(i)}
+                  onHoverStart={() => setHovered(daddy._id)}
                   onHoverEnd={() => setHovered(null)}
                 >
                   <DaddyBlock daddy={daddy} />
