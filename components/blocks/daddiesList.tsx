@@ -1,12 +1,23 @@
 'use client';
 
 import { api } from '@/convex/_generated/api';
-import { Id } from '@/convex/_generated/dataModel';
+import { Id, Doc } from '@/convex/_generated/dataModel';
 import { useMutation, useQuery } from 'convex/react';
-import { motion } from 'framer-motion';
+import { motion, Reorder } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import { DaddyExtendedData } from '@/custom-types';
+import animations from '@/constants/animations';
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 import {
   AlertDialog,
@@ -21,7 +32,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import animations, { staggerUp } from '@/constants/animations';
 import { toast } from 'sonner';
 import DaddyBlock from './daddyBlock';
 import { NewDaddyButton } from './newDaddyDialog';
@@ -128,12 +138,98 @@ export function ArchiveDaddyButton({
 
 export function DaddiesList() {
   const [hovered, setHovered] = useState<number | null>(null);
+  const [orderType, setOrderType] = useState<string | undefined>(undefined);
   const daddies = useQuery(api.daddies.getDaddies);
+
+  const [orderedDaddies, setOrderedDaddies] = useState<DaddyExtendedData[]>(
+    daddies || [],
+  );
+
+  useEffect(() => {
+    if (daddies && orderedDaddies.length !== daddies.length) {
+      setOrderedDaddies(daddies);
+    }
+  }, [daddies, orderedDaddies]);
+
+  useEffect(() => {
+    if (orderType === 'lifetimeValueDown') {
+      setOrderedDaddies(
+        orderedDaddies.sort((a, b) => b.lifetimeValue - a.lifetimeValue),
+      );
+    }
+
+    if (orderType === 'lifetimeValueUp') {
+      setOrderedDaddies(
+        orderedDaddies.sort((a, b) => a.lifetimeValue - b.lifetimeValue),
+      );
+    }
+
+    if (orderType === 'vibeRating') {
+      setOrderedDaddies(
+        orderedDaddies.sort((a, b) => b.vibeRating - a.vibeRating),
+      );
+    }
+
+    if (orderType === 'mostRecentDate') {
+      setOrderedDaddies(
+        orderedDaddies.sort(
+          (a, b) => (b.mostRecentDate || 0) - (a.mostRecentDate || 0),
+        ),
+      );
+    }
+
+    if (orderType === 'nextDate') {
+      //create a new Date 50 years from now
+      const fiftyYearsFromNow = new Date();
+      fiftyYearsFromNow.setFullYear(fiftyYearsFromNow.getFullYear() + 50);
+      const fiftyYearsFromNowTimestamp = fiftyYearsFromNow.getTime();
+
+      setOrderedDaddies(
+        orderedDaddies.sort(
+          (a, b) =>
+            (a.nextDate || fiftyYearsFromNowTimestamp) -
+            (b.nextDate || fiftyYearsFromNowTimestamp),
+        ),
+      );
+    }
+  }, [orderType, orderedDaddies]);
+
   return (
     <div className="flex flex-grow flex-col">
       <div className="flex flex-row justify-between items-center mb-4">
-        <h1 className="text-3xl font-semibold">Daddies</h1>
-        <NewDaddyButton />
+        <div className=" flex flex-row gap-4">
+          <h1 className="text-3xl font-semibold">Daddies</h1>
+          <Select value={orderType} onValueChange={setOrderType}>
+            <SelectTrigger className="w-[220px] bg-white">
+              <SelectValue placeholder="Reorder by..." />
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              <SelectGroup>
+                <SelectLabel>Order by:</SelectLabel>
+                <SelectItem value="lifetimeValueUp">
+                  Lifetime Value Ascending
+                </SelectItem>
+                <SelectItem value="lifetimeValueDown">
+                  Lifetime Value Descending️
+                </SelectItem>
+                <SelectItem value="nextDate">Next Date</SelectItem>
+                <SelectItem value="mostRecentDate">Most Recent Date</SelectItem>
+                <SelectItem value="vibeRating">Vibe Rating</SelectItem>
+                <SelectItem value="_creationTime">Date Added</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-row gap-4">
+          <Button
+            variant="ghost"
+            className="border border-transparent hover:bg-transparent hover:border-slate-500"
+          >
+            See Archived
+          </Button>
+
+          <NewDaddyButton />
+        </div>
       </div>
       {(() => {
         if (!daddies) {
@@ -144,32 +240,35 @@ export function DaddiesList() {
               <Skeleton className="w-full h-[20px] rounded-full mb-4" />
             </div>
           );
-        } else if (daddies?.length) {
+        } else if (orderedDaddies?.length) {
           return (
-            <motion.div
+            <Reorder.Group
               variants={stagger}
               initial="initial"
               animate="animate"
+              values={orderedDaddies}
+              onReorder={() => {}}
               className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4"
             >
-              {daddies.map((daddy, i) => (
-                <motion.div
+              {orderedDaddies.map((daddy, i) => (
+                <Reorder.Item
+                  key={daddy._id}
+                  value={daddy}
                   variants={stagger}
                   animate={{
                     opacity: hovered == i || hovered == null ? 1 : 0.7,
                     filter:
                       hovered == i || hovered == null ? 'none' : 'grayscale(1)',
                   }}
-                  className-=" hover:bg-slate-100 min-w-[470px] grow"
+                  className-="min-w-[470px] grow"
                   whileHover={{ scale: 1.03, rotate: -0.5 }}
                   onHoverStart={() => setHovered(i)}
                   onHoverEnd={() => setHovered(null)}
-                  key={daddy._id}
                 >
                   <DaddyBlock daddy={daddy} />
-                </motion.div>
+                </Reorder.Item>
               ))}
-            </motion.div>
+            </Reorder.Group>
           );
         } else {
           return (

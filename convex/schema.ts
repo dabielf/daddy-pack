@@ -42,7 +42,7 @@ export default defineSchema({
     .index('by_user', ['user'])
     .index('by_name', ['name'])
     .index('by_lifetymeValue', ['lifetimeValue'])
-    .index('by_archived', ['archived']),
+    .index('by_user_archived', ['user', 'archived']),
   // Includes: SD name, date, location, time it starts, time it finishes, comfort level, fun level, sex notes, personality notes, score of how I felt leaving the date (good, not so good), score of how I’d feel about another date, gift amount
   dates: defineTable({
     user: v.id('users'),

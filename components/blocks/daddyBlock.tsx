@@ -26,7 +26,7 @@ function StarRating({ stars = 0 }: { stars: number }) {
 export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
   return (
     <Link href={`/daddies/${daddy._id}`}>
-      <Card className="hover:shadow-xl transition-all">
+      <Card className="hover:shadow-xl hover:border-slate-500 border-slate-300 transition-all">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="text-xl font-medium">
             <div className="flex flex-col">

@@ -34,6 +34,8 @@ export const staggerUpDaddies = {
     y: 0,
     transition: {
       staggerChildren: 0.1,
+      duration: 0.2,
+      type: 'spring',
     },
   },
 };

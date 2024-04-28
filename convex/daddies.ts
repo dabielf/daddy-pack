@@ -39,8 +39,9 @@ export const getArchivedDaddies = query({
 
     return await ctx.db
       .query('daddies')
-      .withIndex('by_user', q => q.eq('user', user._id))
-      .filter(q => q.eq(q.field('archived'), true))
+      .withIndex('by_user_archived', q =>
+        q.eq('user', user._id).eq('archived', true),
+      )
       .collect();
   },
 });
@@ -51,15 +52,16 @@ export const getDaddies = query({
     const user = await getConvexQueryUser(ctx);
 
     if (!user) return null;
-    return await Promise.all(
+    const daddies = await Promise.all(
       (
         await ctx.db
           .query('daddies')
-          .withIndex('by_user', q => q.eq('user', user._id))
-          .filter(q => q.neq(q.field('archived'), true))
+          .withIndex('by_user_archived', q =>
+            q.eq('user', user._id).eq('archived', false || undefined),
+          )
           .collect()
       ).map(async daddy => {
-        const dates = await ctx.db
+        const datesData = await ctx.db
           .query('dates')
           .withIndex('by_daddy', q => q.eq('daddy', daddy._id))
           .collect();
@@ -69,6 +71,8 @@ export const getDaddies = query({
           .withIndex('by_daddy', q => q.eq('daddy', daddy._id))
           .collect();
 
+        const dates = datesData.filter(date => date.status !== 'canceled');
+
         // count how many dates have the status of 'scheduled'
         const scheduledDates = dates.filter(
           date => date.status === 'scheduled' || !date.status,
@@ -76,7 +80,7 @@ export const getDaddies = query({
         const completedDates = dates.filter(
           date => date.status === 'completed',
         ).length;
-        const canceledDates = dates.filter(
+        const canceledDates = datesData.filter(
           date => date.status === 'canceled',
         ).length;
 
@@ -112,6 +116,16 @@ export const getDaddies = query({
         };
       }),
     );
+
+    // if (orderType === 'lifetimeValue') {
+    //   return daddies.sort((a, b) => b.lifetimeValue - a.lifetimeValue);
+    // }
+    // if (orderType === 'mostRecentDate') {
+    //   return daddies.sort(
+    //     (a, b) => (b.mostRecentDate || 0) - (a.mostRecentDate || 0),
+    //   );
+    // }
+    return daddies;
   },
 });
 

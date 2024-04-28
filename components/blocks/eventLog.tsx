@@ -8,6 +8,7 @@ import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
 import { motion } from 'framer-motion';
 import { staggerUp as stagger } from '@/constants/animations';
+import { useState } from 'react';
 
 export default function EventLog({
   contacts,
@@ -16,6 +17,7 @@ export default function EventLog({
   contacts: Doc<'contacts'>[];
   dates: Doc<'dates'>[];
 }) {
+  const [hovered, setHovered] = useState<string | null>(null);
   // create a function that takes contact and dates, order them by date, and returns two arrays, one with the incoming contacts and dates and one with the past contacts and dates
   function orderEvents(contacts: Doc<'contacts'>[], dates: Doc<'dates'>[]) {
     // first, map over both arrays and add a type property to each object
