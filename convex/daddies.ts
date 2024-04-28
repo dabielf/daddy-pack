@@ -152,12 +152,12 @@ export const createDaddy = mutation({
 });
 
 export const archiveDaddy = mutation({
-  args: { daddy: v.id('daddies') },
-  handler: async (ctx, { daddy }) => {
+  args: { daddy: v.id('daddies'), archivedReason: v.optional(v.string()) },
+  handler: async (ctx, { daddy, archivedReason }) => {
     const user = await getConvexMutationUser(ctx);
 
     if (!user) return null;
-    return await ctx.db.patch(daddy, { archived: true });
+    return await ctx.db.patch(daddy, { archived: true, archivedReason });
   },
 });
 
@@ -167,7 +167,10 @@ export const unarchiveDaddy = mutation({
     const user = await getConvexMutationUser(ctx);
 
     if (!user) return null;
-    return await ctx.db.patch(daddy, { archived: false });
+    return await ctx.db.patch(daddy, {
+      archived: false,
+      archivedReason: undefined,
+    });
   },
 });
 

@@ -38,6 +38,7 @@ import { NewDaddyButton } from './newDaddyDialog';
 import NoDaddyYet from './noDaddyYet';
 import { staggerUpDaddies as stagger } from '@/constants/animations';
 import { ArchivedDaddiesButton } from './archivedDaddies';
+import Tiptap from './tiptap';
 
 export function DeleteDaddyButton({
   daddy,
@@ -98,11 +99,12 @@ export function ArchiveDaddyButton({
   name: string;
   buttonText?: string;
 }) {
+  const [archivedReason, setArchivedReason] = useState<string>('');
   const archiveDaddy = useMutation(api.daddies.archiveDaddy);
   const router = useRouter();
 
   function archiveDaddyHandler() {
-    archiveDaddy({ daddy });
+    archiveDaddy({ daddy, archivedReason });
 
     toast.success(`${name} was successfully ARCHIVED 🎊.`);
     router.push('/daddies');
@@ -126,6 +128,10 @@ export function ArchiveDaddyButton({
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
+        <div className="mt-2 -mb-2 font-semibold">
+          (optional) Reason for archiving:
+        </div>
+        <Tiptap content={archivedReason} onChange={setArchivedReason} />
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={archiveDaddyHandler}>

@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/dialog';
 import Link from 'next/link';
 import { Id } from '@/convex/_generated/dataModel';
+import { Separator } from '../ui/separator';
+import Markdown from 'react-markdown';
 
 export function ArchivedDaddiesButton() {
   const archivedDaddies = useQuery(api.daddies.getArchivedDaddies);
@@ -38,26 +40,42 @@ export function ArchivedDaddiesButton() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Your Archived Daddies</DialogTitle>
-            <DialogDescription>
+            {/* <DialogDescription>
               This action cannot be undone. This will permanently delete your
               account and remove your data from our servers.
-            </DialogDescription>
+            </DialogDescription> */}
           </DialogHeader>
-          {archivedDaddies?.length > 0 &&
+          {archivedDaddies &&
+            archivedDaddies?.length > 0 &&
             archivedDaddies.map(daddy => {
               return (
                 <div
                   key={daddy._id}
-                  className="flex flex-row justify-between items-center"
+                  className="flex flex-col border border-primary rounded-sm px-3 py-2"
                 >
-                  <Link href={`/daddies/${daddy._id}`}>{daddy.name}</Link>
+                  <div className="flex flex-row justify-between items-center">
+                    <Link
+                      href={`/daddies/${daddy._id}`}
+                      className="hover:underline decoration-primary font-semibold"
+                    >
+                      {daddy.name}
+                    </Link>
 
-                  <Button
-                    variant="ghost"
-                    onClick={() => handleUnarchiveDaddy(daddy._id)}
-                  >
-                    Unarchive
-                  </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleUnarchiveDaddy(daddy._id)}
+                    >
+                      Unarchive
+                    </Button>
+                  </div>
+                  {daddy.archivedReason && (
+                    <div className="flex flex-col  italic text-sm">
+                      <span className="font-semibold">
+                        Reason for archiving:
+                      </span>
+                      <Markdown>{daddy.archivedReason || ''}</Markdown>
+                    </div>
+                  )}
                 </div>
               );
             })}
