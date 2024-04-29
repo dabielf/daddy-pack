@@ -39,41 +39,45 @@ export function ArchivedDaddiesButton() {
       <DialogPortal>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Your Archived Daddies</DialogTitle>
+            <DialogTitle className="text-2xl">
+              Your Archived Daddies
+            </DialogTitle>
             {/* <DialogDescription>
               This action cannot be undone. This will permanently delete your
               account and remove your data from our servers.
             </DialogDescription> */}
           </DialogHeader>
+          <Separator className="bg-foreground" />
           {archivedDaddies &&
             archivedDaddies?.length > 0 &&
             archivedDaddies.map(daddy => {
               return (
-                <div
-                  key={daddy._id}
-                  className="flex flex-col border border-primary rounded-sm px-3 py-2"
-                >
+                <div key={daddy._id} className="flex flex-col">
                   <div className="flex flex-row justify-between items-center">
-                    <Link
-                      href={`/daddies/${daddy._id}`}
-                      className="hover:underline decoration-primary font-semibold"
-                    >
-                      {daddy.name}
-                    </Link>
-
+                    <Button variant="link" asChild>
+                      <Link
+                        href={`/daddies/${daddy._id}`}
+                        className="font-medium text-xl px-0"
+                      >
+                        {daddy.name}
+                      </Link>
+                    </Button>
                     <Button
-                      variant="ghost"
+                      variant="link"
+                      className="px-0"
                       onClick={() => handleUnarchiveDaddy(daddy._id)}
                     >
                       Unarchive
                     </Button>
                   </div>
                   {daddy.archivedReason && (
-                    <div className="flex flex-col  italic text-sm">
+                    <div className="flex flex-col text-sm">
                       <span className="font-semibold">
                         Reason for archiving:
                       </span>
-                      <Markdown>{daddy.archivedReason || ''}</Markdown>
+                      <Markdown className="italic text-xs">
+                        {daddy.archivedReason || ''}
+                      </Markdown>
                     </div>
                   )}
                 </div>
