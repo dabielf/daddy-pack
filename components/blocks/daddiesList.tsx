@@ -143,14 +143,71 @@ export function ArchiveDaddyButton({
   );
 }
 
+function getLocalOrderType() {
+  return localStorage.getItem('orderType') || undefined;
+}
+
+function setLocalOrderType(orderType: string | undefined) {
+  if (orderType) {
+    localStorage.setItem('orderType', orderType);
+  }
+}
+
+function orderDaddies(
+  daddies: DaddyExtendedData[] | null | undefined,
+  orderType: string | undefined,
+) {
+  if (!daddies) {
+    return [];
+  }
+  if (!orderType) {
+    return daddies || [];
+  }
+  if (orderType === 'lifetimeValueDown') {
+    return daddies.sort((a, b) => b.lifetimeValue - a.lifetimeValue);
+  }
+
+  if (orderType === 'lifetimeValueUp') {
+    return daddies.sort((a, b) => a.lifetimeValue - b.lifetimeValue);
+  }
+
+  if (orderType === 'vibeRating') {
+    return daddies.sort((a, b) => b.vibeRating - a.vibeRating);
+  }
+
+  if (orderType === 'mostRecentDate') {
+    return daddies.sort(
+      (a, b) => (b.mostRecentDate || 0) - (a.mostRecentDate || 0),
+    );
+  }
+
+  if (orderType === 'nextDate') {
+    //create a new Date 50 years from now
+    const fiftyYearsFromNow = new Date();
+    fiftyYearsFromNow.setFullYear(fiftyYearsFromNow.getFullYear() + 50);
+    const fiftyYearsFromNowTimestamp = fiftyYearsFromNow.getTime();
+
+    return daddies.sort(
+      (a, b) =>
+        (a.nextDate || fiftyYearsFromNowTimestamp) -
+        (b.nextDate || fiftyYearsFromNowTimestamp),
+    );
+  }
+
+  return [];
+}
+
 export function DaddiesList() {
+  const localOrderType = getLocalOrderType();
   const [hovered, setHovered] = useState<string | null>(null);
-  const [orderType, setOrderType] = useState<string | undefined>(undefined);
+  const [orderType, setOrderType] = useState<string | undefined>(
+    localOrderType,
+  );
   const daddies = useQuery(api.daddies.getDaddies);
 
-  const [orderedDaddies, setOrderedDaddies] = useState<DaddyExtendedData[]>(
-    daddies || [],
-  );
+  const initialDaddies = orderDaddies(daddies, orderType);
+  const [orderedDaddies, setOrderedDaddies] =
+    useState<DaddyExtendedData[]>(initialDaddies);
 
   useEffect(() => {
     if (daddies && orderedDaddies.length !== daddies.length) {
@@ -159,46 +216,8 @@ export function DaddiesList() {
   }, [daddies, orderedDaddies]);
 
   useEffect(() => {
-    if (orderType === 'lifetimeValueDown') {
-      setOrderedDaddies(
-        orderedDaddies.sort((a, b) => b.lifetimeValue - a.lifetimeValue),
-      );
-    }
-
-    if (orderType === 'lifetimeValueUp') {
-      setOrderedDaddies(
-        orderedDaddies.sort((a, b) => a.lifetimeValue - b.lifetimeValue),
-      );
-    }
-
-    if (orderType === 'vibeRating') {
-      setOrderedDaddies(
-        orderedDaddies.sort((a, b) => b.vibeRating - a.vibeRating),
-      );
-    }
-
-    if (orderType === 'mostRecentDate') {
-      setOrderedDaddies(
-        orderedDaddies.sort(
-          (a, b) => (b.mostRecentDate || 0) - (a.mostRecentDate || 0),
-        ),
-      );
-    }
-
-    if (orderType === 'nextDate') {
-      //create a new Date 50 years from now
-      const fiftyYearsFromNow = new Date();
-      fiftyYearsFromNow.setFullYear(fiftyYearsFromNow.getFullYear() + 50);
-      const fiftyYearsFromNowTimestamp = fiftyYearsFromNow.getTime();
-
-      setOrderedDaddies(
-        orderedDaddies.sort(
-          (a, b) =>
-            (a.nextDate || fiftyYearsFromNowTimestamp) -
-            (b.nextDate || fiftyYearsFromNowTimestamp),
-        ),
-      );
-    }
+    setLocalOrderType(orderType);
+    setOrderedDaddies(orderDaddies(orderedDaddies, orderType));
   }, [orderType, orderedDaddies]);
 
   return (

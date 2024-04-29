@@ -86,7 +86,7 @@ function DisplayForm({ dateData }: { dateData: Doc<'dates'>; edit: boolean }) {
           <p className="pt-2">{dateData.location || 'N/A'}</p>
         </motion.div>
         <motion.div className="space-y-1" variants={stagger}>
-          <p className="font-bold text-lg">Duration</p>
+          <p className="font-bold text-lg">Duration (hours)</p>
           <Separator className="bg-primary/50" />
           <p className="pt-2">{dateData.dateDuration || 'N/A'}</p>
         </motion.div>
@@ -175,6 +175,7 @@ function EditForm({
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    const status = dateData.status ? dateData.status : 'scheduled';
     const formattedValues = {
       ...values,
       date: values.date.valueOf(),
@@ -186,7 +187,7 @@ function EditForm({
       giftAmount: Number(values.giftAmount || '0'),
       status: (Number(values.giftAmount || '0') > 0
         ? 'completed'
-        : 'scheduled') as Status | undefined,
+        : status) as Status,
     };
 
     try {
@@ -281,7 +282,7 @@ function EditForm({
                   name="dateDuration"
                   render={({ field }) => (
                     <FormItem className="grow">
-                      <FormLabel>Duration</FormLabel>
+                      <FormLabel>Duration (hours)</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -325,11 +326,11 @@ function EditForm({
                   name="comfortLevel"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Comfort Rating (min: 1, max: 5)</FormLabel>
+                      <FormLabel>Comfort Rating (min: 0, max: 5)</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
-                          min={1}
+                          min={0}
                           max={5}
                           placeholder="Comfort rating..."
                           {...field}
@@ -346,11 +347,11 @@ function EditForm({
                   name="funLevel"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Fun Rating (min: 1, max: 5)</FormLabel>
+                      <FormLabel>Fun Rating (min: 0, max: 5)</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
-                          min={1}
+                          min={0}
                           max={5}
                           placeholder="Fun rating..."
                           {...field}
@@ -368,12 +369,12 @@ function EditForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        General Date Rating (min: 1, max: 5)
+                        General Date Rating (min: 0, max: 5)
                       </FormLabel>
                       <FormControl>
                         <Input
                           type="number"
-                          min={1}
+                          min={0}
                           max={5}
                           placeholder="General Date rating..."
                           {...field}
@@ -394,6 +395,7 @@ function EditForm({
                       <FormControl>
                         <Input
                           type="number"
+                          min={0}
                           placeholder="Expected gift..."
                           {...field}
                         />
@@ -413,6 +415,7 @@ function EditForm({
                       <FormControl>
                         <Input
                           type="number"
+                          min={0}
                           placeholder="Received gift..."
                           {...field}
                         />
