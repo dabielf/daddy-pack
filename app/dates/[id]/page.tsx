@@ -1,6 +1,7 @@
 'use client';
 
 import Tiptap from '@/components/blocks/tiptap';
+import { AddToCalendarButton } from '@/components/blocks/addToCalendarButton';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -563,6 +564,7 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
                       </AlertDialogContent>
                     </AlertDialog>
                   )}
+                  <AddToCalendarButton date={date} />
                 </div>
               </CardTitle>
             </CardHeader>
