@@ -71,6 +71,7 @@ export default defineSchema({
         v.literal('scheduled'),
         v.literal('completed'),
         v.literal('canceled'),
+        v.literal('no-show'),
       ),
     ),
     archived: v.optional(v.boolean()),

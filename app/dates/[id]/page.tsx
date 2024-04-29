@@ -467,12 +467,13 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
     date: params.id,
   });
   const updateDate = useMutation(api.dates.updateDate);
+  const cancelDate = useMutation(api.dates.cancelDate);
   const router = useRouter();
   const [edit, setEdit] = useState(false);
 
   function onCancelDate(dateId: Id<'dates'>) {
     try {
-      updateDate({ dateId, date: dateData?.date.date, status: 'canceled' });
+      cancelDate({ dateId });
 
       toast.success('Date has been canceled.');
     } catch (error) {
@@ -517,6 +518,9 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
                           addSuffix: true,
                         })}
                       </span>
+                      {date.status === 'canceled' && (
+                        <span className="text-red-500">( canceled )</span>
+                      )}
                     </h1>
                     {/* <p>
                       {dates.length || 0} Dates - {contacts.length || 0}{' '}
