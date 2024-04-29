@@ -38,6 +38,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Markdown from 'react-markdown';
 import { z } from 'zod';
+import Link from 'next/link';
 
 export default function ContactPage({
   params,
@@ -110,7 +111,13 @@ export default function ContactPage({
               <div>
                 <h1 className="text-2xl font-semibold flex flex-row gap-2 items-center">
                   <MessageSquareMore size={20} />
-                  Contact with {daddy ? daddy.name : 'REDACTED'}
+                  Contact with{' '}
+                  <Link
+                    href={`/daddies/${contact.daddy}`}
+                    className="hover:underline decoration-primary"
+                  >
+                    {daddy ? daddy.name : 'REDACTED'}
+                  </Link>
                   <span className="text-slate-600 font-medium">
                     {formatDate(contact.date)}
                   </span>

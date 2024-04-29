@@ -58,6 +58,7 @@ export default defineSchema({
     daddy: v.id('daddies'),
     daddyName: v.optional(v.string()),
     date: v.number(),
+    birthday: v.optional(v.number()),
     location: v.optional(v.string()),
     dateDuration: v.optional(v.number()),
     comfortLevel: v.optional(v.number()),

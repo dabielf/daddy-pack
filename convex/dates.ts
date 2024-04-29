@@ -68,6 +68,23 @@ export const cancelDate = mutation({
   },
 });
 
+export const updateDateStatus = mutation({
+  args: {
+    dateId: v.id('dates'),
+    status: v.union(
+      v.literal('scheduled'),
+      v.literal('completed'),
+      v.literal('canceled'),
+      v.literal('no-show'),
+    ),
+  },
+  handler: async (ctx, { dateId, status }) => {
+    await ctx.db.patch(dateId, {
+      status,
+    });
+  },
+});
+
 export const updateDate = mutation({
   args: {
     dateId: v.id('dates'),

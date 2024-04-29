@@ -53,6 +53,7 @@ import Markdown from 'react-markdown';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { staggerUp as stagger } from '@/constants/animations';
+import { DateStatusSelector } from '@/components/blocks/dateStatusSelector';
 
 const formSchema = z.object({
   date: z.date(),
@@ -497,7 +498,7 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
     <div className="flex w-full h-full flex-col">
       <div
         onClick={() => goBack(daddy?._id || '')}
-        className="text-md text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-4"
+        className="text-md text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-4 w-fit"
       >
         <ChevronLeft size={24} />
         Back
@@ -508,32 +509,28 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 <div className="flex flex-row items-center gap-4">
-                  <div>
-                    <h1 className="text-2xl font-semibold flex flex-row gap-2 items-center">
-                      <CalendarFold size={20} /> Date with{' '}
-                      <Link
-                        href={`/daddies/${date.daddy}`}
-                        className="hover:underline decoration-primary"
-                      >
-                        {daddy?.name}
-                      </Link>
-                      <span className="font-medium text-slate-600">
-                        {formatDistance(date.date, new Date(), {
-                          addSuffix: true,
-                        })}
-                      </span>
-                      {date.status === 'canceled' && (
-                        <span className="text-red-500">( canceled )</span>
-                      )}
-                    </h1>
-                    {/* <p>
+                  <h1 className="text-2xl font-semibold flex flex-row gap-2 items-center">
+                    <CalendarFold size={20} /> Date:
+                    <Link
+                      href={`/daddies/${date.daddy}`}
+                      className="hover:underline decoration-primary"
+                    >
+                      {daddy?.name}
+                    </Link>
+                    <span className="font-medium text-slate-600">
+                      {formatDistance(date.date, new Date(), {
+                        addSuffix: true,
+                      })}
+                    </span>
+                    <AddToCalendarButton date={date} />
+                  </h1>
+                  {/* <p>
                       {dates.length || 0} Dates - {contacts.length || 0}{' '}
                       Contacts
                     </p> */}
-                  </div>
                 </div>
                 <div className="flex flex-row gap-4">
-                  {date.status !== 'canceled' && (
+                  {/* {date.status !== 'canceled' && (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button disabled={edit} variant="outline">
@@ -563,8 +560,9 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-                  )}
-                  <AddToCalendarButton date={date} />
+                  )} */}
+
+                  <DateStatusSelector date={date} />
                 </div>
               </CardTitle>
             </CardHeader>

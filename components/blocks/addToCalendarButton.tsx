@@ -3,8 +3,6 @@
 import { google, ics } from 'calendar-link';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { ChevronRight } from 'lucide-react';
 import {
   Popover,
@@ -30,7 +28,9 @@ export function AddToCalendarButton({ date }: AddToCalendarButtonProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline">ADD TO CALENDAR</Button>
+        <Button variant="outline" className="ml-4">
+          ADD TO CALENDAR
+        </Button>
       </PopoverTrigger>
       <PopoverContent>
         <div className="grid gap-4">

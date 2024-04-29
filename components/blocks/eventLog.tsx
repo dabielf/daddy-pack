@@ -199,7 +199,7 @@ export default function EventLog({
       <CardHeader className="shadow-sm">
         <CardTitle className="text-xl">Timeline</CardTitle>
       </CardHeader>
-      <ScrollArea className="h-[600px]">
+      <ScrollArea className="h-[500px]">
         <CardContent>
           <motion.div
             variants={stagger}
