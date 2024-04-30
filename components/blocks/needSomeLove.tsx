@@ -82,8 +82,9 @@ export function NeedSomeLove({ daddies }: NeedSomeLoveProps) {
         <Separator className="bg-primary/50 mb-4" />
         {daddiesNeedLove.length === 0 && (
           <div className="h-[100px] flex flex-col justify-center items-center">
-            <div className="text-4xl">🎉</div>
-            <div className="text-lg">You&apos;re up to date!</div>
+            <div className="text-4xl mb-4">🎉</div>
+
+            <div className="text-lg leading-3">You&apos;re up to date!</div>
             <div className="text-lg">No Daddy needs contacting right now.</div>
           </div>
         )}

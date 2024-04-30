@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
 import { Id } from '@/convex/_generated/dataModel';
 import { Separator } from '../ui/separator';
@@ -48,44 +49,48 @@ export function ArchivedDaddiesButton() {
             </DialogDescription> */}
           </DialogHeader>
           <Separator className="bg-foreground" />
-          {archivedDaddies &&
-            archivedDaddies?.length > 0 &&
-            archivedDaddies.map(daddy => {
-              return (
-                <div key={daddy._id} className="flex flex-col">
-                  <div className="flex flex-row justify-between items-center">
-                    <Button variant="link" asChild>
-                      <Link
-                        href={`/daddies/${daddy._id}`}
-                        className="font-medium text-xl px-0"
+          <ScrollArea className="h-[300px] [&>*]:h-[300px]">
+            {archivedDaddies &&
+              archivedDaddies?.length > 0 &&
+              archivedDaddies.map(daddy => {
+                return (
+                  <div key={daddy._id} className="flex flex-col">
+                    <div className="flex flex-row justify-between items-center">
+                      <Button variant="link" asChild>
+                        <Link
+                          href={`/daddies/${daddy._id}`}
+                          className="font-medium text-xl px-0"
+                        >
+                          {daddy.name}
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="link"
+                        className="px-0"
+                        onClick={() => handleUnarchiveDaddy(daddy._id)}
                       >
-                        {daddy.name}
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="link"
-                      className="px-0"
-                      onClick={() => handleUnarchiveDaddy(daddy._id)}
-                    >
-                      Unarchive
-                    </Button>
-                  </div>
-                  {daddy.archivedReason && (
-                    <div className="flex flex-col text-sm">
-                      <span className="font-semibold">
-                        Reason for archiving:
-                      </span>
-                      <Markdown className="italic text-xs">
-                        {daddy.archivedReason || ''}
-                      </Markdown>
+                        Unarchive
+                      </Button>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          {archivedDaddies?.length === 0 && (
-            <div className="text-center">No archived daddies</div>
-          )}
+                    {daddy.archivedReason && (
+                      <div className="flex flex-col text-sm">
+                        <span className="font-semibold">
+                          Reason for archiving:
+                        </span>
+                        <Markdown className="italic text-xs">
+                          {daddy.archivedReason || ''}
+                        </Markdown>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            {archivedDaddies?.length === 0 && (
+              <div className="flex justify-center items-center h-full">
+                <p>No archived daddies</p>
+              </div>
+            )}
+          </ScrollArea>
         </DialogContent>
       </DialogPortal>
     </Dialog>

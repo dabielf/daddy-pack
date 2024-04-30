@@ -40,19 +40,19 @@ export const Header = () => {
   const button = isAuthenticated ? <SignOut /> : <SignIn />;
   return isLoading ? null : (
     <motion.div {...animations.appearDown}>
-      <header className="mb-9">
-        <div className="flex flex-row justify-between items-center w-full">
+      <header className="mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 items-center  w-full">
           <Link href={'/'}>
             <Image
-              src="/logo.svg"
+              src="/logo.png"
               alt="logo"
-              width={150}
+              width={160}
               height={100}
               priority
             />
           </Link>
 
-          <nav>
+          <nav className="justify-self-end md:place-self-center">
             <ul className="flex flex-row gap-4 items-center">
               {links.map(link => (
                 <li key={link.name}>
@@ -64,7 +64,7 @@ export const Header = () => {
             </ul>
           </nav>
 
-          <div className="hidden md:flex flex-row gap-4 items-center">
+          <div className="hidden md:flex flex-row gap-4 items-center place-self-end">
             {isLoading ? null : button}
           </div>
         </div>

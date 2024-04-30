@@ -181,6 +181,12 @@ function orderDaddies(
     );
   }
 
+  if (orderType === '_creationTime') {
+    return daddies.sort(
+      (a, b) => (b._creationTime || 0) - (a._creationTime || 0),
+    );
+  }
+
   if (orderType === 'nextDate') {
     //create a new Date 50 years from now
     const fiftyYearsFromNow = new Date();
@@ -210,15 +216,11 @@ export function DaddiesList() {
     useState<DaddyExtendedData[]>(initialDaddies);
 
   useEffect(() => {
-    if (daddies && orderedDaddies.length !== daddies.length) {
-      setOrderedDaddies(daddies);
-    }
-  }, [daddies, orderedDaddies]);
-
-  useEffect(() => {
     setLocalOrderType(orderType);
-    setOrderedDaddies(orderDaddies(orderedDaddies, orderType));
-  }, [orderType, orderedDaddies]);
+    if (daddies !== undefined) {
+      setOrderedDaddies(orderDaddies(daddies, orderType));
+    }
+  }, [daddies, orderType]);
 
   return (
     <div className="flex flex-grow flex-col">
