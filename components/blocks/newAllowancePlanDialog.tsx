@@ -2,15 +2,12 @@
 
 import { api } from '@/convex/_generated/api';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from 'convex/react';
-import { format, addDays } from 'date-fns';
+import { useMutation } from 'convex/react';
+import { addDays, format } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useDrawers } from '@/providers/convex-client-provider';
-
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import {
   Dialog,
   DialogClose,
@@ -22,7 +19,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -31,30 +27,18 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { TimePicker } from '@/components/ui/time-picker';
-import { Doc, Id } from '@/convex/_generated/dataModel';
-import { cn, getErrorMessage } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { Doc } from '@/convex/_generated/dataModel';
+import { getErrorMessage } from '@/lib/utils';
 import {
   Calendar as CalendarIcon,
   ChevronRight,
   CircleDollarSign,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { DaddyExtendedData } from '@/custom-types';
+
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 const formSchema = z.object({
   intervalInDays: z.coerce.number().int().positive(),

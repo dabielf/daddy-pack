@@ -12,7 +12,7 @@ import {
 
 import Link from 'next/link';
 import { Separator } from '../ui/separator';
-import { DaddyExtendedData } from '@/custom-types';
+import { Doc } from '@/convex/_generated/dataModel';
 
 //make a StarRating component that fakes a number of stars based on a stars prop from 1 to 5 , use the star icons from lucide
 function StarRating({ stars = 0 }: { stars: number }) {
@@ -47,7 +47,7 @@ function AllowanceIcon() {
   );
 }
 
-export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
+export default function DaddyBlock({ daddy }: { daddy: Doc<'daddies'> }) {
   return (
     <Link href={`/daddies/${daddy._id}`}>
       <Card className="hover:shadow-xl hover:border-slate-500 border-slate-300 transition-all">

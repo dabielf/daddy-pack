@@ -1,14 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-// import { Doc } from '@/convex/_generated/dataModel';
+import { Doc } from '@/convex/_generated/dataModel';
 import { subDays, formatDistance, isBefore } from 'date-fns';
 import { ChevronRight, MessageSquareHeart } from 'lucide-react';
 
-import { DaddyExtendedData } from '@/custom-types';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 
 interface NeedSomeLoveProps {
-  daddies: DaddyExtendedData[];
+  daddies: Doc<'daddies'>[];
 }
 
 function formatMostRecentDate(date: number | undefined) {
@@ -48,7 +47,7 @@ export function NeedSomeLove({ daddies }: NeedSomeLoveProps) {
     );
   });
 
-  function DisplayDaddy({ daddy }: { daddy: DaddyExtendedData }) {
+  function DisplayDaddy({ daddy }: { daddy: Doc<'daddies'> }) {
     return (
       <Link href={`/daddies/${daddy._id}`} className="group flex flex-row">
         <div className="grow">

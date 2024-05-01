@@ -48,7 +48,6 @@ import { Doc, Id } from '@/convex/_generated/dataModel';
 import { cn, getErrorMessage } from '@/lib/utils';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { toast } from 'sonner';
-import { DaddyExtendedData } from '@/custom-types';
 import Link from 'next/link';
 
 const formSchema = z.object({

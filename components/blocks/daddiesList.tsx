@@ -6,7 +6,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { motion, Reorder } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { DaddyExtendedData } from '@/custom-types';
+
 import animations from '@/constants/animations';
 
 import {
@@ -154,7 +154,7 @@ function setLocalOrderType(orderType: string | undefined) {
 }
 
 function orderDaddies(
-  daddies: DaddyExtendedData[] | null | undefined,
+  daddies: Doc<'daddies'>[] | null | undefined,
   orderType: string | undefined,
 ) {
   if (!daddies) {
@@ -195,8 +195,8 @@ function orderDaddies(
 
     return daddies.sort(
       (a, b) =>
-        (a.nextDate || fiftyYearsFromNowTimestamp) -
-        (b.nextDate || fiftyYearsFromNowTimestamp),
+        (a.nextDateDate || fiftyYearsFromNowTimestamp) -
+        (b.nextDateDate || fiftyYearsFromNowTimestamp),
     );
   }
 
@@ -213,7 +213,7 @@ export function DaddiesList() {
 
   const initialDaddies = orderDaddies(daddies, orderType);
   const [orderedDaddies, setOrderedDaddies] =
-    useState<DaddyExtendedData[]>(initialDaddies);
+    useState<Doc<'daddies'>[]>(initialDaddies);
 
   useEffect(() => {
     setLocalOrderType(orderType);
