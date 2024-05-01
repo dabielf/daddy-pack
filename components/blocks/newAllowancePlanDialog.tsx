@@ -58,10 +58,10 @@ const formSchema = z.object({
 
 function AllowanceLink({
   daddy,
-  allowance,
+  allowanceData,
 }: {
   daddy: Doc<'daddies'>;
-  allowance: Doc<'allowances'>;
+  allowanceData?: Doc<'allowances'> | null;
 }) {
   return (
     <Link href={`/daddies/${daddy._id}/allowance/${daddy.allowance}`}>
@@ -109,8 +109,9 @@ export function AddAllowancePlanButton({
     }
   }
 
-  if (daddy.allowance)
-    return <AllowanceLink daddy={daddy} allowance={allowance} />;
+  if (daddy.allowance) {
+    return <AllowanceLink daddy={daddy} allowanceData={allowance} />;
+  }
 
   return (
     <Dialog>
