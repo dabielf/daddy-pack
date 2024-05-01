@@ -36,7 +36,7 @@ export function NeedSomeLove({ daddies }: NeedSomeLoveProps) {
     const mostRecentDate = daddy.mostRecentDateDate || 0;
     const mostRecentContact = daddy.mostRecentContactDate || 0;
 
-    if (daddy.nextDate) {
+    if (daddy.nextDateDate) {
       return false;
     }
 
@@ -55,7 +55,7 @@ export function NeedSomeLove({ daddies }: NeedSomeLoveProps) {
             {daddy.name}
           </div>
           <div className="text-sm">
-            Last Contact: {formatMostRecentContact(daddy.mostRecentContact)}
+            Last Contact: {formatMostRecentContact(daddy.mostRecentContactDate)}
           </div>
           <div className="text-sm">
             Last Date: {formatMostRecentDate(daddy.mostRecentDate)}

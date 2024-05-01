@@ -101,7 +101,8 @@ export default function DaddyBlock({ daddy }: { daddy: Doc<'daddies'> }) {
               </div>
               <div className="flex flex-row gap-2 items-baseline">
                 <div className="text-baseline font-bold w-3">
-                  {daddy.totalCanceledDates || 0 + daddy.totalNoShowDates || 0}
+                  {(daddy.totalCanceledDates || 0) +
+                    (daddy.totalNoShowDates || 0)}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   Canceled / No Show
