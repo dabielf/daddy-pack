@@ -63,11 +63,12 @@ export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
           </CardTitle>
           <div className="text-xs flex h-4 items-center space-x-2">
             <div>
-              <span className="text-base mr-1">{daddy.numDates}</span> Dates
+              <span className="text-base mr-1">{daddy.totalDates || '0'}</span>
+              Dates
             </div>
             <Separator orientation="vertical" className="bg-primary" />
             <div>
-              <span className="text-base mr-1">{daddy.numContacts}</span>
+              <span className="text-base mr-1">{daddy.totalContacts}</span>
               Contacts
             </div>
             <Separator orientation="vertical" className="bg-primary" />
@@ -84,7 +85,7 @@ export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
             <div className="flex flex-col grow">
               <div className="flex flex-row gap-2 items-baseline">
                 <div className="text-baseline font-bold w-2">
-                  {daddy.scheduledDates || 0}
+                  {daddy.totalScheduledDates || 0}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   Dates Scheduled/To Process
@@ -92,7 +93,7 @@ export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
               </div>
               <div className="flex flex-row gap-1 items-baseline">
                 <div className="text-baseline font-bold w-3">
-                  {daddy.completedDates || 0}
+                  {daddy.totalCompletedDates || 0}
                 </div>
                 <div className="text-xs text-muted-foreground">
                   Dates Completed
@@ -100,17 +101,19 @@ export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
               </div>
               <div className="flex flex-row gap-2 items-baseline">
                 <div className="text-baseline font-bold w-3">
-                  {daddy.canceledDates || 0}
+                  {daddy.totalCanceledDates || 0 + daddy.totalNoShowDates || 0}
                 </div>
-                <p className="text-xs text-muted-foreground">Dates Canceled</p>
+                <p className="text-xs text-muted-foreground">
+                  Canceled / No Show
+                </p>
               </div>
             </div>
             <div className="flex flex-col">
               <div className="flex flex-row gap-2 items-baseline justify-end">
                 <p className="text-xs text-muted-foreground">Next Date:</p>
                 <div className="text-baseline font-bold">
-                  {daddy.nextDate
-                    ? formatDistance(new Date(daddy.nextDate), new Date(), {
+                  {daddy.nextDateDate
+                    ? formatDistance(new Date(daddy.nextDateDate), new Date(), {
                         addSuffix: true,
                       })
                     : 'No Date Planned'}
@@ -121,9 +124,9 @@ export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
                   Most Recent Date:
                 </p>
                 <div className="text-baseline font-bold">
-                  {daddy.mostRecentDate
+                  {daddy.mostRecentDateDate
                     ? formatDistance(
-                        new Date(daddy.mostRecentDate),
+                        new Date(daddy.mostRecentDateDate),
                         new Date(),
                         { addSuffix: true },
                       )
@@ -135,9 +138,9 @@ export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
                   Most Recent Contact:
                 </p>
                 <div className="text-baseline font-bold">
-                  {daddy.mostRecentContact
+                  {daddy.mostRecentContactDate
                     ? formatDistance(
-                        new Date(daddy.mostRecentContact),
+                        new Date(daddy.mostRecentContactDate),
                         new Date(),
                         { addSuffix: true },
                       )

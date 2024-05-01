@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { useState, createContext, useContext, useRef } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
+import { cn } from '@/lib/utils';
 
 const ActionContext = createContext({
   open: false,
@@ -12,10 +13,11 @@ const ActionContext = createContext({
 
 function staggerDown(open: boolean) {
   return {
-    initial: { opacity: 0, y: -10 },
+    initial: { opacity: 0, y: -5 },
     animate: {
       opacity: open ? 1 : 0,
-      y: open ? 0 : -10,
+      y: open ? 0 : -5,
+      // height: open ? 'auto' : 0,
       transition: {
         staggerChildren: 0.05,
       },
@@ -43,9 +45,12 @@ export function ActionItems({ children }: { children: React.ReactNode }) {
       initial="initial"
       animate="animate"
       variants={staggerDown(context.open)}
-      className="absolute z-10 mt-2 flex flex-col gap-1 right-0 items-end"
+      className={cn(
+        context.open ? '' : 'pointer-events-none',
+        'absolute z-10 mt-2 flex flex-col gap-1 right-0 items-end',
+      )}
     >
-      {context.open ? children : null}
+      {children}
     </motion.div>
   );
 }

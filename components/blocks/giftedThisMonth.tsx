@@ -4,7 +4,13 @@ import { isSameMonth, subMonths } from 'date-fns';
 import { DollarSign } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
-export function GiftedThisMonth({ dates }: { dates: Doc<'dates'>[] }) {
+export function GiftedThisMonth({
+  dates,
+  allowancePayments,
+}: {
+  dates: Doc<'dates'>[];
+  allowancePayments: Doc<'allowancePayments'>[];
+}) {
   // Filter dates for this month
   const thisMonth = dates.filter(date =>
     isSameMonth(new Date(date.date), new Date()),
@@ -13,6 +19,16 @@ export function GiftedThisMonth({ dates }: { dates: Doc<'dates'>[] }) {
   // Filter dates for last month
   const lastMonth = dates.filter(date =>
     isSameMonth(new Date(date.date), subMonths(new Date(), 1)),
+  );
+
+  const allowancePaymentsThisMonth = allowancePayments.filter(
+    allowancePayment =>
+      isSameMonth(new Date(allowancePayment.date), new Date()),
+  );
+
+  const allowancePaymentsLastMonth = allowancePayments.filter(
+    allowancePayment =>
+      isSameMonth(new Date(allowancePayment.date), subMonths(new Date(), 1)),
   );
 
   // get the total gifted amount from date.giftAmount
@@ -24,6 +40,18 @@ export function GiftedThisMonth({ dates }: { dates: Doc<'dates'>[] }) {
   // get the total gifted last month
   const totalGiftedLastMonth = lastMonth.reduce(
     (acc, date) => acc + (date.giftAmount || 0),
+    0,
+  );
+
+  // get the total allowance payments this month
+  const totalAllowancePayments = allowancePaymentsThisMonth.reduce(
+    (acc, allowancePayment) => acc + (allowancePayment.amount || 0),
+    0,
+  );
+
+  // get the total allowance payments last month
+  const totalAllowancePaymentsLastMonth = allowancePaymentsLastMonth.reduce(
+    (acc, allowancePayment) => acc + (allowancePayment.amount || 0),
     0,
   );
 
@@ -72,11 +100,13 @@ export function GiftedThisMonth({ dates }: { dates: Doc<'dates'>[] }) {
       </CardHeader>
       <CardContent>
         <Separator className="bg-primary/50 mb-4" />
-        <div className="text-2xl font-bold">${totalGifted}</div>
+        <div className="text-2xl font-bold">
+          ${totalGifted + totalAllowancePayments}
+        </div>
 
         <PercentageChange
-          thisMonth={totalGifted}
-          lastMonth={totalGiftedLastMonth}
+          thisMonth={totalGifted + totalAllowancePayments}
+          lastMonth={totalGiftedLastMonth + totalAllowancePaymentsLastMonth}
         />
       </CardContent>
     </Card>

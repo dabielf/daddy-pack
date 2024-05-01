@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { getConvexQueryUser, getConvexMutationUser } from './helpers';
+import { updateDaddyDatesData, updateDaddyLifetimeValue } from './daddies';
 
 export const getDate = query({
   args: { date: v.id('dates') },
@@ -51,9 +52,7 @@ export const createDate = mutation({
       status: 'scheduled',
     });
 
-    await ctx.db.patch(daddy, {
-      mostRecentDate: date,
-    });
+    await updateDaddyDatesData(ctx, { daddy });
 
     return dateId;
   },
@@ -65,6 +64,10 @@ export const cancelDate = mutation({
     await ctx.db.patch(dateId, {
       status: 'canceled',
     });
+
+    const dateData = await ctx.db.get(dateId);
+    if (!dateData) return null;
+    await updateDaddyDatesData(ctx, { daddy: dateData.daddy });
   },
 });
 
@@ -82,6 +85,10 @@ export const updateDateStatus = mutation({
     await ctx.db.patch(dateId, {
       status,
     });
+
+    const dateData = await ctx.db.get(dateId);
+    if (!dateData) return null;
+    await updateDaddyDatesData(ctx, { daddy: dateData.daddy });
   },
 });
 
@@ -105,7 +112,6 @@ export const updateDate = mutation({
         v.literal('no-show'),
       ),
     ),
-    // status: v.optional(v.string()),
   },
   handler: async (
     ctx,
@@ -135,6 +141,13 @@ export const updateDate = mutation({
       giftAmount,
       status,
     });
+
+    const dateData = await ctx.db.get(dateId);
+    if (!dateData) return null;
+    if (status == 'completed') {
+      await updateDaddyLifetimeValue(ctx, { daddy: dateData.daddy });
+    }
+    await updateDaddyDatesData(ctx, { daddy: dateData.daddy });
   },
 });
 
@@ -142,5 +155,8 @@ export const deleteDate = mutation({
   args: { date: v.id('dates') },
   handler: async (ctx, { date }) => {
     await ctx.db.delete(date);
+    const dateData = await ctx.db.get(date);
+    if (!dateData) return null;
+    await updateDaddyDatesData(ctx, { daddy: dateData.daddy });
   },
 });

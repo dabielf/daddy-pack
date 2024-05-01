@@ -13,8 +13,9 @@ export function Dashboard() {
   const daddies = useQuery(api.daddies.getDaddies);
   const dates = useQuery(api.dates.getDates);
   const contacts = useQuery(api.contacts.getContacts);
+  const allowancePayments = useQuery(api.allowances.getAllowancePayments);
 
-  if (!daddies || !dates || !contacts) return null;
+  if (!daddies || !dates || !contacts || !allowancePayments) return null;
 
   return (
     <motion.div
@@ -30,7 +31,7 @@ export function Dashboard() {
         <NeedSomeLove daddies={daddies} />
       </motion.div>
       <motion.div variants={stagger}>
-        <GiftedThisMonth dates={dates} />
+        <GiftedThisMonth dates={dates} allowancePayments={allowancePayments} />
       </motion.div>
     </motion.div>
   );

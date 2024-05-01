@@ -468,7 +468,7 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
   const dateData = useQuery(api.dates.getDate, {
     date: params.id,
   });
-  const updateDate = useMutation(api.dates.updateDate);
+
   const cancelDate = useMutation(api.dates.cancelDate);
   const router = useRouter();
   const [edit, setEdit] = useState(false);

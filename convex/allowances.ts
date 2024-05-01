@@ -2,6 +2,7 @@ import { v } from 'convex/values';
 import { isAfter, isBefore } from 'date-fns';
 import { mutation, query } from './_generated/server';
 import { getConvexMutationUser, getConvexQueryUser } from './helpers';
+import { updateDaddyLifetimeValue } from './daddies';
 
 export const deleteAllowance = mutation({
   args: { allowance: v.id('allowances') },
@@ -69,6 +70,19 @@ export const getAllowanceWithPayments = query({
   },
 });
 
+export const getAllowancePayments = query({
+  args: {},
+  handler: async ctx => {
+    const user = await getConvexQueryUser(ctx);
+
+    if (!user) return null;
+    return await ctx.db
+      .query('allowancePayments')
+      .withIndex('by_user', q => q.eq('user', user._id))
+      .collect();
+  },
+});
+
 export const createAllowance = mutation({
   args: {
     daddy: v.id('daddies'),
@@ -88,8 +102,6 @@ export const createAllowance = mutation({
       totalGiftAmount: 0,
       numberOfPayments: 0,
     });
-
-    console.log('allowanceId', allowanceId);
 
     await ctx.db.patch(daddy, {
       allowance: allowanceId,
@@ -142,6 +154,8 @@ export const createAllowancePayment = mutation({
       lastPaymentDate,
       lastPaymentId,
     });
+
+    await updateDaddyLifetimeValue(ctx, { daddy });
 
     return allowancePaymentId;
   },

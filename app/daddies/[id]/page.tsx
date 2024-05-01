@@ -75,9 +75,9 @@ function DisplayForm({
 }) {
   return (
     <motion.div>
-      <Card className="p-6 grid md:grid-cols-2 gap-6">
+      <Card className="p-4 grid md:grid-cols-2 gap-4">
         <motion.div
-          className="grow flex flex-col gap-6"
+          className="grow flex flex-col gap-4"
           variants={stagger}
           initial="initial"
           animate="animate"
@@ -129,7 +129,7 @@ function DisplayForm({
           </motion.div>
         </motion.div>
         <motion.div
-          className="grow flex flex-col gap-6"
+          className="grow flex flex-col gap-4"
           variants={stagger}
           initial="initial"
           animate="animate"
@@ -216,15 +216,15 @@ function EditForm({
 
   return (
     <motion.div>
-      <Card className="p-6">
+      <Card className="p-4">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-4"
           >
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-4">
               <motion.div
-                className="grow flex flex-col gap-6"
+                className="grow flex flex-col gap-4"
                 variants={stagger}
                 initial="initial"
                 animate="animate"
@@ -309,7 +309,7 @@ function EditForm({
                 </motion.div>
               </motion.div>
               <motion.div
-                className="grow flex flex-col gap-6"
+                className="grow flex flex-col gap-4"
                 variants={stagger}
                 initial="initial"
                 animate="animate"
@@ -462,7 +462,6 @@ export default function DaddyPage({
   const { daddy, contacts, dates } = daddyData;
   if (!daddy) return null;
 
-  console.log({ daddy });
   return (
     <div className="flex w-full h-full flex-col">
       {/* <div
@@ -515,17 +514,37 @@ export default function DaddyPage({
           </ActionItems>
         </ActionMenu>
       </div>
-      <div className="flex flex-col md:grid md:grid-cols-3 xl:grid-cols-4 h-full gap-2">
-        <div className="md:col-span-2 xl:col-span-3 flex flex-col gap-2">
+      <div className="flex flex-col md:grid md:grid-cols-3 xl:grid-cols-4 h-full gap-4">
+        <div className="md:col-span-2 xl:col-span-3 flex flex-col gap-4">
           <Card>
             <CardHeader>
-              <CardTitle className="flex flex-row justify-between items-center h-6">
-                <p className="text-xl font-semibold">
-                  {dates.length || 0} Dates
+              <CardTitle className="flex flex-row justify-center items-center h-4 gap-3">
+                <p className="text-sm font-light">
+                  <span className="text-lg font-semibold mr-1">
+                    ${daddy.lifetimeValue || 0}
+                  </span>{' '}
+                  Gifted
                 </p>
-                <Separator orientation="vertical" />
-                <p className="text-xl font-semibold">
-                  {contacts.length || 0} Contacts
+                <Separator orientation="vertical" className="bg-primary" />
+                <p className="text-sm font-light">
+                  <span className="text-lg font-semibold mr-1">
+                    {daddy.totalCompletedDates || 0}
+                  </span>{' '}
+                  {` ${daddy.totalCompletedDates == 1 ? 'Date' : 'Dates'} Completed`}
+                </p>
+                <Separator orientation="vertical" className="bg-primary" />
+                <p className="text-sm font-light">
+                  <span className="text-lg font-semibold mr-1">
+                    {daddy.totalScheduledDates || 0}
+                  </span>
+                  {`${daddy.totalScheduledDates == 1 ? ' Date' : ' Dates'} Scheduled`}
+                </p>
+                <Separator orientation="vertical" className="bg-primary" />
+                <p className="text-sm font-light">
+                  <span className="text-lg font-semibold mr-1">
+                    {daddy.totalContacts || 0}
+                  </span>{' '}
+                  {` ${daddy.totalContacts == 1 ? 'Contact' : 'Contacts'}`}
                 </p>
               </CardTitle>
             </CardHeader>
@@ -541,7 +560,7 @@ export default function DaddyPage({
           />
         </div>
 
-        <div className="h-full flex flex-col md:justify-between gap-2">
+        <div className="h-full flex flex-col md:justify-between gap-4">
           <EventLog contacts={contacts} dates={dates} />
           <Card className="border-destructive shadow-md">
             <CardHeader>

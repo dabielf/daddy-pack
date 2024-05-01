@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { getConvexMutationUser, getConvexQueryUser } from './helpers';
+import { updateDaddyContactsData } from './daddies';
 
 export const getContact = query({
   args: { contact: v.id('contacts') },
@@ -45,6 +46,8 @@ export const createContact = mutation({
       notes,
     });
 
+    await updateDaddyContactsData(ctx, { daddy });
+
     return contactId;
   },
 });
@@ -72,6 +75,10 @@ export const updateContact = mutation({
       notes,
     });
 
+    const contactData = await ctx.db.get(contact);
+    if (!contactData) return contactId;
+    await updateDaddyContactsData(ctx, { daddy: contactData.daddy });
+
     return contactId;
   },
 });
@@ -80,5 +87,8 @@ export const deleteContact = mutation({
   args: { contact: v.id('contacts') },
   handler: async (ctx, { contact }) => {
     await ctx.db.delete(contact);
+    const contactData = await ctx.db.get(contact);
+    if (!contactData) return null;
+    await updateDaddyContactsData(ctx, { daddy: contactData.daddy });
   },
 });

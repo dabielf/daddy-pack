@@ -177,7 +177,7 @@ function orderDaddies(
 
   if (orderType === 'mostRecentDate') {
     return daddies.sort(
-      (a, b) => (b.mostRecentDate || 0) - (a.mostRecentDate || 0),
+      (a, b) => (b.mostRecentDateDate || 0) - (a.mostRecentDateDate || 0),
     );
   }
 

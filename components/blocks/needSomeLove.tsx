@@ -34,8 +34,8 @@ function formatMostRecentContact(date: number | undefined) {
 export function NeedSomeLove({ daddies }: NeedSomeLoveProps) {
   // filter daddies where mostRecentDate and mostRecentContact are moth more than 7 days ago
   const daddiesNeedLove = daddies.filter(daddy => {
-    const mostRecentDate = daddy.mostRecentDate || 0;
-    const mostRecentContact = daddy.mostRecentContact || 0;
+    const mostRecentDate = daddy.mostRecentDateDate || 0;
+    const mostRecentContact = daddy.mostRecentContactDate || 0;
 
     if (daddy.nextDate) {
       return false;
