@@ -124,14 +124,6 @@ export const getDaddies = query({
       }),
     );
 
-    // if (orderType === 'lifetimeValue') {
-    //   return daddies.sort((a, b) => b.lifetimeValue - a.lifetimeValue);
-    // }
-    // if (orderType === 'mostRecentDate') {
-    //   return daddies.sort(
-    //     (a, b) => (b.mostRecentDate || 0) - (a.mostRecentDate || 0),
-    //   );
-    // }
     return daddies;
   },
 });

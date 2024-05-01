@@ -16,6 +16,13 @@ import {
 import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 
+import {
+  ActionMenu,
+  ActionTrigger,
+  ActionItems,
+  ActionItem,
+} from '@/components/animations/actionMenu';
+
 import { Dashboard } from '@/components/blocks/dashboard';
 import { Button } from '@/components/ui/button';
 import animations from '@/constants/animations';
@@ -49,7 +56,7 @@ export default function Home() {
       <div className="flex flex-row justify-between items-center mb-4">
         <h1 className="text-3xl font-semibold">Dashboard</h1>
         <div className="flex flex-row justify-end items-center gap-4 w-full">
-          <Drawer>
+          {/* <Drawer>
             <DrawerTrigger asChild>
               <Button className="md:hidden w-full flex flex-row gap-2">
                 <Plus size={20} /> Quick Add
@@ -60,9 +67,6 @@ export default function Home() {
                 <motion.div {...animations.appearUp}>
                   <DrawerHeader>
                     <DrawerTitle>What do you want to add ?</DrawerTitle>
-                    {/* <DrawerDescription>
-                This action cannot be undone.
-              </DrawerDescription> */}
                   </DrawerHeader>
                   <DrawerFooter>
                     <DrawerClose asChild>
@@ -82,9 +86,9 @@ export default function Home() {
                 </motion.div>
               </DrawerContent>
             </DrawerPortal>
-          </Drawer>
+          </Drawer> */}
 
-          <div className="hidden md:block">
+          {/* <div className="hidden md:block">
             <NewDaddyButton />
           </div>
           <div className="hidden md:block">
@@ -92,7 +96,21 @@ export default function Home() {
           </div>
           <div className="hidden md:block">
             <NewContactButton />
-          </div>
+          </div> */}
+          <ActionMenu>
+            <ActionTrigger />
+            <ActionItems>
+              <ActionItem>
+                <NewDaddyButton />
+              </ActionItem>
+              <ActionItem>
+                <NewDateButton />
+              </ActionItem>
+              <ActionItem>
+                <NewContactButton />
+              </ActionItem>
+            </ActionItems>
+          </ActionMenu>
         </div>
       </div>
       <Dashboard />

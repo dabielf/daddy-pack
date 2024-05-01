@@ -3,7 +3,7 @@
 import { api } from '@/convex/_generated/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from 'convex/react';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -46,10 +46,15 @@ import {
 import { TimePicker } from '@/components/ui/time-picker';
 import { Doc, Id } from '@/convex/_generated/dataModel';
 import { cn, getErrorMessage } from '@/lib/utils';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import {
+  Calendar as CalendarIcon,
+  ChevronRight,
+  CircleDollarSign,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { DaddyExtendedData } from '@/custom-types';
 import Link from 'next/link';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 const formSchema = z.object({
   intervalInDays: z.coerce.number().int().positive(),
@@ -64,9 +69,54 @@ function AllowanceLink({
   allowanceData?: Doc<'allowances'> | null;
 }) {
   return (
-    <Link href={`/daddies/${daddy._id}/allowance/${daddy.allowance}`}>
-      Allowance Link
-    </Link>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <h3 className="text-lg font-semibold">Allowance Plan: Active</h3>
+        </CardTitle>
+        <div className="flex flex-col items-start gap-1">
+          <span className="text-sm text-gray-500 flex flex-row items-center">
+            <CircleDollarSign size={16} className="mr-2" />$
+            {allowanceData?.amount} every {allowanceData?.intervalInDays} days
+          </span>
+          <span className="text-sm text-gray-500 flex flex-row items-center">
+            <CircleDollarSign size={16} className="mr-2" />$
+            {allowanceData?.totalGiftAmount} total over{' '}
+            {allowanceData?.numberOfPayments} allowances
+          </span>
+          <span className="text-sm text-gray-500 flex flex-row items-center">
+            <CalendarIcon size={16} className="mr-2" /> Last payment:
+            {allowanceData?.lastPaymentDate
+              ? ` ${format(
+                  new Date(allowanceData.lastPaymentDate),
+                  'MMM do, yyyy',
+                )}`
+              : 'Payments not started yet'}
+          </span>
+          <span className="text-sm text-gray-500 flex flex-row items-center">
+            <CalendarIcon size={16} className="mr-2" />
+            Next payment:
+            {allowanceData?.lastPaymentDate
+              ? ` ${format(
+                  addDays(
+                    new Date(allowanceData.lastPaymentDate),
+                    allowanceData.intervalInDays,
+                  ),
+                  'MMM do, yyyy',
+                )}`
+              : 'Payments not started yet'}
+          </span>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Link
+          href={`/daddies/${daddy._id}/allowance/${daddy.allowance}`}
+          className="flex flex-row justify-end items-center hover:underline decoration-primary"
+        >
+          Manage Allowance <ChevronRight size={16} className="ml-2" />
+        </Link>
+      </CardContent>
+    </Card>
   );
 }
 

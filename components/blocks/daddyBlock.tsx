@@ -40,7 +40,7 @@ function AllowanceIcon() {
           />
         </TooltipTrigger>
         <TooltipContent>
-          <p>This daddy has an allowance plan</p>
+          <p>You are on allowance with this daddy.</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

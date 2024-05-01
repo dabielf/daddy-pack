@@ -20,6 +20,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import {
+  ActionMenu,
+  ActionTrigger,
+  ActionItems,
+  ActionItem,
+} from '@/components/animations/actionMenu';
+import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -34,7 +40,7 @@ import { Doc, Id } from '@/convex/_generated/dataModel';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from 'convex/react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, Plus } from 'lucide-react';
+import { ChevronLeft, Plus, Pencil } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -488,29 +494,55 @@ export default function DaddyPage({
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 <div className="flex flex-row items-center gap-4">
-                  <Avatar className="hidden h-12 w-12 sm:flex">
+                  <Avatar className="hidden h-10 w-10 sm:flex">
                     <AvatarImage src={daddy.imgUrl || ''} alt="Avatar" />
                     <AvatarFallback>{daddy.name.split('')[0]}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <h1 className="text-2xl font-semibold">{daddy?.name}</h1>
-                    <p className="font-medium text-slate-600">
+                    {/* <h1 className="text-2xl font-semibold">{daddy?.name}</h1> */}
+                    <p className="text-xl font-semibold">
                       {dates.length || 0} Dates - {contacts.length || 0}{' '}
                       Contacts
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-row gap-2">
-                  {!edit && (
+                  <ActionMenu>
+                    <ActionTrigger>ACTIONS</ActionTrigger>
+                    <ActionItems>
+                      <ActionItem>
+                        <Button
+                          onClick={() => setEdit(editStatus => !editStatus)}
+                          disabled={edit}
+                          size="sm"
+                        >
+                          <Pencil size={14} className="mr-2" />
+                          EDIT INFO
+                        </Button>
+                      </ActionItem>
+                      <ActionItem>
+                        <NewDateButton daddyId={daddy._id}>
+                          <Plus size={16} className="mr-1" /> ADD DATE
+                        </NewDateButton>
+                      </ActionItem>
+                      <ActionItem>
+                        <NewContactButton daddyId={daddy._id}>
+                          <Plus size={16} className="mr-1" /> ADD CONTACT
+                        </NewContactButton>
+                      </ActionItem>
+                    </ActionItems>
+                  </ActionMenu>
+
+                  {/* {!edit && (
                     <NewDateButton daddyId={daddy._id}>
                       <Plus size={16} className="mr-1" /> ADD DATE
                     </NewDateButton>
-                  )}
-                  {!edit && (
+                  )} */}
+                  {/* {!edit && (
                     <NewContactButton daddyId={daddy._id}>
                       <Plus size={16} className="mr-1" /> ADD CONTACT
                     </NewContactButton>
-                  )}
+                  )} */}
 
                   {/* <Button
                     onClick={() => setEdit(editStatus => !editStatus)}
@@ -523,14 +555,7 @@ export default function DaddyPage({
               </CardTitle>
             </CardHeader>
           </Card>
-          <Button
-            onClick={() => setEdit(editStatus => !editStatus)}
-            disabled={edit}
-            // size="sm"
-            className="rounded-sm"
-          >
-            EDIT
-          </Button>
+
           <DaddyDisplayOrEditForm
             daddyData={daddy}
             edit={edit}
