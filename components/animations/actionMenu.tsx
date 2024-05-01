@@ -43,7 +43,7 @@ export function ActionItems({ children }: { children: React.ReactNode }) {
       initial="initial"
       animate="animate"
       variants={staggerDown(context.open)}
-      className="absolute z-10 mt-2 flex flex-col gap-2 right-0 items-end"
+      className="absolute z-10 mt-2 flex flex-col gap-1 right-0 items-end"
     >
       {context.open ? children : null}
     </motion.div>

@@ -472,90 +472,68 @@ export default function DaddyPage({
         <ChevronLeft size={24} />
         Back
       </div> */}
-      <Breadcrumb className="mb-4">
-        <BreadcrumbList className="md:text-xl font-semibold text-foreground">
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              href="/daddies"
-              className="hover:underline decoration-primary"
-            >
-              Daddies
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{daddy.name}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <div className="flex flex-col md:grid md:grid-cols-3 xl:grid-cols-4 h-full gap-6">
+      <div className="flex flex-row items-center justify-between w-full mb-4">
+        <Breadcrumb className="">
+          <BreadcrumbList className="md:text-xl font-semibold text-foreground">
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                href="/daddies"
+                className="hover:underline decoration-primary"
+              >
+                Daddies
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{daddy.name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <ActionMenu>
+          <ActionTrigger>ACTIONS</ActionTrigger>
+          <ActionItems>
+            <ActionItem>
+              <Button
+                onClick={() => setEdit(editStatus => !editStatus)}
+                disabled={edit}
+                size="sm"
+              >
+                <Pencil size={14} className="mr-2" />
+                EDIT INFOS
+              </Button>
+            </ActionItem>
+            <ActionItem>
+              <NewDateButton daddyId={daddy._id}>
+                <Plus size={16} className="mr-1" /> ADD DATE
+              </NewDateButton>
+            </ActionItem>
+            <ActionItem>
+              <NewContactButton daddyId={daddy._id}>
+                <Plus size={16} className="mr-1" /> ADD CONTACT
+              </NewContactButton>
+            </ActionItem>
+          </ActionItems>
+        </ActionMenu>
+      </div>
+      <div className="flex flex-col md:grid md:grid-cols-3 xl:grid-cols-4 h-full gap-2">
         <div className="md:col-span-2 xl:col-span-3 flex flex-col gap-2">
           <Card>
             <CardHeader>
-              <CardTitle className="flex justify-between items-center">
-                <div className="flex flex-row items-center gap-4">
-                  <Avatar className="hidden h-10 w-10 sm:flex">
-                    <AvatarImage src={daddy.imgUrl || ''} alt="Avatar" />
-                    <AvatarFallback>{daddy.name.split('')[0]}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    {/* <h1 className="text-2xl font-semibold">{daddy?.name}</h1> */}
-                    <p className="text-xl font-semibold">
-                      {dates.length || 0} Dates - {contacts.length || 0}{' '}
-                      Contacts
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-row gap-2">
-                  <ActionMenu>
-                    <ActionTrigger>ACTIONS</ActionTrigger>
-                    <ActionItems>
-                      <ActionItem>
-                        <Button
-                          onClick={() => setEdit(editStatus => !editStatus)}
-                          disabled={edit}
-                          size="sm"
-                        >
-                          <Pencil size={14} className="mr-2" />
-                          EDIT INFO
-                        </Button>
-                      </ActionItem>
-                      <ActionItem>
-                        <NewDateButton daddyId={daddy._id}>
-                          <Plus size={16} className="mr-1" /> ADD DATE
-                        </NewDateButton>
-                      </ActionItem>
-                      <ActionItem>
-                        <NewContactButton daddyId={daddy._id}>
-                          <Plus size={16} className="mr-1" /> ADD CONTACT
-                        </NewContactButton>
-                      </ActionItem>
-                    </ActionItems>
-                  </ActionMenu>
-
-                  {/* {!edit && (
-                    <NewDateButton daddyId={daddy._id}>
-                      <Plus size={16} className="mr-1" /> ADD DATE
-                    </NewDateButton>
-                  )} */}
-                  {/* {!edit && (
-                    <NewContactButton daddyId={daddy._id}>
-                      <Plus size={16} className="mr-1" /> ADD CONTACT
-                    </NewContactButton>
-                  )} */}
-
-                  {/* <Button
-                    onClick={() => setEdit(editStatus => !editStatus)}
-                    disabled={edit}
-                    size="sm"
-                  >
-                    EDIT
-                  </Button> */}
-                </div>
+              <CardTitle className="flex flex-row justify-between items-center h-6">
+                <p className="text-xl font-semibold">
+                  {dates.length || 0} Dates
+                </p>
+                <Separator orientation="vertical" />
+                <p className="text-xl font-semibold">
+                  {contacts.length || 0} Contacts
+                </p>
               </CardTitle>
             </CardHeader>
           </Card>
 
+          <AddAllowancePlanButton daddy={daddy} allowance={allowanceData}>
+            <Plus size={16} className="mr-1" /> START ALLOWANCE PLAN
+          </AddAllowancePlanButton>
           <DaddyDisplayOrEditForm
             daddyData={daddy}
             edit={edit}
@@ -564,9 +542,6 @@ export default function DaddyPage({
         </div>
 
         <div className="h-full flex flex-col md:justify-between gap-2">
-          <AddAllowancePlanButton daddy={daddy} allowance={allowanceData}>
-            <Plus size={16} className="mr-1" /> START ALLOWANCE PLAN
-          </AddAllowancePlanButton>
           <EventLog contacts={contacts} dates={dates} />
           <Card className="border-destructive shadow-md">
             <CardHeader>

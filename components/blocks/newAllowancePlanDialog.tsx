@@ -71,59 +71,73 @@ function AllowanceLink({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
+        <CardTitle className="flex flex-row justify-between items-center">
           <h3 className="text-lg font-semibold">Allowance Plan: Active</h3>
+          <Link
+            href={`/daddies/${daddy._id}/allowance/${daddy.allowance}`}
+            className="flex flex-row justify-end items-center hover:underline decoration-primary"
+          >
+            Manage Allowance <ChevronRight size={16} className="ml-2" />
+          </Link>
         </CardTitle>
-        <div className="flex flex-col items-start gap-1">
-          <span className="text-sm text-gray-500 flex flex-row items-center">
-            <CircleDollarSign size={16} className="mr-2" />$
-            {allowanceData?.amount} every {allowanceData?.intervalInDays} days
-          </span>
-          <span className="text-sm text-gray-500 flex flex-row items-center">
-            <CircleDollarSign size={16} className="mr-2" />$
-            {allowanceData?.totalGiftAmount} total over{' '}
-            {allowanceData?.numberOfPayments} allowances
-          </span>
-          <span className="text-sm text-gray-500 flex flex-row items-center">
-            <CalendarIcon size={16} className="mr-2" /> Last payment:
-            {allowanceData?.lastPaymentDate
-              ? ` ${format(
-                  new Date(allowanceData.lastPaymentDate),
-                  'MMM do, yyyy',
-                )}`
-              : 'Payments not started yet'}
-          </span>
-          <span className="text-sm text-gray-500 flex flex-row items-center">
-            <CalendarIcon size={16} className="mr-2" />
-            Next payment:
-            {allowanceData?.lastPaymentDate
-              ? ` ${format(
-                  addDays(
+        <div className="grid grid-cols-2">
+          <div className="flex flex-col items-start gap-1">
+            <span className="text-xs text-gray-500 flex flex-row items-center">
+              <CircleDollarSign size={16} className="mr-2" />$
+              {allowanceData?.amount} every {allowanceData?.intervalInDays} days
+            </span>
+            <span className="text-xs text-gray-500 flex flex-row items-center">
+              <CircleDollarSign size={16} className="mr-2" />$
+              {allowanceData?.totalGiftAmount} total over{' '}
+              {allowanceData?.numberOfPayments} allowances
+            </span>
+          </div>
+          <div className="flex flex-col items-start gap-1">
+            <span className="text-xs text-gray-500 flex flex-row items-center">
+              <CalendarIcon size={16} className="mr-2" /> Last payment:
+              {allowanceData?.lastPaymentDate
+                ? ` ${format(
                     new Date(allowanceData.lastPaymentDate),
-                    allowanceData.intervalInDays,
-                  ),
-                  'MMM do, yyyy',
-                )}`
-              : 'Payments not started yet'}
-          </span>
+                    'MMM do, yyyy',
+                  )}`
+                : 'Payments not started yet'}
+            </span>
+            <span className="text-xs text-gray-500 flex flex-row items-center">
+              <CalendarIcon size={16} className="mr-2" />
+              Next payment:
+              {allowanceData?.lastPaymentDate
+                ? ` ${format(
+                    addDays(
+                      new Date(allowanceData.lastPaymentDate),
+                      allowanceData.intervalInDays,
+                    ),
+                    'MMM do, yyyy',
+                  )}`
+                : 'Payments not started yet'}
+            </span>
+          </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <Link
-          href={`/daddies/${daddy._id}/allowance/${daddy.allowance}`}
-          className="flex flex-row justify-end items-center hover:underline decoration-primary"
-        >
-          Manage Allowance <ChevronRight size={16} className="ml-2" />
-        </Link>
-      </CardContent>
     </Card>
   );
+}
+
+export function CencelAllowancePlanButton({
+  daddy,
+  allowance,
+  children = 'New Allowance Payment',
+}: {
+  daddy: Doc<'daddies'>;
+  allowance?: Doc<'allowances'> | null;
+  children?: React.ReactNode;
+}) {
+  return <Button>{children}</Button>;
 }
 
 export function AddAllowancePlanButton({
   daddy,
   allowance,
-  children = 'New Allowance Payment',
+  children = 'Start Allowance Plan',
 }: {
   daddy: Doc<'daddies'>;
   allowance?: Doc<'allowances'> | null;
