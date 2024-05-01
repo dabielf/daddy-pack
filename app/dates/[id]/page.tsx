@@ -3,16 +3,13 @@
 import Tiptap from '@/components/blocks/tiptap';
 import { AddToCalendarButton } from '@/components/blocks/addToCalendarButton';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
@@ -493,31 +490,53 @@ export default function DaddyPage({ params }: { params: { id: Id<'dates'> } }) {
   if (!dateData) return null;
 
   const { date, daddy } = dateData;
-  if (!date) return null;
+  if (!date || !daddy) return null;
   return (
     <div className="flex w-full h-full flex-col">
-      <div
+      {/* <div
         onClick={() => goBack(daddy?._id || '')}
         className="text-md text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-4 w-fit"
       >
         <ChevronLeft size={24} />
         Back
-      </div>
+      </div> */}
+      <Breadcrumb className="mb-4">
+        <BreadcrumbList className="md:text-xl font-semibold text-foreground">
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href="/daddies"
+              className="hover:underline decoration-primary"
+            >
+              Daddies
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href={`/daddies/${daddy._id}`}
+              className="hover:underline decoration-primary"
+            >
+              {daddy.name}
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage className="flex flex-row items-center">
+              <CalendarFold size={18} className="mr-1" />
+              Date
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="flex flex-col md:grid md:grid-cols-3 xl:grid-cols-4 h-full gap-6">
         <div className="md:col-span-3 xl:col-span-4 flex flex-col gap-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 <div className="flex flex-row items-center gap-4">
-                  <h1 className="text-2xl font-semibold flex flex-row gap-2 items-center">
-                    <CalendarFold size={20} /> Date:
-                    <Link
-                      href={`/daddies/${date.daddy}`}
-                      className="hover:underline decoration-primary"
-                    >
-                      {daddy?.name}
-                    </Link>
-                    <span className="font-medium text-slate-600">
+                  <h1 className="text-xl font-semibold flex flex-row gap-2 items-center">
+                    <CalendarFold size={20} />
+                    <span className="font-medium">
                       {formatDistance(date.date, new Date(), {
                         addSuffix: true,
                       })}

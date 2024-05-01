@@ -14,7 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as allowance from "../allowance.js";
+import type * as allowances from "../allowances.js";
 import type * as contacts from "../contacts.js";
 import type * as daddies from "../daddies.js";
 import type * as dates from "../dates.js";
@@ -32,7 +32,7 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  allowance: typeof allowance;
+  allowances: typeof allowances;
   contacts: typeof contacts;
   daddies: typeof daddies;
   dates: typeof dates;

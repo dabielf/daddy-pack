@@ -72,7 +72,7 @@ export function ArchivedDaddiesButton() {
                         Unarchive
                       </Button>
                     </div>
-                    {daddy.archivedReason && (
+                    {daddy.archivedReason ? (
                       <div className="flex flex-col text-sm">
                         <span className="font-semibold">
                           Reason for archiving:
@@ -81,6 +81,10 @@ export function ArchivedDaddiesButton() {
                           {daddy.archivedReason || ''}
                         </Markdown>
                       </div>
+                    ) : (
+                      <span className="font-semibold text-sm">
+                        No reason given for archiving.
+                      </span>
                     )}
                   </div>
                 );

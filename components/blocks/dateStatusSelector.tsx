@@ -49,10 +49,10 @@ export function DateStatusSelector({ date }: DateStatusSelectorProps) {
     <div
       className={cn(
         getStatusBgColor(date.status || 'scheduled'),
-        'flex flex-row gap-1 items-center px-4 rounded-md shadow',
+        'flex flex-row gap-1 items-center pl-4 rounded-md',
       )}
     >
-      <div className="text-sm font-semibold underline">STATUS</div>
+      <div className="text-sm font-semibold">STATUS</div>
       <Select value={date.status || 'scheduled'} onValueChange={onStatusChange}>
         <SelectTrigger className="ring-transparent border-0 shadow-none w-[125px]">
           <SelectValue placeholder="Select status:" />

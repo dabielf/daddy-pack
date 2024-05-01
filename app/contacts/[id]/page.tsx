@@ -22,6 +22,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
 import { TimePicker } from '@/components/ui/time-picker';
 import { cn } from '@/lib/utils';
@@ -92,17 +100,45 @@ export default function ContactPage({
   if (!contactData) return null;
 
   const { daddy, contact } = contactData;
-  if (!contact) return null;
+  if (!contact || !daddy) return null;
 
   return (
     <div className="flex w-full h-full flex-col gap-4">
-      <div
+      {/* <div
         onClick={() => goBack(daddy?._id || '')}
         className="text-slate-700 cursor-pointer flex flex-row gap-1 items-center"
       >
         <ChevronLeft size={24} />
         Back
-      </div>
+      </div> */}
+      <Breadcrumb>
+        <BreadcrumbList className="md:text-xl font-semibold text-foreground">
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href="/daddies"
+              className="hover:underline decoration-primary"
+            >
+              Daddies
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href={`/daddies/${daddy._id}`}
+              className="hover:underline decoration-primary"
+            >
+              {daddy.name}
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage className="flex flex-row items-center">
+              <MessageSquareMore size={18} className="mr-1" />
+              Contact
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
       <Card>
         <CardHeader>

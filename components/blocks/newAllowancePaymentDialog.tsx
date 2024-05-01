@@ -52,65 +52,54 @@ import { DaddyExtendedData } from '@/custom-types';
 import Link from 'next/link';
 
 const formSchema = z.object({
-  intervalInDays: z.coerce.number().int().positive(),
+  date: z.date(),
   amount: z.coerce.number().int().positive(),
+  paymentMethod: z.string().optional(),
 });
 
-function AllowanceLink({
-  daddy,
+export function AddAllowancePaymentButton({
   allowance,
+  daddy,
+  children = 'Add New Payment',
 }: {
-  daddy: Doc<'daddies'>;
   allowance: Doc<'allowances'>;
-}) {
-  return (
-    <Link href={`/daddies/${daddy._id}/allowance/${daddy.allowance}`}>
-      Allowance Link
-    </Link>
-  );
-}
-
-export function AddAllowancePlanButton({
-  daddy,
-  allowance,
-  children = 'New Allowance Payment',
-}: {
   daddy: Doc<'daddies'>;
-  allowance?: Doc<'allowances'> | null;
   children?: React.ReactNode;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      intervalInDays: 14,
-      amount: 0,
+      date: new Date(),
+      amount: allowance.amount,
+      paymentMethod: '',
     },
   });
 
-  const createAllowancePlan = useMutation(api.allowances.createAllowance);
+  const createAllowancePayment = useMutation(
+    api.allowances.createAllowancePayment,
+  );
 
-  if (!daddy) return null;
+  if (!daddy || !allowance) return null;
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     try {
-      const allowanceId = await createAllowancePlan({
+      const allowancePaymentId = await createAllowancePayment({
+        allowance: allowance._id,
         daddy: daddy._id,
-        intervalInDays: values.intervalInDays,
+        date: values.date.valueOf(),
         amount: values.amount,
+        paymentMethod: values.paymentMethod,
       });
       form.reset();
-      toast.success(`New Allowance Plan started with ${daddy.name} 🎉`);
-      return allowanceId;
+      toast.success(`New Allowance Payment Added 🎉`);
+      return allowancePaymentId;
     } catch (error) {
       toast.error(`Uh oh ! Something went wrong: ${getErrorMessage(error)}`);
     }
   }
-
-  if (daddy.allowance)
-    return <AllowanceLink daddy={daddy} allowance={allowance} />;
 
   return (
     <Dialog>
@@ -120,38 +109,63 @@ export function AddAllowancePlanButton({
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Start an Allowance Plan with {daddy.name}</DialogTitle>
-            <DialogDescription>
-              You can start and stop this plan anytime.
-            </DialogDescription>
+            <DialogTitle>New Payment from {daddy.name}</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="intervalInDays"
+                name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gifted every X days:</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min={0}
-                        placeholder="Ex: every 14 days..."
-                        {...field}
-                        onChange={event => field.onChange(event.target.value)}
-                      />
-                    </FormControl>
+                    <Popover>
+                      <FormLabel className="mr-6">
+                        When was the payment made ?
+                      </FormLabel>
+                      <FormControl className="w-max">
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              'w-[280px] justify-start text-left font-normal',
+                              !field.value && 'text-muted-foreground',
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? (
+                              format(field.value, 'PPP HH:mm:ss')
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                      </FormControl>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          initialFocus
+                        />
+                        <div className="p-3 border-t border-border">
+                          <TimePicker
+                            setDate={field.onChange}
+                            date={field.value}
+                          />
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="amount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>For X amount:</FormLabel>
+                    <FormLabel>How much was the payment ? </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -165,10 +179,27 @@ export function AddAllowancePlanButton({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="paymentMethod"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>How was the payment made ? (optional)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Ex: Cash, Venmo..."
+                        {...field}
+                        onChange={event => field.onChange(event.target.value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button type="submit">Start Plan</Button>
+                  <Button type="submit">Add Payment</Button>
                 </DialogClose>
               </DialogFooter>
             </form>

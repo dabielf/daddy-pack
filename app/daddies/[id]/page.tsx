@@ -4,6 +4,7 @@ import {
   ArchiveDaddyButton,
   DeleteDaddyButton,
 } from '@/components/blocks/daddiesList';
+import { AddAllowancePlanButton } from '@/components/blocks/newAllowancePlanDialog';
 import EventLog from '@/components/blocks/eventLog';
 import { NewContactButton } from '@/components/blocks/newContactDialog';
 import { NewDateButton } from '@/components/blocks/newDateDialog';
@@ -18,6 +19,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { Input } from '@/components/ui/input';
 import animations, { staggerUp } from '@/constants/animations';
 import { api } from '@/convex/_generated/api';
@@ -426,6 +435,18 @@ export default function DaddyPage({
   const router = useRouter();
   const [edit, setEdit] = useState(false);
 
+  function allowanceQueryParams() {
+    if (daddyData?.daddy?.allowance) {
+      return { allowance: daddyData.daddy.allowance };
+    }
+    return 'skip';
+  }
+
+  const allowanceData = useQuery(
+    api.allowances.getAllowance,
+    allowanceQueryParams(),
+  );
+
   function goBack() {
     router.push('/daddies');
   }
@@ -434,17 +455,35 @@ export default function DaddyPage({
 
   const { daddy, contacts, dates } = daddyData;
   if (!daddy) return null;
+
+  console.log({ daddy });
   return (
     <div className="flex w-full h-full flex-col">
-      <div
+      {/* <div
         onClick={goBack}
-        className="text-md text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-4"
+        className="text-md text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-4 w-fit"
       >
         <ChevronLeft size={24} />
         Back
-      </div>
+      </div> */}
+      <Breadcrumb className="mb-4">
+        <BreadcrumbList className="md:text-xl font-semibold text-foreground">
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              href="/daddies"
+              className="hover:underline decoration-primary"
+            >
+              Daddies
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{daddy.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="flex flex-col md:grid md:grid-cols-3 xl:grid-cols-4 h-full gap-6">
-        <div className="md:col-span-2 xl:col-span-3 flex flex-col gap-6">
+        <div className="md:col-span-2 xl:col-span-3 flex flex-col gap-2">
           <Card>
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
@@ -499,7 +538,10 @@ export default function DaddyPage({
           />
         </div>
 
-        <div className="h-full flex flex-col md:justify-between gap-6">
+        <div className="h-full flex flex-col md:justify-between gap-2">
+          <AddAllowancePlanButton daddy={daddy} allowance={allowanceData}>
+            <Plus size={16} className="mr-1" /> START ALLOWANCE PLAN
+          </AddAllowancePlanButton>
           <EventLog contacts={contacts} dates={dates} />
           <Card className="border-destructive shadow-md">
             <CardHeader>

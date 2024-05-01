@@ -37,7 +37,7 @@ export default defineSchema({
     lifetimeValue: v.number(),
     mostRecentDate: v.optional(v.number()),
     mostRecentContact: v.optional(v.number()),
-    allowance: v.optional(v.id('allowance')),
+    allowance: v.optional(v.id('allowances')),
     allowanceAlert: v.optional(v.boolean()),
     archived: v.boolean(),
     archivedReason: v.optional(v.string()),
@@ -48,18 +48,25 @@ export default defineSchema({
   allowances: defineTable({
     daddy: v.id('daddies'),
     user: v.id('users'),
-    lastPaymentDate: v.number(),
-    lastPaymentId: v.optional(v.id('allowancePayment')),
+    lastPaymentDate: v.optional(v.number()),
+    lastPaymentId: v.optional(v.id('allowancePayments')),
     intervalInDays: v.number(),
     amount: v.number(),
+    totalGiftAmount: v.number(),
     numberOfPayments: v.number(),
-  }).index('by_daddy', ['daddy']),
+  })
+    .index('by_daddy', ['daddy'])
+    .index('by_user', ['user']),
   allowancePayments: defineTable({
-    allowanceId: v.id('allowance'),
+    allowanceId: v.id('allowances'),
+    user: v.id('users'),
+    daddy: v.id('daddies'),
     date: v.number(),
     amount: v.number(),
-    paymentMethod: v.string(),
-  }).index('by_allowanceId', ['allowanceId']),
+    paymentMethod: v.optional(v.string()),
+  })
+    .index('by_allowanceId', ['allowanceId'])
+    .index('by_user', ['user']),
 
   // Includes: SD name, date, location, time it starts, time it finishes, comfort level, fun level, sex notes, personality notes, score of how I felt leaving the date (good, not so good), score of how I’d feel about another date, gift amount
   dates: defineTable({

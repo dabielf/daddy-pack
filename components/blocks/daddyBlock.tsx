@@ -1,8 +1,14 @@
-import { Star } from 'lucide-react';
+import { Star, Wallet } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { formatDistance } from 'date-fns';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 import Link from 'next/link';
 import { Separator } from '../ui/separator';
@@ -23,6 +29,24 @@ function StarRating({ stars = 0 }: { stars: number }) {
   );
 }
 
+function AllowanceIcon() {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Wallet
+            size={18}
+            className="transition-all hover:scale-105 text-primary"
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>This daddy has an allowance plan</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
 export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
   return (
     <Link href={`/daddies/${daddy._id}`}>
@@ -30,7 +54,10 @@ export default function DaddyBlock({ daddy }: { daddy: DaddyExtendedData }) {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="text-xl font-medium">
             <div className="flex flex-col">
-              <div className="text-xl">{daddy.name}</div>
+              <div className="text-xl flex flex-row gap-1 items-center">
+                {daddy.allowance && <AllowanceIcon />}
+                {daddy.name}
+              </div>
               <StarRating stars={daddy.vibeRating || 0} />
             </div>
           </CardTitle>
