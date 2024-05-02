@@ -68,12 +68,11 @@ export const getAllowanceWithPayments = query({
     const allowancePayments = await ctx.db
       .query('allowancePayments')
       .withIndex('by_allowanceId', q => q.eq('allowanceId', allowance))
-      .order('desc')
       .collect();
 
     return {
       allowance: allowanceData,
-      allowancePayments,
+      allowancePayments: allowancePayments.sort((a, b) => b.date - a.date),
     };
   },
 });
@@ -84,10 +83,12 @@ export const getAllowancePayments = query({
     const user = await getConvexQueryUser(ctx);
 
     if (!user) return null;
-    return await ctx.db
+    const allowancePayments = await ctx.db
       .query('allowancePayments')
       .withIndex('by_user', q => q.eq('user', user._id))
       .collect();
+
+    return allowancePayments.sort((a, b) => b.date - a.date);
   },
 });
 
