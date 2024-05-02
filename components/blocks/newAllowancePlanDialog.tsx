@@ -56,7 +56,7 @@ function AllowanceLink({
     <Card>
       <CardHeader>
         <CardTitle className="flex flex-row justify-between items-center">
-          <h3 className="text-lg font-semibold">Allowance Plan: Active</h3>
+          <div className="text-lg font-semibold">Allowance Plan: Active</div>
           <Link
             href={`/daddies/${daddy._id}/allowance/${daddy.allowance}`}
             className="flex flex-row justify-end items-center hover:underline decoration-primary"

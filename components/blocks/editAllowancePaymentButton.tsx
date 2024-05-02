@@ -56,48 +56,39 @@ const formSchema = z.object({
   paymentMethod: z.string().optional(),
 });
 
-export function AddAllowancePaymentButton({
+export function EditAllowancePaymentButton({
   allowance,
   allowancePaymentId,
   daddy,
-  children = 'Add New Payment',
-  editMode = false,
-  linkMode = false,
+  children = 'Edit',
 }: {
   allowance: Doc<'allowances'>;
   allowancePaymentId: Id<'allowancePayments'>;
   daddy?: Doc<'daddies'>;
   children?: React.ReactNode;
-  editMode?: boolean;
-  linkMode?: boolean;
 }) {
-  const allowancePayment = useQuery(
-    api.allowances.getAllowancePayment,
-    allowancePaymentId ? { allowancePayment: allowancePaymentId } : 'skip',
-  );
+  // const form = useForm<z.infer<typeof formSchema>>({
+  //   resolver: zodResolver(formSchema),
+  //   values: {
+  //     date: new Date(allowancePaymentData?.date || Date.now()),
+  //     amount: allowancePaymentData?.amount || 0,
+  //     paymentMethod: allowancePaymentData?.paymentMethod || '',
+  //   },
+  // });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      date: new Date(),
-      amount: allowance.amount,
-      paymentMethod: '',
-    },
-  });
-
-  if (allowancePayment) {
-    form.setValue('date', new Date(allowancePayment.date));
-    form.setValue('amount', allowancePayment.amount);
-    form.setValue('paymentMethod', allowancePayment.paymentMethod);
-  }
+  // if (allowancePayment) {
+  //   form.setValue('date', new Date(allowancePayment.date));
+  //   form.setValue('amount', allowancePayment.amount);
+  //   form.setValue('paymentMethod', allowancePayment.paymentMethod);
+  // }
 
   const updateAllowancePayment = useMutation(
     api.allowances.updateAllowancePayment,
   );
 
-  const createAllowancePayment = useMutation(
-    api.allowances.createAllowancePayment,
-  );
+  // const createAllowancePayment = useMutation(
+  //   api.allowances.createAllowancePayment,
+  // );
 
   if (!daddy || !allowance) return null;
 
@@ -105,36 +96,18 @@ export function AddAllowancePaymentButton({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    if (editMode) {
-      try {
-        await updateAllowancePayment({
-          allowancePayment: allowancePaymentId,
-          date: values.date.valueOf(),
-          amount: values.amount,
-          paymentMethod: values.paymentMethod,
-        });
-        form.reset();
-        toast.success(`Allowance Payment Updated 🎉`);
-        return allowancePaymentId;
-      } catch (error) {
-        toast.error(`Uh oh ! Something went wrong: ${getErrorMessage(error)}`);
-      }
-    } else {
-      try {
-        if (!daddy) return null;
-        const allowancePaymentId = await createAllowancePayment({
-          allowance: allowance._id,
-          daddy: daddy._id,
-          date: values.date.valueOf(),
-          amount: values.amount,
-          paymentMethod: values.paymentMethod,
-        });
-        form.reset();
-        toast.success(`New Allowance Payment Added 🎉`);
-        return allowancePaymentId;
-      } catch (error) {
-        toast.error(`Uh oh ! Something went wrong: ${getErrorMessage(error)}`);
-      }
+    try {
+      await updateAllowancePayment({
+        allowancePayment: allowancePaymentId,
+        date: values.date.valueOf(),
+        amount: values.amount,
+        paymentMethod: values.paymentMethod,
+      });
+      form.reset();
+      toast.success(`Allowance Payment Updated 🎉`);
+      return allowancePaymentId;
+    } catch (error) {
+      toast.error(`Uh oh ! Something went wrong: ${getErrorMessage(error)}`);
     }
   }
 
@@ -146,9 +119,7 @@ export function AddAllowancePaymentButton({
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>
-              {editMode ? 'Edit' : 'New'} Gifting from {daddy.name}
-            </DialogTitle>
+            <DialogTitle>Edit Gifting from {daddy.name}</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -238,9 +209,7 @@ export function AddAllowancePaymentButton({
 
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button type="submit">
-                    {editMode ? 'Edit' : 'Add'} Gifting
-                  </Button>
+                  <Button type="submit">Edit Gifting</Button>
                 </DialogClose>
               </DialogFooter>
             </form>

@@ -4,6 +4,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { Id } from '@/convex/_generated/dataModel';
 import Link from 'next/link';
 import { AddAllowancePaymentButton } from '@/components/blocks/newAllowancePaymentDialog';
+import { AllowancePaymentsTable } from '@/components/blocks/allowancePaymentsTable';
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -72,15 +73,19 @@ export default function AllowancePage({
       </div>
       <div className="grid-cols-2">
         <div>
-          <h2>Allowance</h2>
-          <div>
+          {/* <div>
             <pre>{JSON.stringify(allowanceData, null, 2)}</pre>
-          </div>
+          </div> */}
+          <AllowancePaymentsTable
+            daddy={daddy}
+            allowance={allowanceData.allowance}
+            payments={allowanceData.allowancePayments}
+          />
         </div>
-        <div>
+        {/* <div>
           <h2>Daddy</h2>
           <pre>{JSON.stringify(daddy, null, 2)}</pre>
-        </div>
+        </div> */}
       </div>
     </div>
   );

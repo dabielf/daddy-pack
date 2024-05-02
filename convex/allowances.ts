@@ -22,13 +22,17 @@ export const deleteAllowance = mutation({
 });
 
 export const deleteAllowancePayment = mutation({
-  args: { allowancePayment: v.id('allowancePayments') },
-  handler: async (ctx, { allowancePayment }) => {
+  args: {
+    allowancePayment: v.id('allowancePayments'),
+    daddy: v.id('daddies'),
+  },
+  handler: async (ctx, { allowancePayment, daddy }) => {
     const user = await getConvexMutationUser(ctx);
-
     if (!user) return null;
+
     const allowancePaymentData = await ctx.db.get(allowancePayment);
     if (!allowancePaymentData) return null;
+
     const allowance = await ctx.db.get(allowancePaymentData.allowanceId);
     if (allowance) {
       await ctx.db.patch(allowance._id, {
@@ -37,7 +41,10 @@ export const deleteAllowancePayment = mutation({
           allowance.totalGiftAmount - allowancePaymentData.amount,
       });
     }
+
     await ctx.db.delete(allowancePayment);
+
+    await updateDaddyLifetimeValue(ctx, { daddy });
   },
 });
 
@@ -61,6 +68,7 @@ export const getAllowanceWithPayments = query({
     const allowancePayments = await ctx.db
       .query('allowancePayments')
       .withIndex('by_allowanceId', q => q.eq('allowanceId', allowance))
+      .order('desc')
       .collect();
 
     return {
@@ -111,6 +119,16 @@ export const createAllowance = mutation({
   },
 });
 
+export const getAllowancePayment = query({
+  args: { allowancePayment: v.id('allowancePayments') },
+  handler: async (ctx, { allowancePayment }) => {
+    const user = await getConvexQueryUser(ctx);
+
+    if (!user) return null;
+    return await ctx.db.get(allowancePayment);
+  },
+});
+
 export const createAllowancePayment = mutation({
   args: {
     allowance: v.id('allowances'),
@@ -158,5 +176,45 @@ export const createAllowancePayment = mutation({
     await updateDaddyLifetimeValue(ctx, { daddy });
 
     return allowancePaymentId;
+  },
+});
+
+export const updateAllowancePayment = mutation({
+  args: {
+    allowancePayment: v.id('allowancePayments'),
+    daddy: v.id('daddies'),
+    date: v.optional(v.number()),
+    amount: v.optional(v.number()),
+    paymentMethod: v.optional(v.string()),
+  },
+  handler: async (
+    ctx,
+    { allowancePayment, daddy, date, amount, paymentMethod },
+  ) => {
+    const user = await getConvexMutationUser(ctx);
+    if (!user) return null;
+
+    const allowancePaymentData = await ctx.db.get(allowancePayment);
+    if (!allowancePaymentData) return null;
+
+    const allowance = await ctx.db.get(allowancePaymentData.allowanceId);
+    if (
+      allowance &&
+      amount !== undefined &&
+      amount !== allowancePaymentData.amount
+    ) {
+      await ctx.db.patch(allowance._id, {
+        totalGiftAmount:
+          allowance.totalGiftAmount - allowancePaymentData.amount + amount,
+      });
+    }
+
+    await ctx.db.patch(allowancePayment, {
+      date,
+      amount,
+      paymentMethod,
+    });
+
+    await updateDaddyLifetimeValue(ctx, { daddy });
   },
 });
