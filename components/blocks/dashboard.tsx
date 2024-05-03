@@ -3,7 +3,7 @@
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 
-import { GiftedThisMonth } from '@/components/blocks/giftedThisMonth';
+import { GiftsData } from '@/components/blocks/giftsData';
 import { NeedSomeLove } from '@/components/blocks/needSomeLove';
 import { UpcomingDates } from './upcomingDates';
 import { motion } from 'framer-motion';
@@ -31,7 +31,11 @@ export function Dashboard() {
         <NeedSomeLove daddies={daddies} />
       </motion.div>
       <motion.div variants={stagger}>
-        <GiftedThisMonth dates={dates} allowancePayments={allowancePayments} />
+        <GiftsData
+          daddies={daddies}
+          dates={dates}
+          allowancePayments={allowancePayments}
+        />
       </motion.div>
     </motion.div>
   );
