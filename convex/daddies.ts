@@ -2,6 +2,8 @@ import { v } from 'convex/values';
 import { isAfter, isBefore } from 'date-fns';
 import { internalMutation, mutation, query } from './_generated/server';
 import { getConvexMutationUser, getConvexQueryUser } from './helpers';
+import { updateDatesDaddyNames } from './dates';
+import { Id } from './_generated/dataModel';
 
 export const deleteDaddy = mutation({
   args: { daddy: v.id('daddies') },
@@ -10,17 +12,26 @@ export const deleteDaddy = mutation({
   },
 });
 
-export const getOnlyDaddy = query({
+export const getDaddy = query({
   args: { daddy: v.id('daddies') },
   handler: async (ctx, { daddy }) => {
     return await ctx.db.get(daddy);
   },
 });
 
-export const getDaddy = query({
+export const getDaddyWithMetadata = query({
   args: { daddy: v.id('daddies') },
   handler: async (ctx, { daddy }) => {
-    const daddyRecord = await ctx.db.get(daddy);
+    let daddyRecord = await ctx.db.get(daddy);
+    if (!daddyRecord) return null;
+    if (daddyRecord.daddyInfos) {
+      const daddyInfos = await ctx.db.get(daddyRecord.daddyInfos);
+      daddyRecord = {
+        ...daddyInfos,
+        ...daddyRecord,
+      };
+    }
+
     const daddyDates = await ctx.db
       .query('dates')
       .withIndex('by_daddy', q => q.eq('daddy', daddy))
@@ -81,12 +92,21 @@ export const createDaddy = mutation({
 
     if (!user) return null;
 
+    const daddyInfos = await ctx.db.insert('daddyInfos', {
+      user: user._id,
+    });
+
     const daddyId = await ctx.db.insert('daddies', {
       user: user._id,
       name,
       vibeRating,
       lifetimeValue: 0,
       archived: false,
+      daddyInfos,
+    });
+
+    await ctx.db.patch(daddyInfos, {
+      daddy: daddyId,
     });
 
     return daddyId;
@@ -112,6 +132,73 @@ export const unarchiveDaddy = mutation({
     return await ctx.db.patch(daddy, {
       archived: false,
       archivedReason: undefined,
+    });
+  },
+});
+
+export const updateDaddy: Id<'daddies'> | null = mutation({
+  args: {
+    daddy: v.id('daddies'),
+    name: v.optional(v.string()),
+    profileLink: v.optional(v.string()),
+    imgUrl: v.optional(v.string()),
+    contactInfo: v.optional(v.string()),
+    location: v.optional(v.string()),
+    messagingApp: v.optional(v.string()),
+    initialContactDate: v.optional(v.number()),
+    notes: v.optional(v.string()),
+    earningsEstimate: v.optional(v.number()),
+    giftingMethod: v.optional(v.string()),
+    vibeRating: v.optional(v.number()),
+  },
+  handler: async (
+    ctx,
+    {
+      daddy,
+      name,
+      profileLink,
+      imgUrl,
+      contactInfo,
+      location,
+      messagingApp,
+      initialContactDate,
+      notes,
+      earningsEstimate,
+      giftingMethod,
+      vibeRating,
+    },
+  ) => {
+    const user = await getConvexMutationUser(ctx);
+
+    if (!user) return null;
+    const daddyRecord = await ctx.db.get(daddy);
+    if (!daddyRecord) return null;
+
+    const nameChange = name && daddyRecord.name !== name;
+    const vibeRatingChange =
+      vibeRating && daddyRecord.vibeRating !== vibeRating;
+
+    await ctx.db.patch(daddyRecord.daddyInfos, {
+      profileLink,
+      imgUrl,
+      contactInfo,
+      location,
+      messagingApp,
+      initialContactDate,
+      notes,
+      earningsEstimate,
+      giftingMethod,
+    });
+
+    if (!nameChange && !vibeRatingChange) return daddyRecord._id;
+
+    if (nameChange) {
+      await updateDatesDaddyNames(ctx, { daddy, name });
+    }
+
+    await ctx.db.patch(daddy, {
+      name,
+      vibeRating,
     });
   },
 });
@@ -168,7 +255,9 @@ export const updateDaddyContactsData = internalMutation({
 export const updateDaddyDatesData = internalMutation({
   args: { daddy: v.id('daddies') },
   handler: async (ctx, { daddy }) => {
-    // const daddyRecord = await ctx.db.get(daddy);
+    const daddyRecord = await ctx.db.get(daddy);
+    if (!daddyRecord) return null;
+
     const dates = await ctx.db
       .query('dates')
       .withIndex('by_daddy', q => q.eq('daddy', daddy))
@@ -194,68 +283,20 @@ export const updateDaddyDatesData = internalMutation({
       .filter(date => isAfter(new Date(date.date), new Date()))
       .sort((a, b) => a.date - b.date)[0];
 
-    return await ctx.db.patch(daddy, {
-      totalDates,
+    await ctx.db.patch(daddyRecord.daddyInfos, {
       totalScheduledDates,
       totalCompletedDates,
       totalCanceledDates,
       totalNoShowDates,
+    });
+
+    return await ctx.db.patch(daddy, {
+      totalDates,
       mostRecentDateId: mostRecentDate?._id || undefined,
       mostRecentDateDate: mostRecentDate?.date || undefined,
       mostRecentDate: undefined,
       nextDateId: nextDate?._id || undefined,
       nextDateDate: nextDate?.date || undefined,
-    });
-  },
-});
-
-export const updateDaddy = mutation({
-  args: {
-    daddy: v.id('daddies'),
-    name: v.optional(v.string()),
-    profileLink: v.optional(v.string()),
-    imgUrl: v.optional(v.string()),
-    contactInfo: v.optional(v.string()),
-    location: v.optional(v.string()),
-    messagingApp: v.optional(v.string()),
-    initialContactDate: v.optional(v.number()),
-    notes: v.optional(v.string()),
-    earningsEstimate: v.optional(v.number()),
-    giftingMethod: v.optional(v.string()),
-    vibeRating: v.optional(v.number()),
-  },
-  handler: async (
-    ctx,
-    {
-      daddy,
-      name,
-      profileLink,
-      imgUrl,
-      contactInfo,
-      location,
-      messagingApp,
-      initialContactDate,
-      notes,
-      earningsEstimate,
-      giftingMethod,
-      vibeRating,
-    },
-  ) => {
-    const user = await getConvexMutationUser(ctx);
-
-    if (!user) return null;
-    return await ctx.db.patch(daddy, {
-      name,
-      profileLink,
-      imgUrl,
-      contactInfo,
-      location,
-      messagingApp,
-      initialContactDate,
-      notes,
-      earningsEstimate,
-      giftingMethod,
-      vibeRating,
     });
   },
 });

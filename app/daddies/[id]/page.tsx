@@ -8,7 +8,6 @@ import { AddAllowancePlanButton } from '@/components/blocks/newAllowancePlanDial
 import EventLog from '@/components/blocks/eventLog';
 import { NewContactButton } from '@/components/blocks/newContactDialog';
 import { NewDateButton } from '@/components/blocks/newDateDialog';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -435,7 +434,7 @@ export default function DaddyPage({
 }: {
   params: { id: Id<'daddies'> };
 }) {
-  const daddyData = useQuery(api.daddies.getDaddy, {
+  const daddyData = useQuery(api.daddies.getDaddyWithMetadata, {
     daddy: params.id,
   });
   const router = useRouter();

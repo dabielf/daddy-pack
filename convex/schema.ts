@@ -23,6 +23,8 @@ export default defineSchema({
   daddies: defineTable({
     user: v.id('users'),
     name: v.string(),
+    daddyInfos: v.id('daddyInfos'),
+    //To remove
     profileLink: v.optional(v.string()),
     imgUrl: v.optional(v.string()),
     contactInfo: v.optional(v.string()),
@@ -31,15 +33,16 @@ export default defineSchema({
     initialContactDate: v.optional(v.number()),
     notes: v.optional(v.string()),
     earningsEstimate: v.optional(v.number()),
-    vibeRating: v.number(),
-    isFavorite: v.optional(v.boolean()),
     giftingMethod: v.optional(v.string()),
-    lifetimeValue: v.number(),
-    totalDates: v.optional(v.number()),
     totalScheduledDates: v.optional(v.number()),
     totalCompletedDates: v.optional(v.number()),
     totalCanceledDates: v.optional(v.number()),
     totalNoShowDates: v.optional(v.number()),
+    //end remove
+    vibeRating: v.number(),
+    isFavorite: v.optional(v.boolean()),
+    lifetimeValue: v.number(),
+    totalDates: v.optional(v.number()),
     mostRecentDate: v.optional(v.number()),
     mostRecentDateId: v.optional(v.id('dates')),
     mostRecentDateDate: v.optional(v.number()),
@@ -56,6 +59,25 @@ export default defineSchema({
     .index('by_user', ['user'])
     .index('by_name', ['name'])
     .index('by_user_archived', ['user', 'archived']),
+  daddyInfos: defineTable({
+    user: v.id('users'),
+    daddy: v.optional(v.id('daddies')),
+    profileLink: v.optional(v.string()),
+    imgUrl: v.optional(v.string()),
+    contactInfo: v.optional(v.string()),
+    location: v.optional(v.string()),
+    messagingApp: v.optional(v.string()),
+    initialContactDate: v.optional(v.number()),
+    notes: v.optional(v.string()),
+    earningsEstimate: v.optional(v.number()),
+    giftingMethod: v.optional(v.string()),
+    totalScheduledDates: v.optional(v.number()),
+    totalCompletedDates: v.optional(v.number()),
+    totalCanceledDates: v.optional(v.number()),
+    totalNoShowDates: v.optional(v.number()),
+  })
+    .index('by_user', ['user'])
+    .index('by_daddy', ['daddy']),
   allowances: defineTable({
     daddy: v.id('daddies'),
     user: v.id('users'),

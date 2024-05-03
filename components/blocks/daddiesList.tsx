@@ -144,7 +144,7 @@ export function ArchiveDaddyButton({
 }
 
 function getLocalOrderType() {
-  return localStorage.getItem('orderType') || undefined;
+  return localStorage.getItem('orderType') || 'nextDate';
 }
 
 function setLocalOrderType(orderType: string | undefined) {
@@ -173,12 +173,6 @@ function orderDaddies(
 
   if (orderType === 'vibeRating') {
     return daddies.sort((a, b) => b.vibeRating - a.vibeRating);
-  }
-
-  if (orderType === 'mostRecentDate') {
-    return daddies.sort(
-      (a, b) => (b.mostRecentDateDate || 0) - (a.mostRecentDateDate || 0),
-    );
   }
 
   if (orderType === '_creationTime') {
@@ -241,7 +235,6 @@ export function DaddiesList() {
                   Lifetime Value Descending️
                 </SelectItem>
                 <SelectItem value="nextDate">Next Date</SelectItem>
-                <SelectItem value="mostRecentDate">Most Recent Date</SelectItem>
                 <SelectItem value="vibeRating">Vibe Rating</SelectItem>
                 <SelectItem value="_creationTime">Date Added</SelectItem>
               </SelectGroup>
@@ -256,13 +249,7 @@ export function DaddiesList() {
       </div>
       {(() => {
         if (!daddies) {
-          return (
-            <div>
-              <Skeleton className="w-full h-[20px] rounded-full mb-4" />
-              <Skeleton className="w-full h-[20px] rounded-full mb-4" />
-              <Skeleton className="w-full h-[20px] rounded-full mb-4" />
-            </div>
-          );
+          return null;
         } else if (orderedDaddies?.length) {
           return (
             <Reorder.Group

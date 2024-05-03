@@ -20,7 +20,7 @@ export default function AllowancePage({
 }: {
   params: { id: Id<'daddies'>; allowanceId: Id<'allowances'> };
 }) {
-  const daddy = useQuery(api.daddies.getOnlyDaddy, {
+  const daddy = useQuery(api.daddies.getDaddy, {
     daddy: params.id,
   });
   const allowanceData = useQuery(api.allowances.getAllowanceWithPayments, {

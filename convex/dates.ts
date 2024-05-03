@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
-import { mutation, query } from './_generated/server';
+import { internalMutation, mutation, query } from './_generated/server';
 import { getConvexQueryUser, getConvexMutationUser } from './helpers';
+import { internal } from './_generated/api';
 import { updateDaddyDatesData, updateDaddyLifetimeValue } from './daddies';
 
 export const getDate = query({
@@ -145,7 +146,9 @@ export const updateDate = mutation({
     const dateData = await ctx.db.get(dateId);
     if (!dateData) return null;
     if (status == 'completed') {
-      await updateDaddyLifetimeValue(ctx, { daddy: dateData.daddy });
+      await updateDaddyLifetimeValue(ctx, {
+        daddy: dateData.daddy,
+      });
     }
     await updateDaddyDatesData(ctx, { daddy: dateData.daddy });
   },
@@ -157,6 +160,23 @@ export const deleteDate = mutation({
     await ctx.db.delete(date);
     const dateData = await ctx.db.get(date);
     if (!dateData) return null;
-    await updateDaddyDatesData(ctx, { daddy: dateData.daddy });
+
+    return await updateDaddyDatesData(ctx, { daddy: dateData.daddy });
+  },
+});
+
+export const updateDatesDaddyNames = internalMutation({
+  args: { daddy: v.id('daddies'), name: v.string() },
+  handler: async (ctx, { daddy, name }) => {
+    const daddyDates = await ctx.db
+      .query('dates')
+      .withIndex('by_daddy', q => q.eq('daddy', daddy))
+      .collect();
+
+    daddyDates.map(async date => {
+      await ctx.db.patch(date._id, {
+        daddyName: name,
+      });
+    });
   },
 });

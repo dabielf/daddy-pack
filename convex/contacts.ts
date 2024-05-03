@@ -77,7 +77,9 @@ export const updateContact = mutation({
 
     const contactData = await ctx.db.get(contact);
     if (!contactData) return contactId;
-    await updateDaddyContactsData(ctx, { daddy: contactData.daddy });
+    await updateDaddyContactsData(ctx, {
+      daddy: contactData.daddy,
+    });
 
     return contactId;
   },
@@ -89,6 +91,8 @@ export const deleteContact = mutation({
     await ctx.db.delete(contact);
     const contactData = await ctx.db.get(contact);
     if (!contactData) return null;
-    await updateDaddyContactsData(ctx, { daddy: contactData.daddy });
+    await updateDaddyContactsData(ctx, {
+      daddy: contactData.daddy,
+    });
   },
 });
