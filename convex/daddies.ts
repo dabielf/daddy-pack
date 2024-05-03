@@ -136,7 +136,7 @@ export const unarchiveDaddy = mutation({
   },
 });
 
-export const updateDaddy: Id<'daddies'> | null = mutation({
+export const updateDaddy = mutation({
   args: {
     daddy: v.id('daddies'),
     name: v.optional(v.string()),
