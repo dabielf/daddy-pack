@@ -64,7 +64,7 @@ export const Header = () => {
             </ul>
           </nav>
 
-          <div className="hidden md:flex flex-row gap-4 items-center place-self-end">
+          <div className="flex flex-row gap-4 items-center place-self-end">
             {isLoading ? null : button}
           </div>
         </div>
