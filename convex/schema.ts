@@ -23,7 +23,7 @@ export default defineSchema({
   daddies: defineTable({
     user: v.id('users'),
     name: v.string(),
-    daddyInfos: v.id('daddyInfos'),
+    daddyInfos: v.optional(v.id('daddyInfos')),
     //To remove
     profileLink: v.optional(v.string()),
     imgUrl: v.optional(v.string()),

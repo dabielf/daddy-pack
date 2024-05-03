@@ -178,17 +178,19 @@ export const updateDaddy = mutation({
     const vibeRatingChange =
       vibeRating && daddyRecord.vibeRating !== vibeRating;
 
-    await ctx.db.patch(daddyRecord.daddyInfos, {
-      profileLink,
-      imgUrl,
-      contactInfo,
-      location,
-      messagingApp,
-      initialContactDate,
-      notes,
-      earningsEstimate,
-      giftingMethod,
-    });
+    if (daddyRecord.daddyInfos) {
+      await ctx.db.patch(daddyRecord.daddyInfos, {
+        profileLink,
+        imgUrl,
+        contactInfo,
+        location,
+        messagingApp,
+        initialContactDate,
+        notes,
+        earningsEstimate,
+        giftingMethod,
+      });
+    }
 
     if (!nameChange && !vibeRatingChange) return daddyRecord._id;
 
@@ -283,12 +285,14 @@ export const updateDaddyDatesData = internalMutation({
       .filter(date => isAfter(new Date(date.date), new Date()))
       .sort((a, b) => a.date - b.date)[0];
 
-    await ctx.db.patch(daddyRecord.daddyInfos, {
-      totalScheduledDates,
-      totalCompletedDates,
-      totalCanceledDates,
-      totalNoShowDates,
-    });
+    if (daddyRecord.daddyInfos) {
+      await ctx.db.patch(daddyRecord.daddyInfos, {
+        totalScheduledDates,
+        totalCompletedDates,
+        totalCanceledDates,
+        totalNoShowDates,
+      });
+    }
 
     return await ctx.db.patch(daddy, {
       totalDates,
