@@ -2,27 +2,21 @@
 
 import { api } from '@/convex/_generated/api';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from 'convex/react';
-import { format } from 'date-fns';
+import { useMutation } from 'convex/react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useDrawers } from '@/providers/convex-client-provider';
-
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogPortal,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -31,27 +25,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { TimePicker } from '@/components/ui/time-picker';
-import { Doc, Id } from '@/convex/_generated/dataModel';
-import { cn, getErrorMessage } from '@/lib/utils';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Doc } from '@/convex/_generated/dataModel';
+import { dateTimeDate, getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
-import Link from 'next/link';
 
 const formSchema = z.object({
-  date: z.date(),
+  date: z.string(),
   amount: z.coerce.number().int().positive(),
   paymentMethod: z.string().optional(),
 });
@@ -68,7 +48,7 @@ export function AddAllowancePaymentButton({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      date: new Date(),
+      date: dateTimeDate(),
       amount: allowance.amount,
       paymentMethod: '',
     },
@@ -90,7 +70,7 @@ export function AddAllowancePaymentButton({
       const allowancePaymentId = await createAllowancePayment({
         allowance: allowance._id,
         daddy: daddy._id,
-        date: values.date.valueOf(),
+        date: new Date(values.date).valueOf(),
         amount: values.amount,
         paymentMethod: values.paymentMethod,
       });
@@ -119,43 +99,12 @@ export function AddAllowancePaymentButton({
                 name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <Popover>
-                      <FormLabel className="mr-6">
-                        When was the gift made ?
-                      </FormLabel>
-                      <FormControl className="w-max">
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              'w-[280px] justify-start text-left font-normal',
-                              !field.value && 'text-muted-foreground',
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? (
-                              format(field.value, 'PPP HH:mm:ss')
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                      </FormControl>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          initialFocus
-                        />
-                        <div className="p-3 border-t border-border">
-                          <TimePicker
-                            setDate={field.onChange}
-                            date={field.value}
-                          />
-                        </div>
-                      </PopoverContent>
-                    </Popover>
+                    <FormLabel className="mr-6">
+                      When was the gift made?{' '}
+                    </FormLabel>
+                    <FormControl className="w-max">
+                      <Input type="datetime-local" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

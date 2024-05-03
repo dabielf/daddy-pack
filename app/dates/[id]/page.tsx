@@ -32,7 +32,7 @@ import { TimePicker } from '@/components/ui/time-picker';
 import animations from '@/constants/animations';
 import { api } from '@/convex/_generated/api';
 import { Doc, Id } from '@/convex/_generated/dataModel';
-import { cn, getErrorMessage } from '@/lib/utils';
+import { cn, getErrorMessage, dateTimeDate } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from 'convex/react';
 import { format, formatDistance } from 'date-fns';
@@ -53,7 +53,7 @@ import { staggerUp as stagger } from '@/constants/animations';
 import { DateStatusSelector } from '@/components/blocks/dateStatusSelector';
 
 const formSchema = z.object({
-  date: z.date(),
+  date: z.string(),
   location: z.string().optional(),
   dateDuration: z.string().optional(),
   comfortLevel: z.string().optional(),
@@ -155,7 +155,7 @@ function EditForm({
     resolver: zodResolver(formSchema),
     values: {
       ...dateData,
-      date: new Date(dateData.date),
+      date: dateTimeDate(dateData.date),
       dateDuration: dateData.dateDuration?.toString() || '',
       comfortLevel: dateData.comfortLevel?.toString() || '',
       funLevel: dateData.funLevel?.toString() || '',
@@ -177,7 +177,7 @@ function EditForm({
     const status = dateData.status ? dateData.status : 'scheduled';
     const formattedValues = {
       ...values,
-      date: values.date.valueOf(),
+      date: new Date(values.date).valueOf(),
       dateDuration: Number(values.dateDuration || '0'),
       comfortLevel: Number(values.comfortLevel || '0'),
       funLevel: Number(values.funLevel || '0'),
@@ -220,41 +220,10 @@ function EditForm({
                   name="date"
                   render={({ field }) => (
                     <FormItem>
-                      <Popover>
-                        <FormLabel className="mr-6">Pick a date</FormLabel>
-                        <FormControl className="w-max">
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className={cn(
-                                'w-[280px] justify-start text-left font-normal',
-                                !field.value && 'text-muted-foreground',
-                              )}
-                            >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {field.value ? (
-                                format(field.value, 'PPP HH:mm:ss')
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                            </Button>
-                          </PopoverTrigger>
-                        </FormControl>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                          />
-                          <div className="p-3 border-t border-border">
-                            <TimePicker
-                              setDate={field.onChange}
-                              date={field.value}
-                            />
-                          </div>
-                        </PopoverContent>
-                      </Popover>
+                      <FormLabel className="mr-6">Pick a date: </FormLabel>
+                      <FormControl className="w-max">
+                        <Input type="datetime-local" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

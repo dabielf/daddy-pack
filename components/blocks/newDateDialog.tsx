@@ -3,14 +3,18 @@
 import { api } from '@/convex/_generated/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from 'convex/react';
-import { format } from 'date-fns';
+import { formatRFC3339 } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useRef } from 'react';
 
 import { useDrawers } from '@/providers/convex-client-provider';
 
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
+
 import {
   Dialog,
   DialogClose,
@@ -18,7 +22,6 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogPortal,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
@@ -42,16 +45,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { TimePicker } from '@/components/ui/time-picker';
+
 import { Id } from '@/convex/_generated/dataModel';
-import { cn, getErrorMessage } from '@/lib/utils';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { getErrorMessage, dateTimeDate } from '@/lib/utils';
 import { toast } from 'sonner';
 
 const formSchema = z.object({
   daddy: z.string(),
   daddyName: z.string(),
-  date: z.date(),
+  date: z.string(),
 });
 
 export function NewDateButton({
@@ -67,9 +69,11 @@ export function NewDateButton({
     defaultValues: {
       daddy: daddyId || '',
       daddyName: '',
-      date: new Date(),
+      date: dateTimeDate(),
     },
   });
+
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const createDate = useMutation(api.dates.createDate);
   const daddies = useQuery(api.daddies.getDaddies);
@@ -88,7 +92,7 @@ export function NewDateButton({
       const dateId = await createDate({
         daddy: values.daddy as Id<'daddies'>,
         daddyName: getDaddyName(values.daddy),
-        date: values.date.valueOf(),
+        date: new Date(values.date).valueOf(),
       });
       form.reset();
       toast.success(`New Date Created with ${getDaddyName(values.daddy)} 🎉`);
@@ -112,102 +116,69 @@ export function NewDateButton({
           {children}
         </Button>
       </DialogTrigger>
-      <DialogPortal>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>
-              Add a new Date {daddyId ? `with ${getDaddyName(daddyId)}` : ''}
-            </DialogTitle>
-            <DialogDescription>
-              Click create when you&apos;re done.
-            </DialogDescription>
-          </DialogHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              {!daddyId ? (
-                <FormField
-                  control={form.control}
-                  name="daddy"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Daddy I got the date with:</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose a Daddy" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {daddies?.length
-                            ? daddies.map(daddy => (
-                                <SelectItem key={daddy._id} value={daddy._id}>
-                                  {daddy.name}
-                                </SelectItem>
-                              ))
-                            : null}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ) : null}
+      <DialogContent className="sm:max-w-[425px]" ref={dialogRef}>
+        <DialogHeader>
+          <DialogTitle>
+            Add a new Date {daddyId ? `with ${getDaddyName(daddyId)}` : ''}
+          </DialogTitle>
+          <DialogDescription>
+            Click create when you&apos;re done.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {!daddyId ? (
               <FormField
                 control={form.control}
-                name="date"
+                name="daddy"
                 render={({ field }) => (
                   <FormItem>
-                    <Popover>
-                      <FormLabel className="mr-6">Pick a date</FormLabel>
-                      <FormControl className="w-max">
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              'w-[280px] justify-start text-left font-normal',
-                              !field.value && 'text-muted-foreground',
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? (
-                              format(field.value, 'PPP HH:mm:ss')
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
+                    <FormLabel>Daddy I got the date with:</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose a Daddy" />
+                        </SelectTrigger>
                       </FormControl>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          initialFocus
-                        />
-                        <div className="p-3 border-t border-border">
-                          <TimePicker
-                            setDate={field.onChange}
-                            date={field.value}
-                          />
-                        </div>
-                      </PopoverContent>
-                    </Popover>
+                      <SelectContent>
+                        {daddies?.length
+                          ? daddies.map(daddy => (
+                              <SelectItem key={daddy._id} value={daddy._id}>
+                                {daddy.name}
+                              </SelectItem>
+                            ))
+                          : null}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="submit">Create</Button>
-                </DialogClose>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </DialogPortal>
+            ) : null}
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="mr-6">Pick a date: </FormLabel>
+                  <FormControl className="w-max">
+                    <Input type="datetime-local" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="submit">Create</Button>
+              </DialogClose>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
     </Dialog>
   );
 }

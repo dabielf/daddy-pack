@@ -1,8 +1,16 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { formatRFC3339 } from 'date-fns';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function dateTimeDate(date?: number) {
+  if (date) {
+    return formatRFC3339(new Date(date)).slice(0, 16);
+  }
+  return formatRFC3339(new Date()).slice(0, 16);
 }
 
 // Error Message Manager

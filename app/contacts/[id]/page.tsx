@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
@@ -32,7 +33,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
 import { TimePicker } from '@/components/ui/time-picker';
-import { cn } from '@/lib/utils';
+import { cn, dateTimeDate } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format, formatRelative } from 'date-fns';
 import { motion } from 'framer-motion';
@@ -60,16 +61,14 @@ export default function ContactPage({
   const updateContact = useMutation(api.contacts.updateContact);
   const router = useRouter();
   const formSchema = z.object({
-    date: z.date(),
+    date: z.string(),
     notes: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     values: {
-      date: contactData?.contact?.date
-        ? new Date(contactData?.contact?.date)
-        : new Date(),
+      date: dateTimeDate(contactData?.contact?.date),
       notes: contactData?.contact?.notes || '',
     },
   });
@@ -91,7 +90,7 @@ export default function ContactPage({
   function onSubmit(values: z.infer<typeof formSchema>) {
     const contactId = updateContact({
       contact: params.id,
-      date: values.date.valueOf(),
+      date: new Date(values.date).valueOf(),
       notes: values.notes,
     });
     setEdit(false);
@@ -186,41 +185,10 @@ export default function ContactPage({
                     name="date"
                     render={({ field }) => (
                       <FormItem>
-                        <Popover>
-                          <FormLabel className="mr-6">Pick a date</FormLabel>
-                          <FormControl className="w-max">
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  'w-[280px] justify-start text-left font-normal',
-                                  !field.value && 'text-muted-foreground',
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {field.value ? (
-                                  format(field.value, 'PPP HH:mm:ss')
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                          </FormControl>
-                          <PopoverContent className="w-auto p-0">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                            />
-                            <div className="p-3 border-t border-border">
-                              <TimePicker
-                                setDate={field.onChange}
-                                date={field.value}
-                              />
-                            </div>
-                          </PopoverContent>
-                        </Popover>
+                        <FormLabel className="mr-6">Pick a date: </FormLabel>
+                        <FormControl className="w-max">
+                          <Input type="datetime-local" {...field} />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
