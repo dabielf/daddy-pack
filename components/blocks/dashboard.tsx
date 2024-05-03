@@ -11,6 +11,7 @@ import { staggerUpDaddies as stagger } from '@/constants/animations';
 
 export function Dashboard() {
   const daddies = useQuery(api.daddies.getDaddies);
+  const archivedDaddies = useQuery(api.daddies.getArchivedDaddies);
   const dates = useQuery(api.dates.getDates);
   const contacts = useQuery(api.contacts.getContacts);
   const allowancePayments = useQuery(api.allowances.getAllowancePayments);
@@ -33,6 +34,7 @@ export function Dashboard() {
       <motion.div variants={stagger}>
         <GiftsData
           daddies={daddies}
+          archivedDaddies={archivedDaddies ? archivedDaddies : []}
           dates={dates}
           allowancePayments={allowancePayments}
         />

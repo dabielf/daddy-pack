@@ -7,10 +7,12 @@ import { Separator } from '@/components/ui/separator';
 export function GiftsData({
   dates,
   daddies,
+  archivedDaddies,
   allowancePayments,
 }: {
   dates: Doc<'dates'>[];
   daddies: Doc<'daddies'>[];
+  archivedDaddies: Doc<'daddies'>[];
   allowancePayments: Doc<'allowancePayments'>[];
 }) {
   // calculate the total of all the daddies 'lifetimeValue' field
@@ -18,6 +20,15 @@ export function GiftsData({
     (acc, daddy) => acc + daddy.lifetimeValue,
     0,
   );
+
+  let totalArchivedLifetimeValue = 0;
+  if (archivedDaddies && archivedDaddies.length) {
+    totalArchivedLifetimeValue = archivedDaddies.reduce(
+      (acc, daddy) => acc + daddy.lifetimeValue,
+      0,
+    );
+  }
+
   // Filter dates for this month
   const thisMonth = dates.filter(date =>
     isSameMonth(new Date(date.date), new Date()),
@@ -110,7 +121,9 @@ export function GiftsData({
             <p className="text-xs text-muted-foreground">
               Total Gifted Lifetime
             </p>
-            <p className="text-2xl font-bold">${totalLifetimeValue}</p>
+            <p className="text-2xl font-bold">
+              ${totalLifetimeValue + (totalArchivedLifetimeValue || 0)}
+            </p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Gifted this month</p>
