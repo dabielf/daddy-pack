@@ -22,15 +22,11 @@ export const getDaddy = query({
 export const getDaddyWithMetadata = query({
   args: { daddy: v.id("daddies") },
   handler: async (ctx, { daddy }) => {
-    let daddyRecord = await ctx.db.get(daddy);
+    const daddyRecord = await ctx.db.get(daddy);
     if (!daddyRecord) return null;
-    if (daddyRecord.daddyInfos) {
-      const daddyInfos = await ctx.db.get(daddyRecord.daddyInfos);
-      daddyRecord = {
-        ...daddyInfos,
-        ...daddyRecord,
-      };
-    }
+    const daddyInfos = await ctx.db.get(daddyRecord.daddyInfos);
+    if (!daddyInfos) return null;
+    const daddyWithInfos = { ...daddyInfos, ...daddyRecord };
 
     const daddyDates = await ctx.db
       .query("dates")
@@ -41,7 +37,7 @@ export const getDaddyWithMetadata = query({
       .withIndex("by_daddy", (q) => q.eq("daddy", daddy))
       .collect();
     return {
-      daddy: daddyRecord,
+      daddy: daddyWithInfos,
       dates: daddyDates,
       contacts: daddyContacts,
     };

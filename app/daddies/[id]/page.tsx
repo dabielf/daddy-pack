@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
 import {
   ArchiveDaddyButton,
   DeleteDaddyButton,
-} from '@/components/blocks/daddiesList';
-import { AddAllowancePlanButton } from '@/components/blocks/newAllowancePlanDialog';
-import EventLog from '@/components/blocks/eventLog';
-import { NewContactButton } from '@/components/blocks/newContactDialog';
-import { NewDateButton } from '@/components/blocks/newDateDialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+} from "@/components/blocks/daddiesList";
+import { AddAllowancePlanButton } from "@/components/blocks/newAllowancePlanDialog";
+import EventLog from "@/components/blocks/eventLog";
+import { NewContactButton } from "@/components/blocks/newContactDialog";
+import { NewDateButton } from "@/components/blocks/newDateDialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -17,13 +17,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   ActionMenu,
   ActionTrigger,
   ActionItems,
   ActionItem,
-} from '@/components/animations/actionMenu';
+} from "@/components/animations/actionMenu";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -31,30 +31,31 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import { Input } from '@/components/ui/input';
-import animations, { staggerUp } from '@/constants/animations';
-import { api } from '@/convex/_generated/api';
-import { Doc, Id } from '@/convex/_generated/dataModel';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from 'convex/react';
-import { motion } from 'framer-motion';
-import { ChevronLeft, Plus, Pencil } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Markdown from 'react-markdown';
-import { z } from 'zod';
+} from "@/components/ui/breadcrumb";
+import { Input } from "@/components/ui/input";
+import animations, { staggerUp } from "@/constants/animations";
+import { api } from "@/convex/_generated/api";
+import { Doc, Id } from "@/convex/_generated/dataModel";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "convex/react";
+import { motion } from "framer-motion";
+import { ChevronLeft, Plus, Pencil } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import Markdown from "react-markdown";
+import { z } from "zod";
 
-import Tiptap from '@/components/blocks/tiptap';
-import { Separator } from '@/components/ui/separator';
-import { getErrorMessage } from '@/lib/utils';
-import { toast } from 'sonner';
-import { staggerUp as stagger } from '@/constants/animations';
+import Tiptap from "@/components/blocks/tiptap";
+import { Separator } from "@/components/ui/separator";
+import { getErrorMessage } from "@/lib/utils";
+import { toast } from "sonner";
+import { staggerUp as stagger } from "@/constants/animations";
+import { DaddyWithInfos } from "@/custom-types";
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: 'Name must be at least 2 characters.',
+    message: "Name must be at least 2 characters.",
   }),
   profileLink: z.string().optional(),
   contactInfo: z.string().optional(),
@@ -69,28 +70,28 @@ const formSchema = z.object({
 function DisplayForm({
   daddyData,
 }: {
-  daddyData: Doc<'daddies'>;
+  daddyData: DaddyWithInfos;
   edit: boolean;
 }) {
   return (
     <motion.div>
-      <Card className="p-4 grid md:grid-cols-2 gap-4">
+      <Card className="grid gap-4 p-4 md:grid-cols-2">
         <motion.div
-          className="grow flex flex-col gap-4"
+          className="flex grow flex-col gap-4"
           variants={stagger}
           initial="initial"
           animate="animate"
         >
           <motion.div variants={stagger}>
             <div className="space-y-1">
-              <p className="font-bold text-lg">Name / Nickname</p>
+              <p className="text-lg font-bold">Name / Nickname</p>
               <Separator className="bg-primary/50" />
               <p className="pt-2">{daddyData.name}</p>
             </div>
           </motion.div>
           <motion.div variants={stagger}>
             <div className="space-y-1">
-              <p className="font-bold text-lg">Profile Link</p>
+              <p className="text-lg font-bold">Profile Link</p>
               <Separator className="bg-primary/50" />
 
               {daddyData.profileLink ? (
@@ -107,64 +108,64 @@ function DisplayForm({
           </motion.div>
           <motion.div variants={stagger}>
             <div className="space-y-1">
-              <p className="font-bold text-lg">Gifting Method</p>
+              <p className="text-lg font-bold">Gifting Method</p>
               <Separator className="bg-primary/50" />
-              <p className="pt-2">{daddyData.giftingMethod || 'N/A'}</p>
+              <p className="pt-2">{daddyData.giftingMethod || "N/A"}</p>
             </div>
           </motion.div>
           <motion.div variants={stagger}>
             <div className="space-y-1">
-              <p className="font-bold text-lg">Contact Info</p>
+              <p className="text-lg font-bold">Contact Info</p>
               <Separator className="bg-primary/50" />
-              <p className="pt-2">{daddyData.contactInfo || 'N/A'}</p>
+              <p className="pt-2">{daddyData.contactInfo || "N/A"}</p>
             </div>
           </motion.div>
           <motion.div variants={stagger}>
             <div className="space-y-1">
-              <p className="font-bold text-lg">Location</p>
+              <p className="text-lg font-bold">Location</p>
               <Separator className="bg-primary/50" />
-              <p className="pt-2">{daddyData.location || 'N/A'}</p>
+              <p className="pt-2">{daddyData.location || "N/A"}</p>
             </div>
           </motion.div>
         </motion.div>
         <motion.div
-          className="grow flex flex-col gap-4"
+          className="flex grow flex-col gap-4"
           variants={stagger}
           initial="initial"
           animate="animate"
         >
           <motion.div variants={stagger}>
             <div className="space-y-1">
-              <p className="font-bold text-lg">Messaging App</p>
+              <p className="text-lg font-bold">Messaging App</p>
               <Separator className="bg-primary/50" />
-              <p className="pt-2">{daddyData.messagingApp || 'N/A'}</p>
+              <p className="pt-2">{daddyData.messagingApp || "N/A"}</p>
             </div>
           </motion.div>
           <motion.div variants={stagger}>
             <div className="space-y-1">
-              <p className="font-bold text-lg">Notes</p>
+              <p className="text-lg font-bold">Notes</p>
               <Separator className="bg-primary/50" />
               <Markdown className="pt-2">
-                {daddyData.notes || 'No notes about this daddy yet'}
+                {daddyData.notes || "No notes about this daddy yet"}
               </Markdown>
             </div>
           </motion.div>
           <motion.div variants={stagger}>
             <div className="space-y-1">
-              <p className="font-bold text-lg">
+              <p className="text-lg font-bold">
                 Earnings Estimate / Agreement per Date
               </p>
               <Separator className="bg-primary/50" />
               <p className="pt-2">
                 {daddyData.earningsEstimate
                   ? `$${daddyData.earningsEstimate}`
-                  : 'N/A'}
+                  : "N/A"}
               </p>
             </div>
           </motion.div>
           <motion.div variants={stagger}>
             <div className="space-y-1">
-              <p className="font-bold text-lg">Vibe Rating</p>
+              <p className="text-lg font-bold">Vibe Rating</p>
               <Separator className="bg-primary/50" />
               <p className="pt-2">{`${daddyData.vibeRating} / 5`}</p>
             </div>
@@ -179,7 +180,7 @@ function EditForm({
   daddyData,
   setEdit,
 }: {
-  daddyData: Doc<'daddies'>;
+  daddyData: DaddyWithInfos;
   edit: boolean;
   setEdit: (edit: boolean) => void;
 }) {
@@ -189,7 +190,7 @@ function EditForm({
     values: {
       ...daddyData,
       vibeRating: daddyData.vibeRating.toString(),
-      earningsEstimate: daddyData.earningsEstimate?.toString() || '',
+      earningsEstimate: daddyData.earningsEstimate?.toString() || "",
     },
   });
 
@@ -198,7 +199,7 @@ function EditForm({
     // ✅ This will be type-safe and validated.
     const formattedValues = {
       ...values,
-      earningsEstimate: Number(values.earningsEstimate || '0'),
+      earningsEstimate: Number(values.earningsEstimate || "0"),
       vibeRating: Number(values.vibeRating),
     };
 
@@ -221,9 +222,9 @@ function EditForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
           >
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid gap-4 md:grid-cols-2">
               <motion.div
-                className="grow flex flex-col gap-4"
+                className="flex grow flex-col gap-4"
                 variants={stagger}
                 initial="initial"
                 animate="animate"
@@ -308,7 +309,7 @@ function EditForm({
                 </motion.div>
               </motion.div>
               <motion.div
-                className="grow flex flex-col gap-4"
+                className="flex grow flex-col gap-4"
                 variants={stagger}
                 initial="initial"
                 animate="animate"
@@ -390,7 +391,7 @@ function EditForm({
                 </motion.div>
               </motion.div>
             </div>
-            <div className="flex flex-row items-end justify-end gap-2 grow">
+            <div className="flex grow flex-row items-end justify-end gap-2">
               <Button
                 type="button"
                 variant="secondary"
@@ -418,7 +419,7 @@ function DaddyDisplayOrEditForm({
   edit,
   setEdit,
 }: {
-  daddyData: Doc<'daddies'>;
+  daddyData: DaddyWithInfos;
   edit: boolean;
   setEdit: (edit: boolean) => void;
 }) {
@@ -432,7 +433,7 @@ function DaddyDisplayOrEditForm({
 export default function DaddyPage({
   params,
 }: {
-  params: { id: Id<'daddies'> };
+  params: { id: Id<"daddies"> };
 }) {
   const daddyData = useQuery(api.daddies.getDaddyWithMetadata, {
     daddy: params.id,
@@ -444,7 +445,7 @@ export default function DaddyPage({
     if (daddyData?.daddy?.allowance) {
       return { allowance: daddyData.daddy.allowance };
     }
-    return 'skip';
+    return "skip";
   }
 
   const allowanceData = useQuery(
@@ -453,7 +454,7 @@ export default function DaddyPage({
   );
 
   function goBack() {
-    router.push('/daddies');
+    router.push("/daddies");
   }
 
   if (!daddyData) return null;
@@ -462,7 +463,7 @@ export default function DaddyPage({
   if (!daddy) return null;
 
   return (
-    <div className="flex w-full h-full flex-col">
+    <div className="flex h-full w-full flex-col">
       {/* <div
         onClick={goBack}
         className="text-md text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-4 w-fit"
@@ -470,13 +471,13 @@ export default function DaddyPage({
         <ChevronLeft size={24} />
         Back
       </div> */}
-      <div className="flex flex-row items-center justify-between w-full mb-4">
+      <div className="mb-4 flex w-full flex-row items-center justify-between">
         <Breadcrumb className="">
-          <BreadcrumbList className="md:text-xl font-semibold text-foreground">
+          <BreadcrumbList className="font-semibold text-foreground md:text-xl">
             <BreadcrumbItem>
               <BreadcrumbLink
                 href="/daddies"
-                className="hover:underline decoration-primary"
+                className="decoration-primary hover:underline"
               >
                 Daddies
               </BreadcrumbLink>
@@ -492,7 +493,7 @@ export default function DaddyPage({
           <ActionItems>
             <ActionItem>
               <Button
-                onClick={() => setEdit(editStatus => !editStatus)}
+                onClick={() => setEdit((editStatus) => !editStatus)}
                 disabled={edit}
                 size="sm"
               >
@@ -513,37 +514,37 @@ export default function DaddyPage({
           </ActionItems>
         </ActionMenu>
       </div>
-      <div className="flex flex-col md:grid md:grid-cols-3 xl:grid-cols-4 h-full gap-4">
-        <div className="md:col-span-2 xl:col-span-3 flex flex-col gap-4">
+      <div className="flex h-full flex-col gap-4 md:grid md:grid-cols-3 xl:grid-cols-4">
+        <div className="flex flex-col gap-4 md:col-span-2 xl:col-span-3">
           <Card>
             <CardHeader>
-              <CardTitle className="flex flex-row justify-center items-center h-4 gap-3">
+              <CardTitle className="flex h-4 flex-row items-center justify-center gap-3">
                 <p className="text-sm font-light">
-                  <span className="text-lg font-semibold mr-1">
+                  <span className="mr-1 text-lg font-semibold">
                     ${daddy.lifetimeValue || 0}
-                  </span>{' '}
+                  </span>{" "}
                   Gifted
                 </p>
                 <Separator orientation="vertical" className="bg-primary" />
                 <p className="text-sm font-light">
-                  <span className="text-lg font-semibold mr-1">
+                  <span className="mr-1 text-lg font-semibold">
                     {daddy.totalCompletedDates || 0}
-                  </span>{' '}
-                  {` ${daddy.totalCompletedDates == 1 ? 'Date' : 'Dates'} Completed`}
+                  </span>{" "}
+                  {` ${daddy.totalCompletedDates == 1 ? "Date" : "Dates"} Completed`}
                 </p>
                 <Separator orientation="vertical" className="bg-primary" />
                 <p className="text-sm font-light">
-                  <span className="text-lg font-semibold mr-1">
+                  <span className="mr-1 text-lg font-semibold">
                     {daddy.totalScheduledDates || 0}
                   </span>
-                  {`${daddy.totalScheduledDates == 1 ? ' Date' : ' Dates'} Scheduled`}
+                  {`${daddy.totalScheduledDates == 1 ? " Date" : " Dates"} Scheduled`}
                 </p>
                 <Separator orientation="vertical" className="bg-primary" />
                 <p className="text-sm font-light">
-                  <span className="text-lg font-semibold mr-1">
+                  <span className="mr-1 text-lg font-semibold">
                     {daddy.totalContacts || 0}
-                  </span>{' '}
-                  {` ${daddy.totalContacts == 1 ? 'Contact' : 'Contacts'}`}
+                  </span>{" "}
+                  {` ${daddy.totalContacts == 1 ? "Contact" : "Contacts"}`}
                 </p>
               </CardTitle>
             </CardHeader>
@@ -559,7 +560,7 @@ export default function DaddyPage({
           />
         </div>
 
-        <div className="h-full flex flex-col md:justify-between gap-4">
+        <div className="flex h-full flex-col gap-4 md:justify-between">
           <EventLog contacts={contacts} dates={dates} />
           <Card className="border-destructive shadow-md">
             <CardHeader>
