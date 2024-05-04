@@ -144,8 +144,7 @@ export default function EventLog({
   function EventDisplayer(event: extendedContact | extendedDate) {
     if ("giftAmount" in event) {
       return DateDisplayer(event);
-    }
-    if (event.eventType === "contact") {
+    } else if (event.eventType === "contact") {
       return (
         <motion.div
           key={event._id}
@@ -194,8 +193,6 @@ export default function EventLog({
           </Link>
         </motion.div>
       );
-    } else {
-      return DateDisplayer(event);
     }
   }
 
