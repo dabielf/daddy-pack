@@ -207,7 +207,7 @@ export default function EventLog({
             variants={stagger}
             initial="initial"
             animate="animate"
-            className="-mt-2 flex flex-col gap-4"
+            className="-mt-2 flex flex-col gap-2"
           >
             <motion.h3 variants={stagger} className="mt-6 text-lg font-bold">
               Upcoming Events
