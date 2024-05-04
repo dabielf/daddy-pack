@@ -1,26 +1,30 @@
-'use client';
+"use client";
 
-import { useQuery } from 'convex/react';
-import { api } from '@/convex/_generated/api';
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
-import { GiftsData } from '@/components/blocks/giftsData';
-import { NeedSomeLove } from '@/components/blocks/needSomeLove';
-import { UpcomingDates } from './upcomingDates';
-import { motion } from 'framer-motion';
-import { staggerUpDaddies as stagger } from '@/constants/animations';
+import { GiftsData } from "@/components/blocks/giftsData";
+import { NeedSomeLove } from "@/components/blocks/needSomeLove";
+import { UpcomingDates } from "./upcomingDates";
+import { motion } from "framer-motion";
+import { staggerUpDaddies as stagger } from "@/constants/animations";
+
+import { useConvexData } from "@/providers/convexDataContext";
 
 export function Dashboard() {
-  const daddies = useQuery(api.daddies.getDaddies);
-  const archivedDaddies = useQuery(api.daddies.getArchivedDaddies);
-  const dates = useQuery(api.dates.getDates);
-  const contacts = useQuery(api.contacts.getContacts);
-  const allowancePayments = useQuery(api.allowances.getAllowancePayments);
+  // const contacts = useQuery(api.contacts.getContacts);
+  // const allowancePayments = useQuery(api.allowances.getAllowancePayments);
+  //
+  const { daddies, dates, contacts, allowancePayments, archivedDaddies } =
+    useConvexData();
+
+  // console.log(daddies, dates, contacts, allowancePayments, archivedDaddies);
 
   if (!daddies || !dates || !contacts || !allowancePayments) return null;
 
   return (
     <motion.div
-      className="grid md:grid-cols-2  xl:grid-cols-3 gap-6"
+      className="grid gap-6  md:grid-cols-2 xl:grid-cols-3"
       variants={stagger}
       initial="initial"
       animate="animate"

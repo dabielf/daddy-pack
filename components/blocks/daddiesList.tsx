@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { api } from '@/convex/_generated/api';
-import { Id, Doc } from '@/convex/_generated/dataModel';
-import { useMutation, useQuery } from 'convex/react';
-import { motion, Reorder } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { api } from "@/convex/_generated/api";
+import { Id, Doc } from "@/convex/_generated/dataModel";
+import { useMutation, useQuery } from "convex/react";
+import { motion, Reorder } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import animations from '@/constants/animations';
+import animations from "@/constants/animations";
 
 import {
   Select,
@@ -17,7 +17,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 import {
   AlertDialog,
@@ -29,23 +29,23 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { toast } from 'sonner';
-import DaddyBlock from './daddyBlock';
-import { NewDaddyButton } from './newDaddyDialog';
-import NoDaddyYet from './noDaddyYet';
-import { staggerUpDaddies as stagger } from '@/constants/animations';
-import { ArchivedDaddiesButton } from './archivedDaddies';
-import Tiptap from './tiptap';
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import DaddyBlock from "./daddyBlock";
+import { NewDaddyButton } from "./newDaddyDialog";
+import NoDaddyYet from "./noDaddyYet";
+import { staggerUpDaddies as stagger } from "@/constants/animations";
+import { ArchivedDaddiesButton } from "./archivedDaddies";
+import Tiptap from "./tiptap";
+import { useConvexData } from "@/providers/convexDataContext";
 
 export function DeleteDaddyButton({
   daddy,
   name,
-  buttonText = 'Delete this Daddy',
+  buttonText = "Delete this Daddy",
 }: {
-  daddy: Id<'daddies'>;
+  daddy: Id<"daddies">;
   name: string;
   buttonText?: string;
 }) {
@@ -56,7 +56,7 @@ export function DeleteDaddyButton({
     deleteDaddy({ daddy });
 
     toast.success(`${name} was successfully ERASED 🎊.`);
-    router.push('/daddies');
+    router.push("/daddies");
   }
 
   return (
@@ -93,13 +93,13 @@ export function DeleteDaddyButton({
 export function ArchiveDaddyButton({
   daddy,
   name,
-  buttonText = 'Archive this Daddy',
+  buttonText = "Archive this Daddy",
 }: {
-  daddy: Id<'daddies'>;
+  daddy: Id<"daddies">;
   name: string;
   buttonText?: string;
 }) {
-  const [archivedReason, setArchivedReason] = useState<string>('');
+  const [archivedReason, setArchivedReason] = useState<string>("");
   const archiveDaddy = useMutation(api.daddies.archiveDaddy);
   const router = useRouter();
 
@@ -107,7 +107,7 @@ export function ArchiveDaddyButton({
     archiveDaddy({ daddy, archivedReason });
 
     toast.success(`${name} was successfully ARCHIVED 🎊.`);
-    router.push('/daddies');
+    router.push("/daddies");
   }
 
   return (
@@ -128,7 +128,7 @@ export function ArchiveDaddyButton({
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="mt-2 -mb-2 font-semibold">
+        <div className="-mb-2 mt-2 font-semibold">
           (optional) Reason for archiving:
         </div>
         <Tiptap content={archivedReason} onChange={setArchivedReason} />
@@ -144,17 +144,17 @@ export function ArchiveDaddyButton({
 }
 
 function getLocalOrderType() {
-  return localStorage.getItem('orderType') || 'nextDate';
+  return localStorage.getItem("orderType") || "nextDate";
 }
 
 function setLocalOrderType(orderType: string | undefined) {
   if (orderType) {
-    localStorage.setItem('orderType', orderType);
+    localStorage.setItem("orderType", orderType);
   }
 }
 
 function orderDaddies(
-  daddies: Doc<'daddies'>[] | null | undefined,
+  daddies: Doc<"daddies">[] | null | undefined,
   orderType: string | undefined,
 ) {
   if (!daddies) {
@@ -163,25 +163,25 @@ function orderDaddies(
   if (!orderType) {
     return daddies || [];
   }
-  if (orderType === 'lifetimeValueDown') {
+  if (orderType === "lifetimeValueDown") {
     return daddies.sort((a, b) => b.lifetimeValue - a.lifetimeValue);
   }
 
-  if (orderType === 'lifetimeValueUp') {
+  if (orderType === "lifetimeValueUp") {
     return daddies.sort((a, b) => a.lifetimeValue - b.lifetimeValue);
   }
 
-  if (orderType === 'vibeRating') {
+  if (orderType === "vibeRating") {
     return daddies.sort((a, b) => b.vibeRating - a.vibeRating);
   }
 
-  if (orderType === '_creationTime') {
+  if (orderType === "_creationTime") {
     return daddies.sort(
       (a, b) => (b._creationTime || 0) - (a._creationTime || 0),
     );
   }
 
-  if (orderType === 'nextDate') {
+  if (orderType === "nextDate") {
     //create a new Date 50 years from now
     const fiftyYearsFromNow = new Date();
     fiftyYearsFromNow.setFullYear(fiftyYearsFromNow.getFullYear() + 50);
@@ -203,11 +203,11 @@ export function DaddiesList() {
   const [orderType, setOrderType] = useState<string | undefined>(
     localOrderType,
   );
-  const daddies = useQuery(api.daddies.getDaddies);
+  const { daddies } = useConvexData();
 
   const initialDaddies = orderDaddies(daddies, orderType);
   const [orderedDaddies, setOrderedDaddies] =
-    useState<Doc<'daddies'>[]>(initialDaddies);
+    useState<Doc<"daddies">[]>(initialDaddies);
 
   useEffect(() => {
     setLocalOrderType(orderType);
@@ -218,7 +218,7 @@ export function DaddiesList() {
 
   return (
     <div className="flex flex-grow flex-col">
-      <div className="flex flex-row justify-between items-center mb-4">
+      <div className="mb-4 flex flex-row items-center justify-between">
         <div className=" flex flex-row gap-4">
           <h1 className="text-3xl font-semibold">Daddies</h1>
           <Select value={orderType} onValueChange={setOrderType}>
@@ -258,7 +258,7 @@ export function DaddiesList() {
               animate="animate"
               values={orderedDaddies}
               onReorder={() => {}}
-              className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4"
+              className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3"
             >
               {orderedDaddies.map((daddy, i) => (
                 <Reorder.Item
@@ -269,8 +269,8 @@ export function DaddiesList() {
                     opacity: hovered == daddy._id || hovered == null ? 1 : 0.7,
                     filter:
                       hovered == daddy._id || hovered == null
-                        ? 'none'
-                        : 'grayscale(0.6)',
+                        ? "none"
+                        : "grayscale(0.6)",
                   }}
                   className-="min-w-[470px] grow"
                   whileHover={{ scale: 1.03, rotate: -0.5 }}

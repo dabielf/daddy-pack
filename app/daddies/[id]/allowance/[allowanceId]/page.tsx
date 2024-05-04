@@ -1,10 +1,10 @@
-'use client';
-import { api } from '@/convex/_generated/api';
-import { useMutation, useQuery } from 'convex/react';
-import { Id } from '@/convex/_generated/dataModel';
-import Link from 'next/link';
-import { AddAllowancePaymentButton } from '@/components/blocks/newAllowancePaymentDialog';
-import { AllowancePaymentsTable } from '@/components/blocks/allowancePaymentsTable';
+"use client";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
+import { Id } from "@/convex/_generated/dataModel";
+import Link from "next/link";
+import { AddAllowancePaymentButton } from "@/components/blocks/newAllowancePaymentDialog";
+import { AllowancePaymentsTable } from "@/components/blocks/allowancePaymentsTable";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -13,12 +13,12 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 
 export default function AllowancePage({
   params,
 }: {
-  params: { id: Id<'daddies'>; allowanceId: Id<'allowances'> };
+  params: { id: Id<"daddies">; allowanceId: Id<"allowances"> };
 }) {
   const daddy = useQuery(api.daddies.getDaddy, {
     daddy: params.id,
@@ -30,13 +30,13 @@ export default function AllowancePage({
   if (!daddy || !allowanceData?.allowance) return null;
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex h-full w-full flex-col">
       <Breadcrumb className="mb-4">
-        <BreadcrumbList className="md:text-xl font-semibold text-foreground">
+        <BreadcrumbList className="font-semibold text-foreground md:text-xl">
           <BreadcrumbItem>
             <BreadcrumbLink
               href="/daddies"
-              className="hover:underline decoration-primary"
+              className="decoration-primary hover:underline"
             >
               Daddies
             </BreadcrumbLink>
@@ -45,7 +45,7 @@ export default function AllowancePage({
           <BreadcrumbItem>
             <BreadcrumbLink
               href={`/daddies/${params.id}`}
-              className="hover:underline decoration-primary"
+              className="decoration-primary hover:underline"
             >
               {daddy.name}
             </BreadcrumbLink>
@@ -61,7 +61,7 @@ export default function AllowancePage({
           Allowance Plan with
           <Link
             href={`/daddies/${daddy._id}`}
-            className="ml-1 hover:underline decoration-primary"
+            className="ml-1 decoration-primary hover:underline"
           >
             {daddy.name}
           </Link>

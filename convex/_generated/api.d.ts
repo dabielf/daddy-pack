@@ -18,6 +18,7 @@ import type * as allowances from "../allowances.js";
 import type * as contacts from "../contacts.js";
 import type * as daddies from "../daddies.js";
 import type * as dates from "../dates.js";
+import type * as functions from "../functions.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as migrations from "../migrations.js";
@@ -37,6 +38,7 @@ declare const fullApi: ApiFromModules<{
   contacts: typeof contacts;
   daddies: typeof daddies;
   dates: typeof dates;
+  functions: typeof functions;
   helpers: typeof helpers;
   http: typeof http;
   migrations: typeof migrations;

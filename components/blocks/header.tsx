@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import animations from '@/constants/animations';
-import { api } from '@/convex/_generated/api';
-import { SignInButton, SignOutButton } from '@clerk/nextjs';
-import { useConvexAuth, useQuery } from 'convex/react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import animations from "@/constants/animations";
+// import { useConvexData } from "@/providers/convexDataContext";
+import { SignInButton, SignOutButton } from "@clerk/nextjs";
+import { useConvexAuth } from "convex/react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 
 const links = [
-  { name: 'Dashboard', href: '/' },
-  { name: 'Daddies', href: '/daddies' },
+  { name: "Dashboard", href: "/" },
+  { name: "Daddies", href: "/daddies" },
   // { name: 'Dates', href: '/dates' },
   // { name: 'Contacts', href: '/contacts' },
-  { name: 'Settings', href: '/settings' },
+  { name: "Settings", href: "/settings" },
 ];
 
 export const Header = () => {
   const { isLoading, isAuthenticated } = useConvexAuth();
-  const user = useQuery(api.users.currentUser);
+  // const { user } = useConvexData();
 
   function SignOut() {
     return (
@@ -41,8 +41,8 @@ export const Header = () => {
   return isLoading ? null : (
     <motion.div {...animations.appearDown}>
       <header className="mb-10">
-        <div className="grid grid-cols-2 md:grid-cols-3 items-center  w-full">
-          <Link href={'/'}>
+        <div className="grid w-full grid-cols-2 items-center  md:grid-cols-3">
+          <Link href={"/"}>
             <Image
               src="/logo.png"
               alt="logo"
@@ -53,8 +53,8 @@ export const Header = () => {
           </Link>
 
           <nav className="justify-self-end md:place-self-center">
-            <ul className="flex flex-row gap-4 items-center">
-              {links.map(link => (
+            <ul className="flex flex-row items-center gap-4">
+              {links.map((link) => (
                 <li key={link.name}>
                   <Link className="hover:underline" href={link.href}>
                     {link.name}
@@ -64,7 +64,7 @@ export const Header = () => {
             </ul>
           </nav>
 
-          <div className="flex flex-row gap-4 items-center place-self-end">
+          <div className="flex flex-row items-center gap-4 place-self-end">
             {isLoading ? null : button}
           </div>
         </div>

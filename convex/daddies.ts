@@ -1,26 +1,26 @@
-import { v } from 'convex/values';
-import { isAfter, isBefore } from 'date-fns';
-import { internalMutation, mutation, query } from './_generated/server';
-import { getConvexMutationUser, getConvexQueryUser } from './helpers';
-import { updateDatesDaddyNames } from './dates';
-import { Id } from './_generated/dataModel';
+import { v } from "convex/values";
+import { isAfter, isBefore } from "date-fns";
+import { internalMutation, mutation, query } from "./_generated/server";
+import { getConvexMutationUser, getConvexQueryUser } from "./helpers";
+import { updateDatesDaddyNames } from "./dates";
+import { Id } from "./_generated/dataModel";
 
 export const deleteDaddy = mutation({
-  args: { daddy: v.id('daddies') },
+  args: { daddy: v.id("daddies") },
   handler: async (ctx, { daddy }) => {
     await ctx.db.delete(daddy);
   },
 });
 
 export const getDaddy = query({
-  args: { daddy: v.id('daddies') },
+  args: { daddy: v.id("daddies") },
   handler: async (ctx, { daddy }) => {
     return await ctx.db.get(daddy);
   },
 });
 
 export const getDaddyWithMetadata = query({
-  args: { daddy: v.id('daddies') },
+  args: { daddy: v.id("daddies") },
   handler: async (ctx, { daddy }) => {
     let daddyRecord = await ctx.db.get(daddy);
     if (!daddyRecord) return null;
@@ -33,12 +33,12 @@ export const getDaddyWithMetadata = query({
     }
 
     const daddyDates = await ctx.db
-      .query('dates')
-      .withIndex('by_daddy', q => q.eq('daddy', daddy))
+      .query("dates")
+      .withIndex("by_daddy", (q) => q.eq("daddy", daddy))
       .collect();
     const daddyContacts = await ctx.db
-      .query('contacts')
-      .withIndex('by_daddy', q => q.eq('daddy', daddy))
+      .query("contacts")
+      .withIndex("by_daddy", (q) => q.eq("daddy", daddy))
       .collect();
     return {
       daddy: daddyRecord,
@@ -50,15 +50,15 @@ export const getDaddyWithMetadata = query({
 
 export const getArchivedDaddies = query({
   args: {},
-  handler: async ctx => {
+  handler: async (ctx) => {
     const user = await getConvexQueryUser(ctx);
 
     if (!user) return null;
 
     return await ctx.db
-      .query('daddies')
-      .withIndex('by_user_archived', q =>
-        q.eq('user', user._id).eq('archived', true),
+      .query("daddies")
+      .withIndex("by_user_archived", (q) =>
+        q.eq("user", user._id).eq("archived", true),
       )
       .collect();
   },
@@ -66,15 +66,15 @@ export const getArchivedDaddies = query({
 
 export const getDaddies = query({
   args: {},
-  handler: async ctx => {
+  handler: async (ctx) => {
     const user = await getConvexQueryUser(ctx);
 
     if (!user) return null;
 
     const daddies = await ctx.db
-      .query('daddies')
-      .withIndex('by_user_archived', q =>
-        q.eq('user', user._id).eq('archived', false),
+      .query("daddies")
+      .withIndex("by_user_archived", (q) =>
+        q.eq("user", user._id).eq("archived", false),
       )
       .collect();
 
@@ -92,11 +92,11 @@ export const createDaddy = mutation({
 
     if (!user) return null;
 
-    const daddyInfos = await ctx.db.insert('daddyInfos', {
+    const daddyInfos = await ctx.db.insert("daddyInfos", {
       user: user._id,
     });
 
-    const daddyId = await ctx.db.insert('daddies', {
+    const daddyId = await ctx.db.insert("daddies", {
       user: user._id,
       name,
       vibeRating,
@@ -114,7 +114,7 @@ export const createDaddy = mutation({
 });
 
 export const archiveDaddy = mutation({
-  args: { daddy: v.id('daddies'), archivedReason: v.optional(v.string()) },
+  args: { daddy: v.id("daddies"), archivedReason: v.optional(v.string()) },
   handler: async (ctx, { daddy, archivedReason }) => {
     const user = await getConvexMutationUser(ctx);
 
@@ -124,7 +124,7 @@ export const archiveDaddy = mutation({
 });
 
 export const unarchiveDaddy = mutation({
-  args: { daddy: v.id('daddies') },
+  args: { daddy: v.id("daddies") },
   handler: async (ctx, { daddy }) => {
     const user = await getConvexMutationUser(ctx);
 
@@ -138,7 +138,7 @@ export const unarchiveDaddy = mutation({
 
 export const updateDaddy = mutation({
   args: {
-    daddy: v.id('daddies'),
+    daddy: v.id("daddies"),
     name: v.optional(v.string()),
     profileLink: v.optional(v.string()),
     imgUrl: v.optional(v.string()),
@@ -206,13 +206,13 @@ export const updateDaddy = mutation({
 });
 
 export const updateDaddyLifetimeValue = internalMutation({
-  args: { daddy: v.id('daddies') },
+  args: { daddy: v.id("daddies") },
   handler: async (ctx, { daddy }) => {
     const daddyRecord = await ctx.db.get(daddy);
     const dates = await ctx.db
-      .query('dates')
-      .withIndex('by_daddy', q => q.eq('daddy', daddy))
-      .filter(q => q.eq(q.field('status'), 'completed'))
+      .query("dates")
+      .withIndex("by_daddy", (q) => q.eq("daddy", daddy))
+      .filter((q) => q.eq(q.field("status"), "completed"))
       .collect();
 
     let lifetimeValue = dates.reduce((acc, date) => {
@@ -229,17 +229,17 @@ export const updateDaddyLifetimeValue = internalMutation({
 });
 
 export const updateDaddyContactsData = internalMutation({
-  args: { daddy: v.id('daddies') },
+  args: { daddy: v.id("daddies") },
   handler: async (ctx, { daddy }) => {
     const contacts = await ctx.db
-      .query('contacts')
-      .withIndex('by_daddy', q => q.eq('daddy', daddy))
+      .query("contacts")
+      .withIndex("by_daddy", (q) => q.eq("daddy", daddy))
       .collect();
 
     const totalContacts = contacts.length;
 
     const mostRecentContact = contacts
-      .filter(date => isBefore(new Date(date.date), new Date()))
+      .filter((date) => isBefore(new Date(date.date), new Date()))
       .sort((a, b) => b.date - a.date)[0];
 
     return await ctx.db.patch(daddy, {
@@ -255,34 +255,34 @@ export const updateDaddyContactsData = internalMutation({
 });
 
 export const updateDaddyDatesData = internalMutation({
-  args: { daddy: v.id('daddies') },
+  args: { daddy: v.id("daddies") },
   handler: async (ctx, { daddy }) => {
     const daddyRecord = await ctx.db.get(daddy);
     if (!daddyRecord) return null;
 
     const dates = await ctx.db
-      .query('dates')
-      .withIndex('by_daddy', q => q.eq('daddy', daddy))
+      .query("dates")
+      .withIndex("by_daddy", (q) => q.eq("daddy", daddy))
       .collect();
 
     const totalDates = dates.length;
     const totalScheduledDates = dates.filter(
-      date => date.status === 'scheduled' || !date.status,
+      (date) => date.status === "scheduled" || !date.status,
     ).length;
     const totalCompletedDates = dates.filter(
-      date => date.status === 'completed',
+      (date) => date.status === "completed",
     ).length;
     const totalCanceledDates = dates.filter(
-      date => date.status === 'canceled',
+      (date) => date.status === "canceled",
     ).length;
     const totalNoShowDates = dates.filter(
-      date => date.status === 'no-show',
+      (date) => date.status === "no-show",
     ).length;
     const mostRecentDate = dates
-      .filter(date => isBefore(new Date(date.date), new Date()))
+      .filter((date) => isBefore(new Date(date.date), new Date()))
       .sort((a, b) => b.date - a.date)[0];
     const nextDate = dates
-      .filter(date => isAfter(new Date(date.date), new Date()))
+      .filter((date) => isAfter(new Date(date.date), new Date()))
       .sort((a, b) => a.date - b.date)[0];
 
     if (daddyRecord.daddyInfos) {

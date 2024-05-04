@@ -1,9 +1,11 @@
-'use client';
+"use client";
 
-import { ClerkProvider, useAuth } from '@clerk/nextjs';
-import { ConvexReactClient } from 'convex/react';
-import { ConvexProviderWithClerk } from 'convex/react-clerk';
-import { createContext, useContext, useState } from 'react';
+import { ClerkProvider, useAuth } from "@clerk/nextjs";
+import { ConvexReactClient } from "convex/react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { createContext, useContext, useState } from "react";
+
+import { ConvexDataProvider } from "./convexDataContext";
 
 interface ConvexClientProviderProps {
   children: React.ReactNode;
@@ -28,7 +30,7 @@ export const DrawersContext = createContext<ReturnType<
 export const useDrawers = () => {
   const drawers = useContext(DrawersContext);
   if (!drawers) {
-    throw new Error('useDrawers must be used within a DrawersProvider');
+    throw new Error("useDrawers must be used within a DrawersProvider");
   }
   return drawers;
 };
@@ -64,9 +66,11 @@ export const ConvexClientProvider = ({
   return (
     <ClerkProvider publishableKey={publishableKey}>
       <ConvexProviderWithClerk useAuth={useAuth} client={convex}>
-        <DrawersContext.Provider value={[drawers, setDrawers]}>
-          {children}
-        </DrawersContext.Provider>
+        <ConvexDataProvider>
+          <DrawersContext.Provider value={[drawers, setDrawers]}>
+            {children}
+          </DrawersContext.Provider>
+        </ConvexDataProvider>
       </ConvexProviderWithClerk>
     </ClerkProvider>
   );

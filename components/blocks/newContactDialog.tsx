@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { api } from '@/convex/_generated/api';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from 'convex/react';
-import { format } from 'date-fns';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { api } from "@/convex/_generated/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useConvex, useMutation, useQuery } from "convex/react";
+import { format } from "date-fns";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { useDrawers } from '@/providers/convex-client-provider';
+import { useDrawers } from "@/providers/convex-client-provider";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Calendar } from '@/components/ui/calendar';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogClose,
@@ -22,7 +22,7 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -30,26 +30,27 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { TimePicker } from '@/components/ui/time-picker';
-import { Id } from '@/convex/_generated/dataModel';
-import { cn, getErrorMessage, dateTimeDate } from '@/lib/utils';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { toast } from 'sonner';
-import Tiptap from './tiptap';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { TimePicker } from "@/components/ui/time-picker";
+import { Id } from "@/convex/_generated/dataModel";
+import { cn, getErrorMessage, dateTimeDate } from "@/lib/utils";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { toast } from "sonner";
+import Tiptap from "./tiptap";
+import { useConvexData } from "@/providers/convexDataContext";
 
 const formSchema = z.object({
   daddy: z.string(),
@@ -59,29 +60,29 @@ const formSchema = z.object({
 
 export function NewContactButton({
   daddyId,
-  children = 'Add a New Contact',
+  children = "Add a New Contact",
 }: {
-  daddyId?: Id<'daddies'>;
+  daddyId?: Id<"daddies">;
   children?: React.ReactNode;
-  contactId?: Id<'contacts'>;
+  contactId?: Id<"contacts">;
 }) {
   // 1. Define your form.
   const contactForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      daddy: daddyId || '',
+      daddy: daddyId || "",
       date: dateTimeDate(),
-      notes: '',
+      notes: "",
     },
   });
 
   const createContact = useMutation(api.contacts.createContact);
-  const daddies = useQuery(api.daddies.getDaddies);
+  const { daddies } = useConvexData();
   const [drawers, setDrawers] = useDrawers();
 
   function getDaddyName(daddyId: string) {
-    const daddy = daddies?.find(daddy => daddy._id === daddyId);
-    return daddy?.name || 'No Name';
+    const daddy = daddies?.find((daddy) => daddy._id === daddyId);
+    return daddy?.name || "No Name";
   }
 
   // 2. Define a submit handler.
@@ -90,7 +91,7 @@ export function NewContactButton({
     // ✅ This will be type-safe and validated.
     try {
       const contactId = await createContact({
-        daddy: values.daddy as Id<'daddies'>,
+        daddy: values.daddy as Id<"daddies">,
         date: new Date(values.date).valueOf(),
         notes: values.notes,
       });
@@ -105,7 +106,7 @@ export function NewContactButton({
   }
 
   function toggleContactDrawer() {
-    setDrawers(prev => ({
+    setDrawers((prev) => ({
       ...prev,
       contactOpen: !prev.contactOpen,
     }));
@@ -114,7 +115,7 @@ export function NewContactButton({
   return (
     <Dialog open={drawers.contactOpen} onOpenChange={toggleContactDrawer}>
       <DialogTrigger asChild>
-        <Button className="w-fill" size={daddyId ? 'sm' : 'default'}>
+        <Button className="w-fill" size={daddyId ? "sm" : "default"}>
           {children}
         </Button>
       </DialogTrigger>
@@ -150,7 +151,7 @@ export function NewContactButton({
                         </FormControl>
                         <SelectContent>
                           {daddies?.length
-                            ? daddies.map(daddy => (
+                            ? daddies.map((daddy) => (
                                 <SelectItem key={daddy._id} value={daddy._id}>
                                   {daddy.name}
                                 </SelectItem>

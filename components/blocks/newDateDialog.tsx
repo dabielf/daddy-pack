@@ -1,19 +1,17 @@
-'use client';
+"use client";
 
-import { api } from '@/convex/_generated/api';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from 'convex/react';
-import { formatRFC3339 } from 'date-fns';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { useRef } from 'react';
+import { api } from "@/convex/_generated/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "convex/react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useRef } from "react";
 
-import { useDrawers } from '@/providers/convex-client-provider';
+import { useDrawers } from "@/providers/convex-client-provider";
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from "@/components/ui/input";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 
 import {
   Dialog,
@@ -24,7 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -32,23 +30,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-import { Id } from '@/convex/_generated/dataModel';
-import { getErrorMessage, dateTimeDate } from '@/lib/utils';
-import { toast } from 'sonner';
+import { Id } from "@/convex/_generated/dataModel";
+import { getErrorMessage, dateTimeDate } from "@/lib/utils";
+import { toast } from "sonner";
+import { useConvexData } from "@/providers/convexDataContext";
 
 const formSchema = z.object({
   daddy: z.string(),
@@ -58,17 +52,17 @@ const formSchema = z.object({
 
 export function NewDateButton({
   daddyId,
-  children = 'Add a New Date',
+  children = "Add a New Date",
 }: {
-  daddyId?: Id<'daddies'>;
+  daddyId?: Id<"daddies">;
   children?: React.ReactNode;
 }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      daddy: daddyId || '',
-      daddyName: '',
+      daddy: daddyId || "",
+      daddyName: "",
       date: dateTimeDate(),
     },
   });
@@ -76,12 +70,12 @@ export function NewDateButton({
   const dialogRef = useRef<HTMLDivElement>(null);
 
   const createDate = useMutation(api.dates.createDate);
-  const daddies = useQuery(api.daddies.getDaddies);
+  const { daddies } = useConvexData();
   const [drawers, setDrawers] = useDrawers();
 
   function getDaddyName(daddyId: string) {
-    const daddy = daddies?.find(daddy => daddy._id === daddyId);
-    return daddy?.name || 'No Name';
+    const daddy = daddies?.find((daddy) => daddy._id === daddyId);
+    return daddy?.name || "No Name";
   }
 
   // 2. Define a submit handler.
@@ -90,7 +84,7 @@ export function NewDateButton({
     // ✅ This will be type-safe and validated.
     try {
       const dateId = await createDate({
-        daddy: values.daddy as Id<'daddies'>,
+        daddy: values.daddy as Id<"daddies">,
         daddyName: getDaddyName(values.daddy),
         date: new Date(values.date).valueOf(),
       });
@@ -103,7 +97,7 @@ export function NewDateButton({
   }
 
   function toggleDateDrawer() {
-    setDrawers(prev => ({
+    setDrawers((prev) => ({
       ...prev,
       dateOpen: !prev.dateOpen,
     }));
@@ -112,14 +106,14 @@ export function NewDateButton({
   return (
     <Dialog open={drawers.dateOpen} onOpenChange={toggleDateDrawer}>
       <DialogTrigger asChild>
-        <Button className="w-fill" size={daddyId ? 'sm' : 'default'}>
+        <Button className="w-fill" size={daddyId ? "sm" : "default"}>
           {children}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]" ref={dialogRef}>
         <DialogHeader>
           <DialogTitle>
-            Add a new Date {daddyId ? `with ${getDaddyName(daddyId)}` : ''}
+            Add a new Date {daddyId ? `with ${getDaddyName(daddyId)}` : ""}
           </DialogTitle>
           <DialogDescription>
             Click create when you&apos;re done.
@@ -145,7 +139,7 @@ export function NewDateButton({
                       </FormControl>
                       <SelectContent>
                         {daddies?.length
-                          ? daddies.map(daddy => (
+                          ? daddies.map((daddy) => (
                               <SelectItem key={daddy._id} value={daddy._id}>
                                 {daddy.name}
                               </SelectItem>
