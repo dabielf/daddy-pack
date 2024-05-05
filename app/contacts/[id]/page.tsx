@@ -1,14 +1,13 @@
-'use client';
+"use client";
 
-import animations from '@/constants/animations';
-import { api } from '@/convex/_generated/api';
-import { Id } from '@/convex/_generated/dataModel';
-import { useMutation, useQuery } from 'convex/react';
+import animations from "@/constants/animations";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { useMutation, useQuery } from "convex/react";
 
-import Tiptap from '@/components/blocks/tiptap';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Tiptap from "@/components/blocks/tiptap";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -16,13 +15,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,32 +24,28 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import { Separator } from '@/components/ui/separator';
-import { TimePicker } from '@/components/ui/time-picker';
-import { cn, dateTimeDate } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { format, formatRelative } from 'date-fns';
-import { motion } from 'framer-motion';
-import {
-  Calendar as CalendarIcon,
-  ChevronLeft,
-  MessageSquareMore,
-} from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Markdown from 'react-markdown';
-import { z } from 'zod';
-import Link from 'next/link';
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+
+import { dateTimeDate } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { formatRelative } from "date-fns";
+import { motion } from "framer-motion";
+import { MessageSquareMore } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import Markdown from "react-markdown";
+import { z } from "zod";
+import Link from "next/link";
 
 export default function ContactPage({
   params,
 }: {
-  params: { id: Id<'contacts'> };
+  params: { id: Id<"contacts"> };
 }) {
   const [edit, setEdit] = useState(false);
-  const contactData = useQuery(api.contacts.getContact, {
+  const contact = useQuery(api.contacts.getContact, {
     contact: params.id,
   });
   const updateContact = useMutation(api.contacts.updateContact);
@@ -68,8 +58,8 @@ export default function ContactPage({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     values: {
-      date: dateTimeDate(contactData?.contact?.date),
-      notes: contactData?.contact?.notes || '',
+      date: dateTimeDate(contact?.date),
+      notes: contact?.notes || "",
     },
   });
 
@@ -96,13 +86,10 @@ export default function ContactPage({
     setEdit(false);
   }
 
-  if (!contactData) return null;
-
-  const { daddy, contact } = contactData;
-  if (!contact || !daddy) return null;
+  if (!contact) return null;
 
   return (
-    <div className="flex w-full h-full flex-col gap-4">
+    <div className="flex h-full w-full flex-col gap-4">
       {/* <div
         onClick={() => goBack(daddy?._id || '')}
         className="text-slate-700 cursor-pointer flex flex-row gap-1 items-center"
@@ -111,11 +98,11 @@ export default function ContactPage({
         Back
       </div> */}
       <Breadcrumb>
-        <BreadcrumbList className="md:text-xl font-semibold text-foreground">
+        <BreadcrumbList className="font-semibold text-foreground md:text-xl">
           <BreadcrumbItem>
             <BreadcrumbLink
               href="/daddies"
-              className="hover:underline decoration-primary"
+              className="decoration-primary hover:underline"
             >
               Daddies
             </BreadcrumbLink>
@@ -123,10 +110,10 @@ export default function ContactPage({
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink
-              href={`/daddies/${daddy._id}`}
-              className="hover:underline decoration-primary"
+              href={`/daddies/${contact.daddy}`}
+              className="decoration-primary hover:underline"
             >
-              {daddy.name}
+              {contact.daddyName}
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -141,19 +128,19 @@ export default function ContactPage({
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex justify-between items-center">
+          <CardTitle className="flex items-center justify-between">
             <div className="flex flex-row items-center gap-4">
               <div>
-                <h1 className="text-2xl font-semibold flex flex-row gap-2 items-center">
+                <h1 className="flex flex-row items-center gap-2 text-2xl font-semibold">
                   <MessageSquareMore size={20} />
-                  Contact with{' '}
+                  Contact with{" "}
                   <Link
                     href={`/daddies/${contact.daddy}`}
-                    className="hover:underline decoration-primary"
+                    className="decoration-primary hover:underline"
                   >
-                    {daddy ? daddy.name : 'REDACTED'}
+                    {contact.daddyName}
                   </Link>
-                  <span className="text-slate-600 font-medium">
+                  <span className="font-medium text-slate-600">
                     {formatDate(contact.date)}
                   </span>
                 </h1>
@@ -165,7 +152,7 @@ export default function ContactPage({
         </CardHeader>
       </Card>
       <Button
-        onClick={() => setEdit(editStatus => !editStatus)}
+        onClick={() => setEdit((editStatus) => !editStatus)}
         disabled={edit}
       >
         EDIT
@@ -229,9 +216,9 @@ export default function ContactPage({
           <Card>
             <CardContent className="pt-4">
               <h2 className="text-lg font-bold">Notes</h2>
-              <Separator className="bg-primary/50 mb-4" />
+              <Separator className="mb-4 bg-primary/50" />
               <Markdown>
-                {contact.notes || 'No notes about this contact yet'}
+                {contact.notes || "No notes about this contact yet"}
               </Markdown>
             </CardContent>
           </Card>

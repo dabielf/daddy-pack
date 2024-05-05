@@ -6,14 +6,10 @@ import { updateDaddyContactsData } from "./daddies";
 export const getContact = query({
   args: { contact: v.id("contacts") },
   handler: async (ctx, { contact }) => {
-    const contactData = await ctx.db.get(contact);
-    if (!contactData) return null;
-    const daddyData = await ctx.db.get(contactData.daddy);
+    const user = await getConvexQueryUser(ctx);
 
-    return {
-      contact: contactData,
-      daddy: daddyData,
-    };
+    if (!user) return null;
+    return await ctx.db.get(contact);
   },
 });
 
@@ -110,7 +106,7 @@ export const updateContactsDaddyNames = internalMutation({
   args: { daddy: v.id("daddies"), name: v.string() },
   handler: async (ctx, { daddy, name }) => {
     const daddyContacts = await ctx.db
-      .query("dates")
+      .query("contacts")
       .withIndex("by_daddy", (q) => q.eq("daddy", daddy))
       .collect();
 
