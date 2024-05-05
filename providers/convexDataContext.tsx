@@ -5,7 +5,7 @@ import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { create } from "zustand";
 
-import { useRef, createContext, useContext } from "react";
+import { createContext, useContext } from "react";
 
 interface ConvexDataProviderProps {
   children: React.ReactNode;

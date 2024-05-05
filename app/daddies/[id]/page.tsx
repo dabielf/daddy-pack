@@ -33,13 +33,12 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Input } from "@/components/ui/input";
-import animations, { staggerUp } from "@/constants/animations";
 import { api } from "@/convex/_generated/api";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "convex/react";
 import { motion } from "framer-motion";
-import { ChevronLeft, Plus, Pencil } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -449,7 +448,7 @@ export default function DaddyPage({
   }
 
   const allowanceData = useQuery(
-    api.allowances.getAllowance,
+    api.allowances.getAllowanceWithPayments,
     allowanceQueryParams(),
   );
 
@@ -550,7 +549,10 @@ export default function DaddyPage({
             </CardHeader>
           </Card>
 
-          <AddAllowancePlanButton daddy={daddy} allowance={allowanceData}>
+          <AddAllowancePlanButton
+            daddy={daddy}
+            allowance={allowanceData?.allowance}
+          >
             <Plus size={16} className="mr-1" /> START ALLOWANCE PLAN
           </AddAllowancePlanButton>
           <DaddyDisplayOrEditForm
@@ -561,7 +563,11 @@ export default function DaddyPage({
         </div>
 
         <div className="flex h-full flex-col gap-4 md:justify-between">
-          <EventLog contacts={contacts} dates={dates} />
+          <EventLog
+            contacts={contacts}
+            dates={dates}
+            allowancePayments={allowanceData?.allowancePayments}
+          />
           <Card className="border-destructive shadow-md">
             <CardHeader>
               <CardTitle className="text-destructive">Danger Zone</CardTitle>

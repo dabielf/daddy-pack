@@ -1,10 +1,10 @@
-import { v } from 'convex/values';
-import { mutation, query } from './_generated/server';
-import { getConvexMutationUser, getConvexQueryUser } from './helpers';
-import { updateDaddyContactsData } from './daddies';
+import { v } from "convex/values";
+import { mutation, query, internalMutation } from "./_generated/server";
+import { getConvexMutationUser, getConvexQueryUser } from "./helpers";
+import { updateDaddyContactsData } from "./daddies";
 
 export const getContact = query({
-  args: { contact: v.id('contacts') },
+  args: { contact: v.id("contacts") },
   handler: async (ctx, { contact }) => {
     const contactData = await ctx.db.get(contact);
     if (!contactData) return null;
@@ -19,18 +19,18 @@ export const getContact = query({
 
 export const getContacts = query({
   args: {},
-  handler: async ctx => {
+  handler: async (ctx) => {
     const user = await getConvexQueryUser(ctx);
 
     if (!user) return null;
 
-    return await ctx.db.query('contacts').withIndex('by_user').collect();
+    return await ctx.db.query("contacts").withIndex("by_user").collect();
   },
 });
 
 export const createContact = mutation({
   args: {
-    daddy: v.id('daddies'),
+    daddy: v.id("daddies"),
     date: v.number(),
     notes: v.optional(v.string()),
   },
@@ -39,9 +39,14 @@ export const createContact = mutation({
 
     if (!user) return null;
 
-    const contactId = await ctx.db.insert('contacts', {
+    const daddyData = await ctx.db.get(daddy);
+    if (!daddyData) return null;
+
+    const contactId = await ctx.db.insert("contacts", {
       user: user._id,
       daddy,
+      contactDaddy: daddy,
+      daddyName: daddyData.name,
       date,
       notes,
     });
@@ -54,7 +59,7 @@ export const createContact = mutation({
 
 export const updateContact = mutation({
   args: {
-    contact: v.id('contacts'),
+    contact: v.id("contacts"),
     date: v.optional(v.number()),
     notes: v.optional(v.string()),
   },
@@ -78,7 +83,9 @@ export const updateContact = mutation({
     const contactData = await ctx.db.get(contact);
     if (!contactData) return contactId;
     await updateDaddyContactsData(ctx, {
-      daddy: contactData.daddy,
+      daddy: contactData.contactDaddy
+        ? contactData.contactDaddy
+        : contactData.daddy,
     });
 
     return contactId;
@@ -86,13 +93,31 @@ export const updateContact = mutation({
 });
 
 export const deleteContact = mutation({
-  args: { contact: v.id('contacts') },
+  args: { contact: v.id("contacts") },
   handler: async (ctx, { contact }) => {
     await ctx.db.delete(contact);
     const contactData = await ctx.db.get(contact);
     if (!contactData) return null;
     await updateDaddyContactsData(ctx, {
-      daddy: contactData.daddy,
+      daddy: contactData.contactDaddy
+        ? contactData.contactDaddy
+        : contactData.daddy,
+    });
+  },
+});
+
+export const updateContactsDaddyNames = internalMutation({
+  args: { daddy: v.id("daddies"), name: v.string() },
+  handler: async (ctx, { daddy, name }) => {
+    const daddyContacts = await ctx.db
+      .query("dates")
+      .withIndex("by_daddy", (q) => q.eq("daddy", daddy))
+      .collect();
+
+    daddyContacts.map(async (contact) => {
+      await ctx.db.patch(contact._id, {
+        daddyName: name,
+      });
     });
   },
 });

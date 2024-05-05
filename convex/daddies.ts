@@ -3,7 +3,7 @@ import { isAfter, isBefore } from "date-fns";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { getConvexMutationUser, getConvexQueryUser } from "./helpers";
 import { updateDatesDaddyNames } from "./dates";
-import { Id } from "./_generated/dataModel";
+import { updateContactsDaddyNames } from "./contacts";
 
 export const deleteDaddy = mutation({
   args: { daddy: v.id("daddies") },
@@ -192,6 +192,7 @@ export const updateDaddy = mutation({
 
     if (nameChange) {
       await updateDatesDaddyNames(ctx, { daddy, name });
+      await updateContactsDaddyNames(ctx, { daddy, name });
     }
 
     await ctx.db.patch(daddy, {

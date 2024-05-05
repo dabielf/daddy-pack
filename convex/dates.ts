@@ -1,11 +1,10 @@
-import { v } from 'convex/values';
-import { internalMutation, mutation, query } from './_generated/server';
-import { getConvexQueryUser, getConvexMutationUser } from './helpers';
-import { internal } from './_generated/api';
-import { updateDaddyDatesData, updateDaddyLifetimeValue } from './daddies';
+import { v } from "convex/values";
+import { internalMutation, mutation, query } from "./_generated/server";
+import { getConvexQueryUser, getConvexMutationUser } from "./helpers";
+import { updateDaddyDatesData, updateDaddyLifetimeValue } from "./daddies";
 
 export const getDate = query({
-  args: { date: v.id('dates') },
+  args: { date: v.id("dates") },
   handler: async (ctx, { date }) => {
     const dateData = await ctx.db.get(date);
     if (!dateData) return null;
@@ -20,23 +19,23 @@ export const getDate = query({
 
 export const getDates = query({
   args: {},
-  handler: async ctx => {
+  handler: async (ctx) => {
     const user = await getConvexQueryUser(ctx);
 
     if (!user) return null;
 
     return await ctx.db
-      .query('dates')
-      .withIndex('by_date')
-      .order('desc')
-      .filter(q => q.eq(q.field('user'), user._id))
+      .query("dates")
+      .withIndex("by_date")
+      .order("desc")
+      .filter((q) => q.eq(q.field("user"), user._id))
       .collect();
   },
 });
 
 export const createDate = mutation({
   args: {
-    daddy: v.id('daddies'),
+    daddy: v.id("daddies"),
     daddyName: v.string(),
     date: v.number(),
   },
@@ -45,12 +44,13 @@ export const createDate = mutation({
 
     if (!user) return null;
 
-    const dateId = await ctx.db.insert('dates', {
+    const dateId = await ctx.db.insert("dates", {
       user: user._id,
       daddy,
+      dateDaddy: daddy,
       daddyName,
       date,
-      status: 'scheduled',
+      status: "scheduled",
     });
 
     await updateDaddyDatesData(ctx, { daddy });
@@ -60,10 +60,10 @@ export const createDate = mutation({
 });
 
 export const cancelDate = mutation({
-  args: { dateId: v.id('dates') },
+  args: { dateId: v.id("dates") },
   handler: async (ctx, { dateId }) => {
     await ctx.db.patch(dateId, {
-      status: 'canceled',
+      status: "canceled",
     });
 
     const dateData = await ctx.db.get(dateId);
@@ -74,12 +74,12 @@ export const cancelDate = mutation({
 
 export const updateDateStatus = mutation({
   args: {
-    dateId: v.id('dates'),
+    dateId: v.id("dates"),
     status: v.union(
-      v.literal('scheduled'),
-      v.literal('completed'),
-      v.literal('canceled'),
-      v.literal('no-show'),
+      v.literal("scheduled"),
+      v.literal("completed"),
+      v.literal("canceled"),
+      v.literal("no-show"),
     ),
   },
   handler: async (ctx, { dateId, status }) => {
@@ -95,7 +95,7 @@ export const updateDateStatus = mutation({
 
 export const updateDate = mutation({
   args: {
-    dateId: v.id('dates'),
+    dateId: v.id("dates"),
     date: v.optional(v.number()),
     location: v.optional(v.string()),
     dateDuration: v.optional(v.number()),
@@ -107,10 +107,10 @@ export const updateDate = mutation({
     giftAmount: v.optional(v.number()),
     status: v.optional(
       v.union(
-        v.literal('scheduled'),
-        v.literal('completed'),
-        v.literal('canceled'),
-        v.literal('no-show'),
+        v.literal("scheduled"),
+        v.literal("completed"),
+        v.literal("canceled"),
+        v.literal("no-show"),
       ),
     ),
   },
@@ -145,7 +145,7 @@ export const updateDate = mutation({
 
     const dateData = await ctx.db.get(dateId);
     if (!dateData) return null;
-    if (status == 'completed') {
+    if (status == "completed") {
       await updateDaddyLifetimeValue(ctx, {
         daddy: dateData.daddy,
       });
@@ -155,7 +155,7 @@ export const updateDate = mutation({
 });
 
 export const deleteDate = mutation({
-  args: { date: v.id('dates') },
+  args: { date: v.id("dates") },
   handler: async (ctx, { date }) => {
     await ctx.db.delete(date);
     const dateData = await ctx.db.get(date);
@@ -166,14 +166,14 @@ export const deleteDate = mutation({
 });
 
 export const updateDatesDaddyNames = internalMutation({
-  args: { daddy: v.id('daddies'), name: v.string() },
+  args: { daddy: v.id("daddies"), name: v.string() },
   handler: async (ctx, { daddy, name }) => {
     const daddyDates = await ctx.db
-      .query('dates')
-      .withIndex('by_daddy', q => q.eq('daddy', daddy))
+      .query("dates")
+      .withIndex("by_daddy", (q) => q.eq("daddy", daddy))
       .collect();
 
-    daddyDates.map(async date => {
+    daddyDates.map(async (date) => {
       await ctx.db.patch(date._id, {
         daddyName: name,
       });

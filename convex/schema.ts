@@ -90,6 +90,7 @@ export default defineSchema({
   dates: defineTable({
     user: v.id("users"),
     daddy: v.id("daddies"),
+    dateDaddy: v.optional(v.id("daddies")),
     daddyName: v.optional(v.string()),
     date: v.number(),
     birthday: v.optional(v.number()),
@@ -120,6 +121,8 @@ export default defineSchema({
   contacts: defineTable({
     user: v.id("users"),
     daddy: v.id("daddies"),
+    contactDaddy: v.optional(v.id("daddies")),
+    daddyName: v.optional(v.string()),
     date: v.number(),
     notes: v.optional(v.string()),
   })
