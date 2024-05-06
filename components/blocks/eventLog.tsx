@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 import { staggerUp as stagger } from "@/constants/animations";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Separator } from "../ui/separator";
 
 type TimelineEvent = Doc<"contacts"> | Doc<"dates"> | Doc<"allowancePayments">;
 
@@ -65,25 +66,25 @@ export default function EventLog({
     if (!past && timelineEvent.status === "scheduled") {
       return (
         <Badge
-          className="w-fit border-cyan-500 font-light text-cyan-500"
+          className="w-fit border-none bg-cyan-500/80 font-normal text-white"
           variant="outline"
         >
-          Scheduled
+          SCHEDULED
         </Badge>
       );
     } else if (timelineEvent.status === "canceled") {
       return (
         <Badge
-          className="w-fit border-red-600 font-light text-red-600"
+          className="w-fit border-none bg-red-600/80 font-normal text-white"
           variant="outline"
         >
-          Canceled
+          CANCELED
         </Badge>
       );
     } else if (timelineEvent.status === "scheduled" || !timelineEvent.status) {
       return (
         <Badge
-          className="w-fit border-red-500 font-medium"
+          className="w-fit border-none bg-red-500/80 font-normal text-white"
           variant="destructive"
         >
           TO PROCESS
@@ -92,12 +93,12 @@ export default function EventLog({
     } else if (timelineEvent.status === "completed") {
       return (
         <Badge
-          className="w-fit border-emerald-500 bg-emerald-500 font-medium text-white"
+          className="w-fit border-none bg-emerald-500/80 font-normal text-white"
           variant="outline"
         >
           {timelineEvent.giftAmount
             ? `+ $${timelineEvent.giftAmount}`
-            : "Completed"}
+            : "COMPLETED"}
         </Badge>
       );
     }
@@ -111,26 +112,17 @@ export default function EventLog({
     return (
       <Link
         href={`/contacts/${timelineEvent._id}`}
-        className="event flex items-start justify-between gap-4"
+        className="event flex items-start justify-between"
       >
-        <div className="grid gap-1">
-          <div className="text-md flex flex-row items-center gap-1 font-medium text-cyan-500">
+        <div className="grid">
+          <div className="text-md flex flex-row items-center gap-1 font-medium text-cyan-600/90">
             <MessageSquareMore size={16} />
-            <div className="flex flex-row items-baseline gap-2">
-              Contact
-              <span className="text-xs font-light text-muted-foreground">
-                {formatEventDate(timelineEvent.date)}
-              </span>
-            </div>
+            <div>Contact</div>
           </div>
-          <Markdown
-            className={cn(
-              hovered == timelineEvent._id || hovered == null
-                ? ""
-                : "opacity-70",
-              "text-sm transition-all",
-            )}
-          >
+          <span className="-mt-0.5 mb-1 text-xs font-light text-muted-foreground">
+            {formatEventDate(timelineEvent.date)}
+          </span>
+          <Markdown className="text-xs transition-all">
             {timelineEvent.notes
               ? timelineEvent.notes
               : "No notes for this contact"}
@@ -140,6 +132,7 @@ export default function EventLog({
           animate={{
             scale: hovered == timelineEvent._id ? 1.5 : 1,
           }}
+          className="pt-2"
         >
           <ChevronRight size={20} />
         </motion.div>
@@ -155,33 +148,29 @@ export default function EventLog({
     return (
       <Link
         href={`/daddies/${timelineEvent.daddy}/allowance/${timelineEvent.allowanceId}`}
-        className="event flex items-start justify-between gap-2"
+        className="event flex items-start justify-between"
       >
-        <div className="grid gap-1">
-          <div className="text-md flex flex-row items-center gap-1 font-medium text-violet-700">
+        <div className="grid">
+          <div className="text-md flex flex-row items-center gap-1 font-medium text-violet-700/80">
             <Gift size={16} />
-            <div className="flex flex-row items-baseline gap-2">
-              Allowance
-              <span className="text-xs font-light text-muted-foreground">
-                {formatEventDate(timelineEvent.date)}
-              </span>
-            </div>
-          </div>
-
-          <div>
+            <div className="mr-1">Allowance</div>
             <Badge
-              className="w-fit border-violet-500 bg-violet-500 font-medium text-white"
+              className="w-fit border-none bg-violet-500/80 font-medium text-white"
               variant="outline"
             >
               + ${timelineEvent.amount}
             </Badge>
           </div>
+          <span className="-mt-0.5 text-xs font-light text-muted-foreground">
+            {formatEventDate(timelineEvent.date)}
+          </span>
         </div>
 
         <motion.div
           animate={{
             scale: hovered == timelineEvent._id ? 1.5 : 1,
           }}
+          className="pt-2"
         >
           <ChevronRight size={20} />
         </motion.div>
@@ -193,26 +182,24 @@ export default function EventLog({
     return (
       <Link
         href={`/dates/${timelineEvent._id}`}
-        className="event flex items-start justify-between gap-2"
+        className="event flex items-start justify-between"
       >
-        <div className="grid gap-1">
-          <div className="text-md flex flex-row items-center gap-1 font-medium text-emerald-700">
+        <div className="grid">
+          <div className="text-md flex flex-row items-center gap-1 font-medium text-emerald-700/90">
             <CalendarFold size={16} />
-            <div className="flex flex-row items-baseline gap-2">
-              Date
-              <span className="text-xs font-light text-muted-foreground">
-                {formatEventDate(timelineEvent.date)}
-              </span>
-            </div>
+            <div className="mr-1">Date</div>
+            <EventStatus timelineEvent={timelineEvent} />
           </div>
-
-          <EventStatus timelineEvent={timelineEvent} />
+          <span className="-mt-0.5 text-xs font-light text-muted-foreground">
+            {formatEventDate(timelineEvent.date)}
+          </span>
         </div>
 
         <motion.div
           animate={{
             scale: hovered == timelineEvent._id ? 1.5 : 1,
           }}
+          className="pt-2"
         >
           <ChevronRight size={20} />
         </motion.div>
@@ -235,16 +222,9 @@ export default function EventLog({
         <motion.div
           key={timelineEvent._id}
           variants={stagger}
-          animate={{
-            opacity: hovered == timelineEvent._id || hovered == null ? 1 : 0.7,
-            filter:
-              hovered == timelineEvent._id || hovered == null
-                ? "none"
-                : "grayscale(0.7)",
-          }}
           onHoverStart={() => setHovered(timelineEvent._id)}
           onHoverEnd={() => setHovered(null)}
-          className="flex flex-col gap-2"
+          className="pb-2"
         >
           {dispatchEvent(timelineEvent)}
         </motion.div>
@@ -267,7 +247,7 @@ export default function EventLog({
           >
             <motion.h3
               variants={stagger}
-              className="mb-2 mt-6 text-lg font-semibold"
+              className="mb-2 mt-4 text-lg font-semibold"
             >
               Upcoming Events
             </motion.h3>
@@ -276,7 +256,7 @@ export default function EventLog({
 
             <motion.h3
               variants={stagger}
-              className="mb-2 mt-4 text-lg font-semibold"
+              className="mb-2 mt-2 text-lg font-semibold"
             >
               Past Events
             </motion.h3>
