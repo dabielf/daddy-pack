@@ -14,8 +14,6 @@ import { ScrollArea } from "../ui/scroll-area";
 import { motion } from "framer-motion";
 import { staggerUp as stagger } from "@/constants/animations";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { Separator } from "../ui/separator";
 
 type TimelineEvent = Doc<"contacts"> | Doc<"dates"> | Doc<"allowancePayments">;
 
