@@ -52,6 +52,7 @@ export default defineSchema({
     contactInfo: v.optional(v.string()),
     location: v.optional(v.string()),
     messagingApp: v.optional(v.string()),
+    birthdayDate: v.optional(v.number()),
     initialContactDate: v.optional(v.number()),
     notes: v.optional(v.string()),
     earningsEstimate: v.optional(v.number()),

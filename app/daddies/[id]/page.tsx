@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
+import { format } from "date-fns";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "convex/react";
@@ -47,7 +48,7 @@ import { z } from "zod";
 
 import Tiptap from "@/components/blocks/tiptap";
 import { Separator } from "@/components/ui/separator";
-import { getErrorMessage } from "@/lib/utils";
+import { getErrorMessage, dateTimeDate } from "@/lib/utils";
 import { toast } from "sonner";
 import { staggerUp as stagger } from "@/constants/animations";
 import { DaddyWithInfos } from "@/custom-types";
@@ -59,6 +60,7 @@ const formSchema = z.object({
   profileLink: z.string().optional(),
   contactInfo: z.string().optional(),
   location: z.string().optional(),
+  birthdayDate: z.string().optional(),
   messagingApp: z.string().optional(),
   notes: z.string().optional(),
   earningsEstimate: z.string().optional(),
@@ -135,6 +137,17 @@ function DisplayForm({
         >
           <motion.div variants={stagger}>
             <div className="space-y-1">
+              <p className="text-lg font-bold">Birthday Date</p>
+              <Separator className="bg-primary/50" />
+              <p className="pt-2">
+                {daddyData.birthdayDate
+                  ? format(daddyData.birthdayDate, "MMMM do")
+                  : "N/A"}
+              </p>
+            </div>
+          </motion.div>
+          <motion.div variants={stagger}>
+            <div className="space-y-1">
               <p className="text-lg font-bold">Messaging App</p>
               <Separator className="bg-primary/50" />
               <p className="pt-2">{daddyData.messagingApp || "N/A"}</p>
@@ -188,6 +201,9 @@ function EditForm({
     resolver: zodResolver(formSchema),
     values: {
       ...daddyData,
+      birthdayDate: daddyData.birthdayDate
+        ? dateTimeDate(daddyData.birthdayDate)
+        : "",
       vibeRating: daddyData.vibeRating.toString(),
       earningsEstimate: daddyData.earningsEstimate?.toString() || "",
     },
@@ -198,6 +214,9 @@ function EditForm({
     // ✅ This will be type-safe and validated.
     const formattedValues = {
       ...values,
+      birthdayDate: values.birthdayDate
+        ? new Date(values.birthdayDate).valueOf()
+        : undefined,
       earningsEstimate: Number(values.earningsEstimate || "0"),
       vibeRating: Number(values.vibeRating),
     };
@@ -313,6 +332,21 @@ function EditForm({
                 initial="initial"
                 animate="animate"
               >
+                <motion.div variants={stagger}>
+                  <FormField
+                    control={form.control}
+                    name="birthdayDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="mr-6">Birthday Date: </FormLabel>
+                        <FormControl className="w-max">
+                          <Input type="datetime-local" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
                 <motion.div variants={stagger}>
                   <FormField
                     control={form.control}

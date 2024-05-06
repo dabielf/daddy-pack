@@ -7,6 +7,7 @@ declare type DaddyWithInfos = Doc<"daddies"> & {
   imgUrl?: string;
   contactInfo?: string;
   location?: string;
+  birthdayDate?: number;
   messagingApp?: string;
   initialContactDate?: number;
   notes?: string;
