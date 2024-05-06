@@ -252,7 +252,13 @@ export default function EventLog({
               Upcoming Events
             </motion.h3>
 
-            {EventDisplayer(incomingEvents)}
+            {incomingEvents.length > 0 ? (
+              EventDisplayer(incomingEvents)
+            ) : (
+              <div className="text-sm font-light italic">
+                No upcoming events at the moment...
+              </div>
+            )}
 
             <motion.h3
               variants={stagger}
@@ -260,8 +266,13 @@ export default function EventLog({
             >
               Past Events
             </motion.h3>
-
-            {EventDisplayer(pastEvents)}
+            {pastEvents.length > 0 ? (
+              EventDisplayer(pastEvents)
+            ) : (
+              <div className="text-sm font-light italic">
+                No past events yet...
+              </div>
+            )}
           </motion.div>
         </CardContent>
       </ScrollArea>
