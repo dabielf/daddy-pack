@@ -232,8 +232,8 @@ export default function EventLog({
 
   return (
     <Card className="grow">
-      <CardHeader className="shadow-sm">
-        <CardTitle className="text-xl">Timeline</CardTitle>
+      <CardHeader className="py-2 shadow-sm">
+        <CardTitle className="text-xl text-primary">History</CardTitle>
       </CardHeader>
       <ScrollArea className="h-[550px]">
         <CardContent>

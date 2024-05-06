@@ -43,7 +43,7 @@ import { useConvexData } from "@/providers/convexDataContext";
 export function DeleteDaddyButton({
   daddy,
   name,
-  buttonText = "Delete this Daddy",
+  buttonText = "DELETE DADDY",
 }: {
   daddy: Id<"daddies">;
   name: string;
@@ -62,7 +62,7 @@ export function DeleteDaddyButton({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="sm">
+        <Button variant="outline" size="sm" className="grow">
           {buttonText}
         </Button>
       </AlertDialogTrigger>
@@ -93,7 +93,7 @@ export function DeleteDaddyButton({
 export function ArchiveDaddyButton({
   daddy,
   name,
-  buttonText = "Archive this Daddy",
+  buttonText = "ARCHIVE DADDY",
 }: {
   daddy: Id<"daddies">;
   name: string;
@@ -113,7 +113,7 @@ export function ArchiveDaddyButton({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="sm">
+        <Button variant="destructive" size="sm" className="grow">
           {buttonText}
         </Button>
       </AlertDialogTrigger>

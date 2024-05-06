@@ -602,11 +602,11 @@ export default function DaddyPage({
             dates={dates}
             allowancePayments={allowanceData?.allowancePayments}
           />
-          <Card className="border-destructive shadow-md">
-            <CardHeader>
+          <Card className=" shadow-md">
+            <CardHeader className="py-4">
               <CardTitle className="text-destructive">Danger Zone</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-2">
+            <CardContent className="flex flex-row gap-2">
               <ArchiveDaddyButton daddy={daddy._id} name={daddy.name} />
               <DeleteDaddyButton daddy={daddy._id} name={daddy.name} />
             </CardContent>
