@@ -76,7 +76,7 @@ function DisplayForm({
 }) {
   return (
     <motion.div>
-      <Card className="grid gap-4 p-4 md:grid-cols-2">
+      <Card className="grid gap-4 border-none p-4 md:grid-cols-2">
         <motion.div
           className="flex grow flex-col gap-4"
           variants={stagger}
@@ -234,7 +234,7 @@ function EditForm({
 
   return (
     <motion.div>
-      <Card className="p-4">
+      <Card className="border-none p-4">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -549,7 +549,7 @@ export default function DaddyPage({
       </div>
       <div className="flex h-full flex-col gap-4 md:grid md:grid-cols-3 xl:grid-cols-4">
         <div className="flex flex-col gap-4 md:col-span-2 xl:col-span-3">
-          <Card>
+          <Card className="border-none">
             <CardHeader>
               <CardTitle className="flex h-4 flex-row items-center justify-center gap-3">
                 <p className="text-sm font-light">
@@ -602,7 +602,7 @@ export default function DaddyPage({
             dates={dates}
             allowancePayments={allowanceData?.allowancePayments}
           />
-          <Card className=" shadow-md">
+          <Card className="border-none shadow-md">
             <CardHeader className="py-4">
               <CardTitle className="text-destructive">Danger Zone</CardTitle>
             </CardHeader>

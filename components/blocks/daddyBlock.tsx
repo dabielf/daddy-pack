@@ -1,19 +1,19 @@
-import { Star, Wallet, CircleAlert } from 'lucide-react';
+import { Star, Wallet, CircleAlert } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { formatDistance, isThisWeek } from 'date-fns';
+import { formatDistance, isThisWeek } from "date-fns";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
-import Link from 'next/link';
-import { Separator } from '../ui/separator';
-import { Doc } from '@/convex/_generated/dataModel';
+import Link from "next/link";
+import { Separator } from "../ui/separator";
+import { Doc } from "@/convex/_generated/dataModel";
 
 //make a StarRating component that fakes a number of stars based on a stars prop from 1 to 5 , use the star icons from lucide
 function StarRating({ stars = 0 }: { stars: number }) {
@@ -23,7 +23,7 @@ function StarRating({ stars = 0 }: { stars: number }) {
         <Star
           key={i}
           size={12}
-          className={`${i < stars ? 'text-primary' : 'text-muted-foreground/50'}`}
+          className={`${i < stars ? "text-primary" : "text-muted-foreground/50"}`}
         />
       ))}
     </div>
@@ -37,7 +37,7 @@ function AllowanceIcon() {
         <TooltipTrigger asChild>
           <Wallet
             size={18}
-            className="transition-all hover:scale-105 text-primary"
+            className="text-primary transition-all hover:scale-105"
           />
         </TooltipTrigger>
         <TooltipContent>
@@ -59,52 +59,52 @@ function DateComingUp({ nextDate }: { nextDate?: number }) {
 
   function classnames(date: number) {
     return cn({
-      'text-primary': isThisWeek(new Date(date), { weekStartsOn: 1 }),
-      'font-semibold': true,
+      "text-primary": isThisWeek(new Date(date), { weekStartsOn: 1 }),
+      "font-semibold": true,
     });
   }
 
   return (
-    <div className="flex flex-row gap-1 items-center">
-      <CircleAlert size={14} /> Date coming up{' '}
+    <div className="flex flex-row items-center gap-1">
+      <CircleAlert size={14} /> Date coming up{" "}
       <span className={classnames(nextDate)}>{dateText}</span>
     </div>
   );
 }
 
-export default function DaddyBlock({ daddy }: { daddy: Doc<'daddies'> }) {
+export default function DaddyBlock({ daddy }: { daddy: Doc<"daddies"> }) {
   return (
     <Link href={`/daddies/${daddy._id}`}>
-      <Card className="hover:shadow-xl hover:border-slate-500 border-slate-300 transition-all">
+      <Card className="border-none transition-all hover:shadow-xl">
         <CardHeader className="flex flex-row justify-between space-y-0 pb-4">
-          <CardTitle className="text-xl font-medium flex flex-col justify-between h-full">
-            <div className="text-lg flex flex-row gap-1 items-center">
+          <CardTitle className="flex h-full flex-col justify-between text-xl font-medium">
+            <div className="flex flex-row items-center gap-1 text-lg">
               {daddy.allowance && <AllowanceIcon />}
               {daddy.name}
             </div>
             <StarRating stars={daddy.vibeRating || 0} />
           </CardTitle>
-          <div className="flex flex-col gap-2 items-end">
+          <div className="flex flex-col items-end gap-2">
             <div className="text-sm font-light">
               <DateComingUp nextDate={daddy.nextDateDate} />
             </div>
-            <div className="text-xs font-light flex h-3 items-center space-x-2">
+            <div className="flex h-3 items-center space-x-2 text-xs font-light">
               <div>
-                <span className="text-sm font-semibold mr-1">
-                  {daddy.totalDates || '0'}
+                <span className="mr-1 text-sm font-semibold">
+                  {daddy.totalDates || "0"}
                 </span>
                 Dates
               </div>
               <Separator orientation="vertical" className="bg-primary" />
               <div>
-                <span className="text-sm font-semibold mr-1">
+                <span className="mr-1 text-sm font-semibold">
                   {daddy.totalContacts}
                 </span>
                 Contacts
               </div>
               <Separator orientation="vertical" className="bg-primary" />
               <div>
-                <span className="text-sm font-semibold mr-1">
+                <span className="mr-1 text-sm font-semibold">
                   ${daddy.lifetimeValue || 0}
                 </span>
                 Lifetime Value

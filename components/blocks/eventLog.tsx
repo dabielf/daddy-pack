@@ -51,7 +51,6 @@ export default function EventLog({
   }
 
   const { incomingEvents, pastEvents } = orderEvents(contacts, dates);
-  console.log({ incomingEvents, pastEvents });
 
   function formatEventDate(date: number) {
     return formatDistance(new Date(date), new Date(), {
@@ -231,7 +230,7 @@ export default function EventLog({
   }
 
   return (
-    <Card className="grow">
+    <Card className="grow border-none">
       <CardHeader className="py-2 shadow-sm">
         <CardTitle className="text-xl text-primary">History</CardTitle>
       </CardHeader>

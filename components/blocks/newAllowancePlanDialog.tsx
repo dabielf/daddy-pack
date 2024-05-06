@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { api } from '@/convex/_generated/api';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from 'convex/react';
-import { addDays, format } from 'date-fns';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { api } from "@/convex/_generated/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "convex/react";
+import { addDays, format } from "date-fns";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -18,7 +18,7 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -26,19 +26,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Doc } from '@/convex/_generated/dataModel';
-import { getErrorMessage } from '@/lib/utils';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Doc } from "@/convex/_generated/dataModel";
+import { getErrorMessage } from "@/lib/utils";
 import {
   Calendar as CalendarIcon,
   ChevronRight,
   CircleDollarSign,
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import Link from 'next/link';
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 const formSchema = z.object({
   intervalInDays: z.coerce.number().int().positive(),
@@ -49,44 +49,44 @@ function AllowanceLink({
   daddy,
   allowanceData,
 }: {
-  daddy: Doc<'daddies'>;
-  allowanceData?: Doc<'allowances'> | null;
+  daddy: Doc<"daddies">;
+  allowanceData?: Doc<"allowances"> | null;
 }) {
   return (
-    <Card>
+    <Card className="border-none">
       <CardHeader>
-        <CardTitle className="flex flex-row justify-between items-center">
+        <CardTitle className="flex flex-row items-center justify-between">
           <div className="text-lg font-semibold">Allowance Plan: Active</div>
           <Link
             href={`/daddies/${daddy._id}/allowance/${daddy.allowance}`}
-            className="flex flex-row justify-end items-center hover:underline decoration-primary"
+            className="flex flex-row items-center justify-end decoration-primary hover:underline"
           >
             Manage Allowance <ChevronRight size={16} className="ml-2" />
           </Link>
         </CardTitle>
         <div className="grid grid-cols-2">
           <div className="flex flex-col items-start gap-1">
-            <span className="text-xs text-gray-500 flex flex-row items-center">
+            <span className="flex flex-row items-center text-xs text-gray-500">
               <CircleDollarSign size={16} className="mr-2" />$
               {allowanceData?.amount} every {allowanceData?.intervalInDays} days
             </span>
-            <span className="text-xs text-gray-500 flex flex-row items-center">
+            <span className="flex flex-row items-center text-xs text-gray-500">
               <CircleDollarSign size={16} className="mr-2" />$
-              {allowanceData?.totalGiftAmount} total over{' '}
+              {allowanceData?.totalGiftAmount} total over{" "}
               {allowanceData?.numberOfPayments} allowances
             </span>
           </div>
           <div className="flex flex-col items-start gap-1">
-            <span className="text-xs text-gray-500 flex flex-row items-center">
+            <span className="flex flex-row items-center text-xs text-gray-500">
               <CalendarIcon size={16} className="mr-2" /> Last payment:
               {allowanceData?.lastPaymentDate
                 ? ` ${format(
                     new Date(allowanceData.lastPaymentDate),
-                    'MMM do, yyyy',
+                    "MMM do, yyyy",
                   )}`
-                : 'Payments not started yet'}
+                : "Payments not started yet"}
             </span>
-            <span className="text-xs text-gray-500 flex flex-row items-center">
+            <span className="flex flex-row items-center text-xs text-gray-500">
               <CalendarIcon size={16} className="mr-2" />
               Next payment:
               {allowanceData?.lastPaymentDate
@@ -95,9 +95,9 @@ function AllowanceLink({
                       new Date(allowanceData.lastPaymentDate),
                       allowanceData.intervalInDays,
                     ),
-                    'MMM do, yyyy',
+                    "MMM do, yyyy",
                   )}`
-                : 'Payments not started yet'}
+                : "Payments not started yet"}
             </span>
           </div>
         </div>
@@ -109,10 +109,10 @@ function AllowanceLink({
 export function CencelAllowancePlanButton({
   daddy,
   allowance,
-  children = 'New Allowance Payment',
+  children = "New Allowance Payment",
 }: {
-  daddy: Doc<'daddies'>;
-  allowance?: Doc<'allowances'> | null;
+  daddy: Doc<"daddies">;
+  allowance?: Doc<"allowances"> | null;
   children?: React.ReactNode;
 }) {
   return <Button>{children}</Button>;
@@ -121,10 +121,10 @@ export function CencelAllowancePlanButton({
 export function AddAllowancePlanButton({
   daddy,
   allowance,
-  children = 'Start Allowance Plan',
+  children = "Start Allowance Plan",
 }: {
-  daddy: Doc<'daddies'>;
-  allowance?: Doc<'allowances'> | null;
+  daddy: Doc<"daddies">;
+  allowance?: Doc<"allowances"> | null;
   children?: React.ReactNode;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -188,7 +188,7 @@ export function AddAllowancePlanButton({
                         min={0}
                         placeholder="Ex: every 14 days..."
                         {...field}
-                        onChange={event => field.onChange(event.target.value)}
+                        onChange={(event) => field.onChange(event.target.value)}
                       />
                     </FormControl>
                     <FormMessage />
@@ -207,7 +207,7 @@ export function AddAllowancePlanButton({
                         min={0}
                         placeholder="Ex: 1250..."
                         {...field}
-                        onChange={event => field.onChange(event.target.value)}
+                        onChange={(event) => field.onChange(event.target.value)}
                       />
                     </FormControl>
                     <FormMessage />

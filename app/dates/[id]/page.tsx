@@ -67,7 +67,7 @@ const formSchema = z.object({
 
 function DisplayForm({ dateData }: { dateData: Doc<"dates">; edit: boolean }) {
   return (
-    <Card className="grid gap-6 p-6 md:grid-cols-2">
+    <Card className="grid gap-6 border-none p-6 md:grid-cols-2">
       <motion.div
         className="flex grow flex-col gap-6"
         variants={stagger}
@@ -201,7 +201,7 @@ function EditForm({
   }
 
   return (
-    <Card className="p-6">
+    <Card className="border-none p-6">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

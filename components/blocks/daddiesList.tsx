@@ -260,7 +260,7 @@ export function DaddiesList() {
               onReorder={() => {}}
               className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3"
             >
-              {orderedDaddies.map((daddy, i) => (
+              {orderedDaddies.map((daddy) => (
                 <Reorder.Item
                   key={daddy._id}
                   value={daddy}
