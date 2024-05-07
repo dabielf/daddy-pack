@@ -38,8 +38,9 @@ export const createDate = mutation({
     daddy: v.id("daddies"),
     daddyName: v.string(),
     date: v.number(),
+    status: v.optional(v.union(v.literal("tentative"), v.literal("confirmed"))),
   },
-  handler: async (ctx, { daddy, daddyName, date }) => {
+  handler: async (ctx, { daddy, daddyName, date, status }) => {
     const user = await getConvexMutationUser(ctx);
 
     if (!user) return null;
@@ -50,7 +51,7 @@ export const createDate = mutation({
       dateDaddy: daddy,
       daddyName,
       date,
-      status: "scheduled",
+      status: status || "tentative",
     });
 
     await updateDaddyDatesData(ctx, { daddy });
@@ -76,6 +77,8 @@ export const updateDateStatus = mutation({
   args: {
     dateId: v.id("dates"),
     status: v.union(
+      v.literal("tentative"),
+      v.literal("confirmed"),
       v.literal("scheduled"),
       v.literal("completed"),
       v.literal("canceled"),
@@ -105,13 +108,13 @@ export const updateDate = mutation({
     dateRating: v.optional(v.number()),
     expectedGiftAmount: v.optional(v.number()),
     giftAmount: v.optional(v.number()),
-    status: v.optional(
-      v.union(
-        v.literal("scheduled"),
-        v.literal("completed"),
-        v.literal("canceled"),
-        v.literal("no-show"),
-      ),
+    status: v.union(
+      v.literal("tentative"),
+      v.literal("confirmed"),
+      v.literal("scheduled"),
+      v.literal("completed"),
+      v.literal("canceled"),
+      v.literal("no-show"),
     ),
   },
   handler: async (

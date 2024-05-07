@@ -108,6 +108,8 @@ export default defineSchema({
     giftAmount: v.optional(v.number()),
     status: v.optional(
       v.union(
+        v.literal("tentative"),
+        v.literal("confirmed"),
         v.literal("scheduled"),
         v.literal("completed"),
         v.literal("canceled"),

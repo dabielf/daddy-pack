@@ -1,13 +1,18 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Doc } from '@/convex/_generated/dataModel';
-import { formatDistance, isAfter } from 'date-fns';
-import { ChevronRight, MessageSquareHeart } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Doc } from "@/convex/_generated/dataModel";
+import { format, formatDistance, isAfter } from "date-fns";
+import {
+  ChevronRight,
+  MessageSquareHeart,
+  CalendarCheck2,
+  CalendarMinus,
+} from "lucide-react";
 
-import { Separator } from '@/components/ui/separator';
-import Link from 'next/link';
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 interface UpcomingDatesProps {
-  dates: Doc<'dates'>[];
+  dates: Doc<"dates">[];
 }
 
 function formatDate(date: number) {
@@ -19,20 +24,30 @@ function formatDate(date: number) {
 export function UpcomingDates({ dates }: UpcomingDatesProps) {
   // filter out dates that are in the past
   const upcomingDates = dates
-    .filter(date => isAfter(new Date(date.date), new Date()))
+    .filter((date) => isAfter(new Date(date.date), new Date()))
     .sort((a, b) => a.date - b.date);
 
-  function DisplayDate({ date }: { date: Doc<'dates'> }) {
+  const confirmedDates = upcomingDates.filter(
+    (date) => date.status === "confirmed",
+  );
+  const tentativeDates = upcomingDates.filter(
+    (date) => date.status !== "confirmed",
+  );
+
+  function DisplayDate({ date }: { date: Doc<"dates"> }) {
     return (
       <Link href={`/dates/${date._id}`} className="group flex flex-row">
         <div className="grow">
-          <div className="text-lg font-semibold group-hover:underline decoration-primary">
-            {formatDate(date.date)}
+          <div className="text-md font-semibold decoration-primary group-hover:underline">
+            {formatDate(date.date)}{" "}
+            <span className="text-sm font-light">
+              - {format(date.date, "p")}
+            </span>
           </div>
-          <div className="text-sm">With {date.daddyName}</div>
+          <div className="text-sm font-medium">With {date.daddyName}</div>
         </div>
         <div className="flex items-center justify-center">
-          <ChevronRight className="h-6 w-6 group-hover:text-primary transition-all group-hover:scale-125" />
+          <ChevronRight className="h-6 w-6 transition-all group-hover:scale-125 group-hover:text-primary" />
         </div>
       </Link>
     );
@@ -42,23 +57,41 @@ export function UpcomingDates({ dates }: UpcomingDatesProps) {
     <Card className="h-fit">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-semibold">Upcoming Dates</CardTitle>
-        <MessageSquareHeart className="h-6 w-6 text-primary" />
+        <MessageSquareHeart className="h-6 w-6 text-primary/80" />
       </CardHeader>
 
       <CardContent>
-        <Separator className="bg-primary/50 mb-4" />
+        <Separator className="mb-4 bg-primary/50" />
         {upcomingDates.length === 0 && (
-          <div className="h-[100px] flex flex-col justify-center items-center">
+          <div className="flex h-[100px] flex-col items-center justify-center">
             <div className="text-4xl">🥲</div>
             <div className="text-lg">No upcoming dates!</div>
           </div>
         )}
-        {upcomingDates.length > 0 && (
-          <ul className="flex flex-col gap-4">
-            {upcomingDates.map(date => (
-              <DisplayDate key={date._id} date={date} />
-            ))}
-          </ul>
+        {confirmedDates.length > 0 && (
+          <div className="mb-4">
+            <h3 className="mb-2 mt-2 inline-flex place-items-center gap-2 text-xl font-semibold">
+              <CalendarCheck2 size={20} className="text-primary/80" /> Confirmed
+              Dates
+            </h3>
+            <ul className="flex flex-col gap-2">
+              {confirmedDates.map((date) => (
+                <DisplayDate key={date._id} date={date} />
+              ))}
+            </ul>
+          </div>
+        )}
+        {tentativeDates.length > 0 && (
+          <>
+            <h3 className="mb-2 mt-2 inline-flex place-items-center gap-2 text-xl font-semibold opacity-80">
+              <CalendarMinus size={20} /> Tentative Dates
+            </h3>
+            <ul className="flex flex-col gap-2 opacity-75">
+              {tentativeDates.map((date) => (
+                <DisplayDate key={date._id} date={date} />
+              ))}
+            </ul>
+          </>
         )}
       </CardContent>
     </Card>

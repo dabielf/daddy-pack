@@ -38,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 
 import { Id } from "@/convex/_generated/dataModel";
 import { getErrorMessage, dateTimeDate } from "@/lib/utils";
@@ -48,6 +49,7 @@ const formSchema = z.object({
   daddy: z.string(),
   daddyName: z.string(),
   date: z.string(),
+  confirmed: z.boolean().default(false),
 });
 
 export function NewDateButton({
@@ -87,6 +89,7 @@ export function NewDateButton({
         daddy: values.daddy as Id<"daddies">,
         daddyName: getDaddyName(values.daddy),
         date: new Date(values.date).valueOf(),
+        status: values.confirmed ? "confirmed" : "tentative",
       });
       form.reset();
       toast.success(`New Date Created with ${getDaddyName(values.daddy)} 🎉`);
@@ -120,7 +123,7 @@ export function NewDateButton({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             {!daddyId ? (
               <FormField
                 control={form.control}
@@ -165,9 +168,26 @@ export function NewDateButton({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="confirmed"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-start gap-4">
+                  <FormLabel className="mt-2">Date confirmed ?</FormLabel>
+                  <FormControl className="space-y-0">
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="submit">Create</Button>
+                <Button type="submit" className="mt-3">
+                  Create
+                </Button>
               </DialogClose>
             </DialogFooter>
           </form>

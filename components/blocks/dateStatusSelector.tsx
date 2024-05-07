@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { api } from '@/convex/_generated/api';
-import { Doc } from '@/convex/_generated/dataModel';
-import { useMutation, useQuery } from 'convex/react';
-import { cn } from '@/lib/utils';
-import { DateStatus } from '@/custom-types';
+import { api } from "@/convex/_generated/api";
+import { Doc } from "@/convex/_generated/dataModel";
+import { useMutation, useQuery } from "convex/react";
+import { cn } from "@/lib/utils";
+import { DateStatus } from "@/custom-types";
 
 import {
   Select,
@@ -14,10 +14,10 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 interface DateStatusSelectorProps {
-  date: Doc<'dates'>;
+  date: Doc<"dates">;
 }
 
 export function DateStatusSelector({ date }: DateStatusSelectorProps) {
@@ -32,38 +32,58 @@ export function DateStatusSelector({ date }: DateStatusSelectorProps) {
 
   function getStatusBgColor(status: DateStatus) {
     switch (status) {
-      case 'scheduled':
-        return 'bg-blue-300/30';
-      case 'completed':
-        return 'bg-green-300/30';
-      case 'canceled':
-        return 'bg-red-300/30';
-      case 'no-show':
-        return 'bg-red-300/30';
+      case "tentative":
+        return "opacity-80";
+      case "confirmed":
+        return "bg-blue-300/30";
+      case "scheduled":
+        return "bg-blue-300/30";
+      case "completed":
+        return "bg-green-300/30";
+      case "canceled":
+        return "bg-red-300/30";
+      case "no-show":
+        return "bg-red-300/30";
       default:
-        return '';
+        return "";
     }
   }
 
+  const past = new Date(date.date).getTime() < new Date().getTime();
+  const dateStatus =
+    !date.status || date.status === "scheduled" ? "tentative" : date.status;
   return (
     <div
       className={cn(
-        getStatusBgColor(date.status || 'scheduled'),
-        'flex flex-row gap-1 items-center pl-4 rounded-md',
+        getStatusBgColor(dateStatus),
+        "flex flex-row items-center gap-1 rounded-md pl-4",
       )}
     >
-      <div className="text-sm font-semibold">STATUS</div>
-      <Select value={date.status || 'scheduled'} onValueChange={onStatusChange}>
-        <SelectTrigger className="ring-transparent border-0 shadow-none w-[125px]">
+      <div className="text-sm font-medium">STATUS</div>
+      <Select value={dateStatus || "tentative"} onValueChange={onStatusChange}>
+        <SelectTrigger className="w-[125px] border-0 shadow-none ring-transparent">
           <SelectValue placeholder="Select status:" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="opacity-100">
           <SelectGroup>
             <SelectLabel>Date Status</SelectLabel>
-            <SelectItem value="scheduled">SCHEDULED</SelectItem>
-            <SelectItem value="completed">COMPLETED</SelectItem>
-            <SelectItem value="canceled">CANCELED</SelectItem>
-            <SelectItem value="no-show">NO SHOW</SelectItem>
+            <SelectItem value="tentative">TENTATIVE</SelectItem>
+            <SelectItem value="confirmed" className="text-blue-900">
+              CONFIRMED
+            </SelectItem>
+            {past && (
+              <SelectItem value="completed" className="text-green-900">
+                COMPLETED
+              </SelectItem>
+            )}
+            <SelectItem value="canceled" className="text-red-900">
+              CANCELED
+            </SelectItem>
+            {past && (
+              <SelectItem value="no-show" className="text-red-900">
+                NO SHOW
+              </SelectItem>
+            )}
           </SelectGroup>
         </SelectContent>
       </Select>

@@ -60,16 +60,40 @@ export default function EventLog({
 
   function EventStatus({ timelineEvent }: { timelineEvent: Doc<"dates"> }) {
     const past = new Date(timelineEvent.date).getTime() < new Date().getTime();
-    if (!past && timelineEvent.status === "scheduled") {
-      return (
-        <Badge
-          className="w-fit border-none bg-cyan-500/80 font-normal text-white"
-          variant="outline"
-        >
-          SCHEDULED
-        </Badge>
-      );
-    } else if (timelineEvent.status === "canceled") {
+    if (!past) {
+      if (timelineEvent.status === "tentative") {
+        return (
+          <Badge
+            className="w-fit border-cyan-500/80 font-normal text-cyan-500/80"
+            variant="outline"
+          >
+            TENTATIVE
+          </Badge>
+        );
+      }
+      if (timelineEvent.status === "confirmed") {
+        return (
+          <Badge
+            className="w-fit border-none bg-cyan-500/80 font-normal text-white"
+            variant="outline"
+          >
+            CONFIRMED
+          </Badge>
+        );
+      }
+      if (timelineEvent.status === "scheduled") {
+        return (
+          <Badge
+            className="w-fit border-none bg-cyan-500/80 font-normal text-white"
+            variant="outline"
+          >
+            CONFIRMED
+          </Badge>
+        );
+      }
+    }
+
+    if (timelineEvent.status === "canceled") {
       return (
         <Badge
           className="w-fit border-none bg-red-600/80 font-normal text-white"
