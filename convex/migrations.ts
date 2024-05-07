@@ -7,18 +7,19 @@ import { internalMutation } from "./_generated/server";
 // } from './daddies';
 //
 
-export const migrateDatesStatus = internalMutation({
-  args: {},
-  handler: async (ctx) => {
-    const dates = await ctx.db.query("dates").collect();
-    dates.map(async (date) => {
-      const nonEmptyStatus = date.status ? date.status : "tentative";
-      const updatedStatus =
-        nonEmptyStatus === "scheduled" ? "tentative" : nonEmptyStatus;
-      ctx.db.patch(date._id, { status: updatedStatus });
-    });
-  },
-});
+// export const migrateDatesStatus = internalMutation({
+//   args: {},
+//   handler: async (ctx) => {
+//     const dates = await ctx.db.query("dates").collect();
+//     dates.map(async (date) => {
+//       const nonEmptyStatus = date.status ? date.status : "tentative";
+//       const updatedStatus =
+//         nonEmptyStatus === "scheduled" ? "tentative" : nonEmptyStatus;
+//       ctx.db.patch(date._id, { status: updatedStatus });
+//     });
+//   },
+// });
+
 // export const migrateDatesAndContacts = internalMutation({
 //   args: {},
 //   handler: async (ctx) => {

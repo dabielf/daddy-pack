@@ -109,7 +109,6 @@ export default defineSchema({
     status: v.union(
       v.literal("tentative"),
       v.literal("confirmed"),
-      v.literal("scheduled"),
       v.literal("completed"),
       v.literal("canceled"),
       v.literal("no-show"),

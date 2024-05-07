@@ -31,7 +31,6 @@ import { format, formatDistance } from "date-fns";
 import { motion } from "framer-motion";
 import { CalendarFold } from "lucide-react";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Markdown from "react-markdown";
@@ -39,6 +38,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { staggerUp as stagger } from "@/constants/animations";
 import { DateStatusSelector } from "@/components/blocks/dateStatusSelector";
+import { DateStatus } from "@/custom-types";
 
 const formSchema = z.object({
   date: z.string(),
@@ -153,16 +153,10 @@ function EditForm({
     },
   });
 
-  enum Status {
-    scheduled = "scheduled",
-    completed = "completed",
-    canceled = "canceled",
-  }
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const status = dateData.status ? dateData.status : "scheduled";
+    const status = dateData.status;
     const formattedValues = {
       ...values,
       date: new Date(values.date).valueOf(),
@@ -174,7 +168,7 @@ function EditForm({
       giftAmount: Number(values.giftAmount || "0"),
       status: (Number(values.giftAmount || "0") > 0
         ? "completed"
-        : status) as Status,
+        : status) as DateStatus,
     };
 
     try {
@@ -426,19 +420,7 @@ export default function DaddyPage({ params }: { params: { id: Id<"dates"> } }) {
     date: params.id,
   });
 
-  const cancelDate = useMutation(api.dates.cancelDate);
-  const router = useRouter();
   const [edit, setEdit] = useState(false);
-
-  function onCancelDate(dateId: Id<"dates">) {
-    try {
-      cancelDate({ dateId });
-
-      toast.success("Date has been canceled.");
-    } catch (error) {
-      toast.error("Error cancelling date");
-    }
-  }
 
   if (!dateData) return null;
 

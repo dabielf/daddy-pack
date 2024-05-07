@@ -107,7 +107,7 @@ export default function DaddyBlock({ daddy }: { daddy: Doc<"daddies"> }) {
                 <span className="mr-1 text-sm font-semibold">
                   ${daddy.lifetimeValue || 0}
                 </span>
-                Lifetime Value
+                Gifted Total
               </div>
             </div>
           </div>

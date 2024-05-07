@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Doc } from "@/convex/_generated/dataModel";
-import { formatDistance } from "date-fns";
+import { format, formatDistance } from "date-fns";
 import {
   CalendarFold,
   ChevronRight,
@@ -81,16 +81,6 @@ export default function EventLog({
           </Badge>
         );
       }
-      if (timelineEvent.status === "scheduled") {
-        return (
-          <Badge
-            className="w-fit border-none bg-cyan-500/80 font-normal text-white"
-            variant="outline"
-          >
-            CONFIRMED
-          </Badge>
-        );
-      }
     }
 
     if (timelineEvent.status === "canceled") {
@@ -100,15 +90,6 @@ export default function EventLog({
           variant="outline"
         >
           CANCELED
-        </Badge>
-      );
-    } else if (timelineEvent.status === "scheduled" || !timelineEvent.status) {
-      return (
-        <Badge
-          className="w-fit border-none bg-red-500/80 font-normal text-white"
-          variant="destructive"
-        >
-          TO PROCESS
         </Badge>
       );
     } else if (timelineEvent.status === "completed") {
@@ -122,7 +103,25 @@ export default function EventLog({
             : "COMPLETED"}
         </Badge>
       );
+    } else if (timelineEvent.status === "no-show") {
+      return (
+        <Badge
+          className="w-fit border-none bg-red-600/80 font-normal text-white"
+          variant="outline"
+        >
+          NO SHOW
+        </Badge>
+      );
     }
+
+    return (
+      <Badge
+        className="w-fit border-none bg-red-500/80 font-normal text-white"
+        variant="destructive"
+      >
+        TO PROCESS
+      </Badge>
+    );
   }
 
   function ContactDisplayer({
@@ -140,8 +139,9 @@ export default function EventLog({
             <MessageSquareMore size={16} />
             <div>Contact</div>
           </div>
-          <span className="-mt-0.5 mb-1 text-xs font-light text-muted-foreground">
-            {formatEventDate(timelineEvent.date)}
+          <span className="mb-1 text-xs font-light text-muted-foreground">
+            {formatEventDate(timelineEvent.date)} -{" "}
+            {format(timelineEvent.date, "p")}
           </span>
           <Markdown className="text-xs transition-all">
             {timelineEvent.notes
@@ -182,8 +182,9 @@ export default function EventLog({
               + ${timelineEvent.amount}
             </Badge>
           </div>
-          <span className="-mt-0.5 text-xs font-light text-muted-foreground">
-            {formatEventDate(timelineEvent.date)}
+          <span className="mb-1 text-xs font-light text-muted-foreground">
+            {formatEventDate(timelineEvent.date)} -{" "}
+            {format(timelineEvent.date, "p")}
           </span>
         </div>
 
@@ -211,8 +212,9 @@ export default function EventLog({
             <div className="mr-1">Date</div>
             <EventStatus timelineEvent={timelineEvent} />
           </div>
-          <span className="-mt-0.5 text-xs font-light text-muted-foreground">
-            {formatEventDate(timelineEvent.date)}
+          <span className="mb-1 text-xs font-light text-muted-foreground">
+            {formatEventDate(timelineEvent.date)} -{" "}
+            {format(timelineEvent.date, "p")}
           </span>
         </div>
 
@@ -254,11 +256,11 @@ export default function EventLog({
   }
 
   return (
-    <Card className="grow border-none">
-      <CardHeader className="py-2 shadow-sm">
+    <Card className="border-none">
+      <CardHeader className="py-2 shadow">
         <CardTitle className="text-xl text-primary">History</CardTitle>
       </CardHeader>
-      <ScrollArea className="h-[550px]">
+      <ScrollArea className="h-[650px]">
         <CardContent>
           <motion.div
             variants={stagger}
@@ -268,7 +270,7 @@ export default function EventLog({
           >
             <motion.h3
               variants={stagger}
-              className="mb-2 mt-4 text-lg font-semibold"
+              className="mb-2 mt-6 text-lg font-semibold"
             >
               Upcoming Events
             </motion.h3>
@@ -285,7 +287,7 @@ export default function EventLog({
               variants={stagger}
               className="mb-2 mt-2 text-lg font-semibold"
             >
-              Past Events
+              Previous Events
             </motion.h3>
             {pastEvents.length > 0 ? (
               EventDisplayer(pastEvents)

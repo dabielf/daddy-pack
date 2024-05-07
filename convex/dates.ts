@@ -79,7 +79,6 @@ export const updateDateStatus = mutation({
     status: v.union(
       v.literal("tentative"),
       v.literal("confirmed"),
-      v.literal("scheduled"),
       v.literal("completed"),
       v.literal("canceled"),
       v.literal("no-show"),
@@ -111,7 +110,6 @@ export const updateDate = mutation({
     status: v.union(
       v.literal("tentative"),
       v.literal("confirmed"),
-      v.literal("scheduled"),
       v.literal("completed"),
       v.literal("canceled"),
       v.literal("no-show"),

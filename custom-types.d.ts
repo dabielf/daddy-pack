@@ -3,7 +3,6 @@ import { Doc } from "@/convex/_generated/dataModel";
 declare type DateStatus =
   | "tentative"
   | "confirmed"
-  | "scheduled"
   | "completed"
   | "canceled"
   | "no-show";

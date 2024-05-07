@@ -267,7 +267,7 @@ export const updateDaddyDatesData = internalMutation({
 
     const totalDates = dates.length;
     const totalScheduledDates = dates.filter(
-      (date) => date.status === "scheduled" || !date.status,
+      (date) => date.status === "tentative" || date.status === "confirmed",
     ).length;
     const totalCompletedDates = dates.filter(
       (date) => date.status === "completed",
