@@ -38,6 +38,9 @@ export default defineSchema({
     mostRecentContactDate: v.optional(v.number()),
     allowance: v.optional(v.id("allowances")),
     allowanceAlert: v.optional(v.boolean()),
+    daysToContact: v.optional(v.number()),
+    snooze: v.optional(v.boolean()),
+    snoozeUntil: v.optional(v.number()),
     archived: v.boolean(),
     archivedReason: v.optional(v.string()),
   })
