@@ -252,18 +252,15 @@ export function DaddiesList() {
           return null;
         } else if (orderedDaddies?.length) {
           return (
-            <Reorder.Group
+            <motion.div
               variants={stagger}
               initial="initial"
               animate="animate"
-              values={orderedDaddies}
-              onReorder={() => {}}
               className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3"
             >
               {orderedDaddies.map((daddy) => (
-                <Reorder.Item
+                <motion.div
                   key={daddy._id}
-                  value={daddy}
                   variants={stagger}
                   animate={{
                     opacity: hovered == daddy._id || hovered == null ? 1 : 0.7,
@@ -278,9 +275,9 @@ export function DaddiesList() {
                   onHoverEnd={() => setHovered(null)}
                 >
                   <DaddyBlock daddy={daddy} />
-                </Reorder.Item>
+                </motion.div>
               ))}
-            </Reorder.Group>
+            </motion.div>
           );
         } else {
           return (

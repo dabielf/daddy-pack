@@ -24,7 +24,7 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          "bg-gradient-to-br from-primary/5 via-pink-50 to-primary/15",
+          "bg-gradient-to-br from-primary/10 via-pink-50 to-primary/15",
         )}
       >
         <ConvexClientProvider>
