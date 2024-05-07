@@ -106,15 +106,13 @@ export default defineSchema({
     dateRating: v.optional(v.number()),
     expectedGiftAmount: v.optional(v.number()),
     giftAmount: v.optional(v.number()),
-    status: v.optional(
-      v.union(
-        v.literal("tentative"),
-        v.literal("confirmed"),
-        v.literal("scheduled"),
-        v.literal("completed"),
-        v.literal("canceled"),
-        v.literal("no-show"),
-      ),
+    status: v.union(
+      v.literal("tentative"),
+      v.literal("confirmed"),
+      v.literal("scheduled"),
+      v.literal("completed"),
+      v.literal("canceled"),
+      v.literal("no-show"),
     ),
     archived: v.optional(v.boolean()),
   })

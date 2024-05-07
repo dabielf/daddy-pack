@@ -44,7 +44,7 @@ export function UpcomingDates({ dates }: UpcomingDatesProps) {
               - {format(date.date, "p")}
             </span>
           </div>
-          <div className="text-sm font-medium">With {date.daddyName}</div>
+          <div className="text-sm font-medium">{date.daddyName}</div>
         </div>
         <div className="flex items-center justify-center">
           <ChevronRight className="h-6 w-6 transition-all group-hover:scale-125 group-hover:text-primary" />
