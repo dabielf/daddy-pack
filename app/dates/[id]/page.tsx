@@ -11,7 +11,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -22,14 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { TimePicker } from "@/components/ui/time-picker";
-import animations from "@/constants/animations";
 import { api } from "@/convex/_generated/api";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { cn, getErrorMessage, dateTimeDate } from "@/lib/utils";
@@ -37,12 +29,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "convex/react";
 import { format, formatDistance } from "date-fns";
 import { motion } from "framer-motion";
-import {
-  CalendarFold,
-  Calendar as CalendarIcon,
-  ChevronLeft,
-} from "lucide-react";
-import Link from "next/link";
+import { CalendarFold } from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -452,23 +440,12 @@ export default function DaddyPage({ params }: { params: { id: Id<"dates"> } }) {
     }
   }
 
-  function goBack(daddyId: string) {
-    router.push(`/daddies/${daddyId}`);
-  }
-
   if (!dateData) return null;
 
   const { date, daddy } = dateData;
   if (!date || !daddy) return null;
   return (
     <div className="flex h-full w-full flex-col">
-      {/* <div
-        onClick={() => goBack(daddy?._id || '')}
-        className="text-md text-slate-700 cursor-pointer flex flex-row gap-1 items-center mb-4 w-fit"
-      >
-        <ChevronLeft size={24} />
-        Back
-      </div> */}
       <Breadcrumb className="mb-4">
         <BreadcrumbList className="font-semibold text-foreground md:text-xl">
           <BreadcrumbItem>
@@ -493,6 +470,16 @@ export default function DaddyPage({ params }: { params: { id: Id<"dates"> } }) {
             <BreadcrumbPage className="flex flex-row items-center">
               <CalendarFold size={18} className="mr-1" />
               Date
+              <span className="place-items-baseline">
+                <span className="mx-1">
+                  {formatDistance(date.date, new Date(), {
+                    addSuffix: true,
+                  })}
+                </span>
+                <span className="text-xs md:text-sm">
+                  ( {format(date.date, "Pp")} )
+                </span>
+              </span>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -512,44 +499,8 @@ export default function DaddyPage({ params }: { params: { id: Id<"dates"> } }) {
                     </span>
                     <AddToCalendarButton date={date} />
                   </h1>
-                  {/* <p>
-                      {dates.length || 0} Dates - {contacts.length || 0}{' '}
-                      Contacts
-                    </p> */}
                 </div>
                 <div className="flex flex-row gap-4">
-                  {/* {date.status !== 'canceled' && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button disabled={edit} variant="outline">
-                          CANCEL DATE
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Do you really want to cancel this date ?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This date will be marked as canceled and will not be
-                            part of your data anymore.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Abort</AlertDialogCancel>
-                          <AlertDialogAction asChild>
-                            <Button
-                              onClick={() => onCancelDate(date._id)}
-                              disabled={edit}
-                            >
-                              Yes. Cancel!
-                            </Button>
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  )} */}
-
                   <DateStatusSelector date={date} />
                 </div>
               </CardTitle>
