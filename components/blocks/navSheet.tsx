@@ -1,8 +1,13 @@
+"use client";
+
 import { Menu } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { useConvexAuth } from "convex/react";
 import { SignInButton, SignOutButton } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -15,7 +20,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const links = [
   { name: "Dashboard", href: "/" },
@@ -43,14 +48,19 @@ export function NavSheetTrigger() {
   const [open, setOpen] = useState(false);
   const { isLoading, isAuthenticated } = useConvexAuth();
 
-  function toggleSheet() {
-    setOpen(!open);
-  }
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // const url = `${pathname}?${searchParams}`;
+    // console.log(url);
+    setOpen(false);
+  }, [pathname, searchParams]);
 
   const button = isAuthenticated ? <SignOut /> : <SignIn />;
 
   return (
-    <Sheet open={open} onOpenChange={toggleSheet}>
+    <Sheet open={open} onOpenChange={() => setOpen(!open)}>
       <SheetTrigger asChild>
         <Button variant="ghost">
           <Menu size={24} />
@@ -77,7 +87,20 @@ export function NavSheetTrigger() {
             <Input id="username" value="@peduarte" className="col-span-3" />
           </div>
         </div> */}
-        <div>Menu</div>
+        <nav className="mt-6">
+          <ul className="flex flex-col items-start gap-2 text-xl">
+            {links.map((link) => (
+              <li key={link.name}>
+                <Link
+                  className="decoration-primary hover:underline"
+                  href={link.href}
+                >
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
         <SheetFooter>
           {/* <SheetClose asChild>
             <Button type="submit">Save changes</Button>

@@ -269,7 +269,7 @@ export function DaddiesList() {
                         ? "none"
                         : "grayscale(0.6)",
                   }}
-                  className-="min-w-[470px] grow"
+                  className="min-w-[470px] grow"
                   whileHover={{ scale: 1.03, rotate: -0.5 }}
                   onHoverStart={() => setHovered(daddy._id)}
                   onHoverEnd={() => setHovered(null)}

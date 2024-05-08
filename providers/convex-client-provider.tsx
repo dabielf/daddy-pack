@@ -69,13 +69,14 @@ export const ConvexClientProvider = ({
 }: ConvexClientProviderProps) => {
   const initialState = initialDrawerState();
   const [drawers, setDrawers] = useDrawersState(initialState);
+
   return (
     <ClerkProvider publishableKey={publishableKey}>
       <ConvexProviderWithClerk useAuth={useAuth} client={convex}>
         <ConvexDataProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
