@@ -45,13 +45,14 @@ const formSchema = z.object({
   amount: z.coerce.number().int().positive(),
 });
 
-function AllowanceLink({
+export function AllowanceLink({
   daddy,
   allowanceData,
 }: {
   daddy: Doc<"daddies">;
-  allowanceData?: Doc<"allowances"> | null;
+  allowanceData?: Doc<"allowances"> | undefined | null;
 }) {
+  if (!allowanceData) return null;
   return (
     <Card className="border-none">
       <CardHeader>
@@ -120,11 +121,11 @@ export function CencelAllowancePlanButton({
 
 export function AddAllowancePlanButton({
   daddy,
-  allowance,
+  // allowance,
   children = "Start Allowance Plan",
 }: {
   daddy: Doc<"daddies">;
-  allowance?: Doc<"allowances"> | null;
+  // allowance?: Doc<"allowances"> | null;
   children?: React.ReactNode;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -158,13 +159,16 @@ export function AddAllowancePlanButton({
   }
 
   if (daddy.allowance) {
-    return <AllowanceLink daddy={daddy} allowanceData={allowance} />;
+    // return <AllowanceLink daddy={daddy} allowanceData={allowance} />;
+    return null;
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-fill">{children}</Button>
+        <Button className="w-fill" size="sm">
+          {children}
+        </Button>
       </DialogTrigger>
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px]">

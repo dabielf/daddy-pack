@@ -4,7 +4,10 @@ import {
   ArchiveDaddyButton,
   DeleteDaddyButton,
 } from "@/components/blocks/daddiesList";
-import { AddAllowancePlanButton } from "@/components/blocks/newAllowancePlanDialog";
+import {
+  AddAllowancePlanButton,
+  AllowanceLink,
+} from "@/components/blocks/newAllowancePlanDialog";
 import EventLog from "@/components/blocks/eventLog";
 import { NewContactButton } from "@/components/blocks/newContactDialog";
 import { NewDateButton } from "@/components/blocks/newDateDialog";
@@ -513,7 +516,7 @@ export default function DaddyPage({
   const daddyData = useQuery(api.daddies.getDaddyWithMetadata, {
     daddy: params.id,
   });
-  const router = useRouter();
+
   const [edit, setEdit] = useState(false);
 
   function allowanceQueryParams() {
@@ -527,10 +530,6 @@ export default function DaddyPage({
     api.allowances.getAllowanceWithPayments,
     allowanceQueryParams(),
   );
-
-  function goBack() {
-    router.push("/daddies");
-  }
 
   if (!daddyData) return null;
 
@@ -586,6 +585,16 @@ export default function DaddyPage({
                 <Plus size={16} className="mr-1" /> ADD CONTACT
               </NewContactButton>
             </ActionItem>
+            {!allowanceData && (
+              <ActionItem>
+                <AddAllowancePlanButton
+                  daddy={daddy}
+                  // allowance={allowanceData?.allowance}
+                >
+                  <Plus size={16} className="mr-1" /> START ALLOWANCE PLAN
+                </AddAllowancePlanButton>
+              </ActionItem>
+            )}
           </ActionItems>
         </ActionMenu>
       </div>
@@ -625,12 +634,12 @@ export default function DaddyPage({
             </CardHeader>
           </Card>
 
-          <AddAllowancePlanButton
+          <AllowanceLink
             daddy={daddy}
-            allowance={allowanceData?.allowance}
-          >
-            <Plus size={16} className="mr-1" /> START ALLOWANCE PLAN
-          </AddAllowancePlanButton>
+            allowanceData={allowanceData?.allowance}
+          />
+          {/* <Plus size={16} className="mr-1" /> START ALLOWANCE PLAN
+          </AddAllowancePlanButton> */}
           <DaddyDisplayOrEditForm
             daddyData={daddy}
             edit={edit}
