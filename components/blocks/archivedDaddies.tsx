@@ -1,8 +1,8 @@
-'use client';
-import { useMutation, useQuery } from 'convex/react';
-import { api } from '@/convex/_generated/api';
+"use client";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -13,18 +13,18 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import Link from 'next/link';
-import { Id } from '@/convex/_generated/dataModel';
-import { Separator } from '../ui/separator';
-import Markdown from 'react-markdown';
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Link from "next/link";
+import { Id } from "@/convex/_generated/dataModel";
+import { Separator } from "../ui/separator";
+import Markdown from "react-markdown";
 
 export function ArchivedDaddiesButton() {
   const archivedDaddies = useQuery(api.daddies.getArchivedDaddies);
   const unarchiveDaddy = useMutation(api.daddies.unarchiveDaddy);
 
-  function handleUnarchiveDaddy(daddy: Id<'daddies'>) {
+  function handleUnarchiveDaddy(daddy: Id<"daddies">) {
     unarchiveDaddy({ daddy });
   }
   return (
@@ -32,7 +32,7 @@ export function ArchivedDaddiesButton() {
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="border border-transparent hover:bg-transparent hover:shadow-md hover:border-foreground opacity-80"
+          className="border border-transparent opacity-80 hover:border-foreground hover:bg-transparent hover:shadow-md"
         >
           See Archived
         </Button>
@@ -52,14 +52,14 @@ export function ArchivedDaddiesButton() {
           <ScrollArea className="h-[300px] [&>*]:h-[300px]">
             {archivedDaddies &&
               archivedDaddies?.length > 0 &&
-              archivedDaddies.map(daddy => {
+              archivedDaddies.map((daddy) => {
                 return (
-                  <div key={daddy._id} className="flex flex-col">
-                    <div className="flex flex-row justify-between items-center">
+                  <div key={daddy._id} className="mb-2 flex flex-col">
+                    <div className="-mb-1 -ml-4 flex flex-row items-center justify-between">
                       <Button variant="link" asChild>
                         <Link
                           href={`/daddies/${daddy._id}`}
-                          className="font-medium text-xl px-0"
+                          className="text-xl font-medium"
                         >
                           {daddy.name}
                         </Link>
@@ -67,6 +67,7 @@ export function ArchivedDaddiesButton() {
                       <Button
                         variant="link"
                         className="px-0"
+                        size="sm"
                         onClick={() => handleUnarchiveDaddy(daddy._id)}
                       >
                         Unarchive
@@ -77,12 +78,12 @@ export function ArchivedDaddiesButton() {
                         <span className="font-semibold">
                           Reason for archiving:
                         </span>
-                        <Markdown className="italic text-xs">
-                          {daddy.archivedReason || ''}
+                        <Markdown className="text-xs italic">
+                          {daddy.archivedReason || ""}
                         </Markdown>
                       </div>
                     ) : (
-                      <span className="font-semibold text-sm">
+                      <span className="text-sm font-semibold">
                         No reason given for archiving.
                       </span>
                     )}
@@ -90,7 +91,7 @@ export function ArchivedDaddiesButton() {
                 );
               })}
             {archivedDaddies?.length === 0 && (
-              <div className="flex justify-center items-center h-full">
+              <div className="flex h-full items-center justify-center">
                 <p>No archived daddies</p>
               </div>
             )}
