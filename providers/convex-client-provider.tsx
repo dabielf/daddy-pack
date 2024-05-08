@@ -6,6 +6,12 @@ import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { createContext, useContext, useState } from "react";
 
 import { ConvexDataProvider } from "./convexDataContext";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { type ThemeProviderProps } from "next-themes/dist/types";
+
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+}
 
 interface ConvexClientProviderProps {
   children: React.ReactNode;
@@ -67,9 +73,16 @@ export const ConvexClientProvider = ({
     <ClerkProvider publishableKey={publishableKey}>
       <ConvexProviderWithClerk useAuth={useAuth} client={convex}>
         <ConvexDataProvider>
-          <DrawersContext.Provider value={[drawers, setDrawers]}>
-            {children}
-          </DrawersContext.Provider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <DrawersContext.Provider value={[drawers, setDrawers]}>
+              {children}
+            </DrawersContext.Provider>
+          </ThemeProvider>
         </ConvexDataProvider>
       </ConvexProviderWithClerk>
     </ClerkProvider>

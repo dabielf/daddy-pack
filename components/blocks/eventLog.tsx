@@ -64,7 +64,7 @@ export default function EventLog({
       if (timelineEvent.status === "tentative") {
         return (
           <Badge
-            className="w-fit border-cyan-500/80 font-normal text-cyan-500/80"
+            className="border-dpblue text-dpblue w-fit font-normal"
             variant="outline"
           >
             TENTATIVE
@@ -74,7 +74,7 @@ export default function EventLog({
       if (timelineEvent.status === "confirmed") {
         return (
           <Badge
-            className="w-fit border-none bg-cyan-500/80 font-normal text-white"
+            className="bg-dpblue w-fit border-none font-normal text-white"
             variant="outline"
           >
             CONFIRMED
@@ -86,7 +86,7 @@ export default function EventLog({
     if (timelineEvent.status === "canceled") {
       return (
         <Badge
-          className="w-fit border-none bg-red-600/80 font-normal text-white"
+          className="bg-dpred w-fit border-none font-normal text-white"
           variant="outline"
         >
           CANCELED
@@ -95,7 +95,7 @@ export default function EventLog({
     } else if (timelineEvent.status === "completed") {
       return (
         <Badge
-          className="w-fit border-none bg-emerald-500/80 font-normal text-white"
+          className="bg-dpgreen-muted w-fit border-none font-normal text-white"
           variant="outline"
         >
           {timelineEvent.giftAmount
@@ -106,7 +106,7 @@ export default function EventLog({
     } else if (timelineEvent.status === "no-show") {
       return (
         <Badge
-          className="w-fit border-none bg-red-600/80 font-normal text-white"
+          className="bg-dpred w-fit border-none font-normal text-white"
           variant="outline"
         >
           NO SHOW
@@ -116,7 +116,7 @@ export default function EventLog({
 
     return (
       <Badge
-        className="w-fit border-none bg-red-500/80 font-normal text-white"
+        className="bg-dpred w-fit border-none font-normal text-white"
         variant="destructive"
       >
         TO PROCESS
@@ -135,7 +135,7 @@ export default function EventLog({
         className="event flex items-start justify-between"
       >
         <div className="grid">
-          <div className="text-md flex flex-row items-center gap-1 font-medium text-cyan-600/90">
+          <div className="text-md text-dpblue flex flex-row items-center gap-1 font-medium">
             <MessageSquareMore size={16} />
             <div>Contact</div>
           </div>
@@ -172,11 +172,11 @@ export default function EventLog({
         className="event flex items-start justify-between"
       >
         <div className="grid">
-          <div className="text-md flex flex-row items-center gap-1 font-medium text-violet-700/80">
+          <div className="text-md text-allowance flex flex-row items-center gap-1 font-medium">
             <Gift size={16} />
             <div className="mr-1">Allowance</div>
             <Badge
-              className="w-fit border-none bg-violet-500/80 font-medium text-white"
+              className="bg-allowance-muted w-fit border-none font-medium text-white"
               variant="outline"
             >
               + ${timelineEvent.amount}
@@ -207,7 +207,7 @@ export default function EventLog({
         className="event flex items-start justify-between"
       >
         <div className="grid">
-          <div className="text-md flex flex-row items-center gap-1 font-medium text-emerald-700/90">
+          <div className="text-md text-dpgreen flex flex-row items-center gap-1 font-medium">
             <CalendarFold size={16} />
             <div className="mr-1">Date</div>
             <EventStatus timelineEvent={timelineEvent} />
@@ -270,7 +270,7 @@ export default function EventLog({
           >
             <motion.h3
               variants={stagger}
-              className="mb-2 mt-6 text-lg font-semibold"
+              className="mb-4 mt-6 text-lg font-semibold"
             >
               Upcoming Events
             </motion.h3>
@@ -285,7 +285,7 @@ export default function EventLog({
 
             <motion.h3
               variants={stagger}
-              className="mb-2 mt-2 text-lg font-semibold"
+              className="mb-4 mt-2 text-lg font-semibold"
             >
               Previous Events
             </motion.h3>

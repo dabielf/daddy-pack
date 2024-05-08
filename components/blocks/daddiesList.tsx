@@ -222,10 +222,10 @@ export function DaddiesList() {
         <div className=" flex flex-row gap-4">
           <h1 className="text-3xl font-semibold">Daddies</h1>
           <Select value={orderType} onValueChange={setOrderType}>
-            <SelectTrigger className="w-[220px] bg-white">
+            <SelectTrigger className="w-[220px]">
               <SelectValue placeholder="Reorder by..." />
             </SelectTrigger>
-            <SelectContent className="bg-white">
+            <SelectContent>
               <SelectGroup>
                 <SelectLabel>Order by:</SelectLabel>
                 <SelectItem value="lifetimeValueUp">
