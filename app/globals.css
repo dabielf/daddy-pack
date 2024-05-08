@@ -29,7 +29,7 @@ body {
     background: rgb(32, 0, 0);
     background: linear-gradient(
       135deg,
-      rgba(41, 0, 0, 1) 0%,
+      rgba(36, 0, 0, 1) 0%,
       rgba(0, 0, 0, 1) 50%,
       rgba(31, 0, 0, 1) 100%
     );
