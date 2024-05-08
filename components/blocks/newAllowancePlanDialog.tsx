@@ -66,18 +66,18 @@ function AllowanceLink({
         </CardTitle>
         <div className="grid grid-cols-2">
           <div className="flex flex-col items-start gap-1">
-            <span className="flex flex-row items-center text-xs text-gray-500">
+            <span className="flex flex-row items-center text-xs text-muted-foreground">
               <CircleDollarSign size={16} className="mr-2" />$
               {allowanceData?.amount} every {allowanceData?.intervalInDays} days
             </span>
-            <span className="flex flex-row items-center text-xs text-gray-500">
+            <span className="flex flex-row items-center text-xs text-muted-foreground">
               <CircleDollarSign size={16} className="mr-2" />$
               {allowanceData?.totalGiftAmount} total over{" "}
               {allowanceData?.numberOfPayments} allowances
             </span>
           </div>
           <div className="flex flex-col items-start gap-1">
-            <span className="flex flex-row items-center text-xs text-gray-500">
+            <span className="flex flex-row items-center text-xs text-muted-foreground">
               <CalendarIcon size={16} className="mr-2" /> Last payment:
               {allowanceData?.lastPaymentDate
                 ? ` ${format(
@@ -86,7 +86,7 @@ function AllowanceLink({
                   )}`
                 : "Payments not started yet"}
             </span>
-            <span className="flex flex-row items-center text-xs text-gray-500">
+            <span className="flex flex-row items-center text-xs text-muted-foreground">
               <CalendarIcon size={16} className="mr-2" />
               Next payment:
               {allowanceData?.lastPaymentDate

@@ -2,12 +2,11 @@
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
-import Link from "next/link";
+
 import { AddAllowancePaymentButton } from "@/components/blocks/newAllowancePaymentDialog";
 import { AllowancePaymentsTable } from "@/components/blocks/allowancePaymentsTable";
 import {
   Breadcrumb,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -56,8 +55,8 @@ export default function AllowancePage({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="flex flex-row justify-between">
-        <h1 className="text-3xl font-semibold">
+      <div className="flex flex-row justify-end">
+        {/* <h1 className="text-3xl font-semibold">
           Allowance Plan with
           <Link
             href={`/daddies/${daddy._id}`}
@@ -65,7 +64,7 @@ export default function AllowancePage({
           >
             {daddy.name}
           </Link>
-        </h1>
+        </h1> */}
         <AddAllowancePaymentButton
           daddy={daddy}
           allowance={allowanceData.allowance}
@@ -73,19 +72,12 @@ export default function AllowancePage({
       </div>
       <div className="grid-cols-2">
         <div>
-          {/* <div>
-            <pre>{JSON.stringify(allowanceData, null, 2)}</pre>
-          </div> */}
           <AllowancePaymentsTable
             daddy={daddy}
             allowance={allowanceData.allowance}
             payments={allowanceData.allowancePayments}
           />
         </div>
-        {/* <div>
-          <h2>Daddy</h2>
-          <pre>{JSON.stringify(daddy, null, 2)}</pre>
-        </div> */}
       </div>
     </div>
   );

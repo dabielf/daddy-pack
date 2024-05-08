@@ -29,7 +29,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { dateTimeDate } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { formatRelative } from "date-fns";
+import { formatDistance, format } from "date-fns";
 import { motion } from "framer-motion";
 import { MessageSquareMore } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -62,20 +62,6 @@ export default function ContactPage({
       notes: contact?.notes || "",
     },
   });
-
-  function formatDate(date: number) {
-    return (
-      // formatDistance(new Date(date), new Date(), {
-      //   addSuffix: true,
-      // }) +
-      // ' - ' +
-      formatRelative(new Date(date), new Date())
-    );
-  }
-
-  function goBack(daddyId: string) {
-    router.push(`/daddies/${daddyId}`);
-  }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const contactId = updateContact({
@@ -130,19 +116,26 @@ export default function ContactPage({
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex flex-row items-center gap-4">
-              <div>
+              <div className="place-items-baseline">
                 <h1 className="flex flex-row items-center gap-2 text-2xl font-semibold">
                   <MessageSquareMore size={20} />
-                  Contact with{" "}
-                  <Link
-                    href={`/daddies/${contact.daddy}`}
-                    className="decoration-primary hover:underline"
-                  >
-                    {contact.daddyName}
-                  </Link>
-                  <span className="font-medium text-slate-600">
-                    {formatDate(contact.date)}
-                  </span>
+                  <div>
+                    Contact with{" "}
+                    <Link
+                      href={`/daddies/${contact.daddy}`}
+                      className="decoration-primary hover:underline"
+                    >
+                      {contact.daddyName}
+                    </Link>
+                    <span className="ml-2 mr-1 font-light">
+                      {formatDistance(contact.date, new Date(), {
+                        addSuffix: true,
+                      })}
+                    </span>
+                    <span className="text-xs font-light md:text-sm">
+                      ( {format(contact.date, "Pp")} )
+                    </span>
+                  </div>
                 </h1>
               </div>
             </div>

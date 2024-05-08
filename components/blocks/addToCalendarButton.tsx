@@ -34,12 +34,13 @@ export function AddToCalendarButton({ date }: AddToCalendarButtonProps) {
     busy: true,
   };
 
+  const past = new Date(date.date).getTime() < new Date().getTime();
+  if (past) return null;
+
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="ml-4">
-          ADD TO CALENDAR
-        </Button>
+        <Button className="ml-4">ADD TO CALENDAR</Button>
       </PopoverTrigger>
       <PopoverContent>
         <div className="grid gap-4">

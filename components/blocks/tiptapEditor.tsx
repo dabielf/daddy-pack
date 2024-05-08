@@ -11,7 +11,7 @@ type Props = {
 export function Toolbar({ editor }: Props) {
   if (!editor) return null;
   return (
-    <div className="rounded-md border border-input bg-card">
+    <div className="rounded-md border border-input bg-transparent">
       <Toggle
         size="sm"
         className="rounded-sm"
