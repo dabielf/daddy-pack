@@ -280,10 +280,19 @@ export const updateDaddyDatesData = internalMutation({
     ).length;
     const mostRecentDate = dates
       .filter((date) => isBefore(new Date(date.date), new Date()))
+      .filter(
+        (date) =>
+          date.status !== "completed" &&
+          date.status !== "confirmed" &&
+          date.status !== "tentative",
+      )
       .sort((a, b) => b.date - a.date)[0];
     const nextDate = dates
       .filter((date) => isAfter(new Date(date.date), new Date()))
+      .filter((date) => date.status !== "canceled")
       .sort((a, b) => a.date - b.date)[0];
+
+    console.log({ daddy: daddyRecord.name, nextDate });
 
     if (daddyRecord.daddyInfos) {
       await ctx.db.patch(daddyRecord.daddyInfos, {

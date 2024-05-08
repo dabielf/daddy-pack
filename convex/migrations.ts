@@ -1,11 +1,25 @@
 import { internalMutation } from "./_generated/server";
 // import { internal } from './_generated/api';
-// import {
-//   updateDaddyLifetimeValue,
-//   updateDaddyContactsData,
-//   updateDaddyDatesData,
-// } from './daddies';
+import {
+  updateDaddyLifetimeValue,
+  updateDaddyContactsData,
+  updateDaddyDatesData,
+} from "./daddies";
 //
+
+export const migrateDaddyDates = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const daddies = await ctx.db.query("daddies").collect();
+    daddies.map(async (daddy) => {
+      // const nonEmptyStatus = date.status ? date.status : "tentative";
+      // const updatedStatus =
+      //   nonEmptyStatus === "scheduled" ? "tentative" : nonEmptyStatus;
+      // ctx.db.patch(date._id, { status: updatedStatus });
+      await updateDaddyDatesData(ctx, { daddy: daddy._id });
+    });
+  },
+});
 
 // export const migrateDatesStatus = internalMutation({
 //   args: {},

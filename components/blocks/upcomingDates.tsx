@@ -25,6 +25,7 @@ export function UpcomingDates({ dates }: UpcomingDatesProps) {
   // filter out dates that are in the past
   const upcomingDates = dates
     .filter((date) => isAfter(new Date(date.date), new Date()))
+    .filter((date) => date.status !== "canceled")
     .sort((a, b) => a.date - b.date);
 
   const confirmedDates = upcomingDates.filter(

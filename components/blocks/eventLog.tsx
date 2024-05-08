@@ -258,7 +258,7 @@ export default function EventLog({
   return (
     <Card className="border-none">
       <CardHeader className="py-2 shadow">
-        <CardTitle className="text-xl text-primary">History</CardTitle>
+        <CardTitle className="text-2xl text-primary">History</CardTitle>
       </CardHeader>
       <ScrollArea className="h-[650px]">
         <CardContent>

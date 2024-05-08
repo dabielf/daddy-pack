@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import animations from "@/constants/animations";
 // import { useConvexData } from "@/providers/convexDataContext";
 import { SignInButton, SignOutButton } from "@clerk/nextjs";
+import { NavSheetTrigger } from "@/components/blocks/navSheet";
 import { useConvexAuth } from "convex/react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -43,7 +44,7 @@ export const Header = () => {
   const button = isAuthenticated ? <SignOut /> : <SignIn />;
   return isLoading ? null : (
     <motion.div {...animations.appearDown}>
-      <header className="mb-10">
+      <header className="mb-6">
         <div className="grid w-full grid-cols-2 items-center  md:grid-cols-3">
           <Link href={"/"}>
             <Image
@@ -69,7 +70,8 @@ export const Header = () => {
 
           <div className="flex flex-row items-center gap-4 place-self-end">
             <ModeToggle />
-            {isLoading ? null : button}
+            {/* {isLoading ? null : button} */}
+            <NavSheetTrigger />
           </div>
         </div>
       </header>
