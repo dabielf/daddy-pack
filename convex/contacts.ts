@@ -20,7 +20,10 @@ export const getContacts = query({
 
     if (!user) return null;
 
-    return await ctx.db.query("contacts").withIndex("by_user").collect();
+    return await ctx.db
+      .query("contacts")
+      .withIndex("by_user", (q) => q.eq("user", user._id))
+      .collect();
   },
 });
 

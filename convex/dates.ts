@@ -26,9 +26,7 @@ export const getDates = query({
 
     return await ctx.db
       .query("dates")
-      .withIndex("by_date")
-      .order("desc")
-      .filter((q) => q.eq(q.field("user"), user._id))
+      .withIndex("by_user", (q) => q.eq("user", user._id))
       .collect();
   },
 });

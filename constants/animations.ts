@@ -35,8 +35,7 @@ export const staggerUpDaddies = {
     opacity: 1,
     y: 0,
     transition: {
-      staggerChildren: 0.05,
-      duration: 0.2,
+      staggerChildren: 0.09,
       type: "spring",
       bounce: 0.5,
     },

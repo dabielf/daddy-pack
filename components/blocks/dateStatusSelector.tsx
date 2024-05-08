@@ -35,13 +35,13 @@ export function DateStatusSelector({ date }: DateStatusSelectorProps) {
       case "tentative":
         return "opacity-80";
       case "confirmed":
-        return "bg-blue-300/30";
+        return "bg-dpblue text-white";
       case "completed":
-        return "bg-green-300/30";
+        return "bg-dpgreen text-white";
       case "canceled":
-        return "bg-red-300/30";
+        return "bg-dpred text-white";
       case "no-show":
-        return "bg-red-300/30";
+        return "bg-dpred text-white";
       default:
         return "";
     }
@@ -64,19 +64,19 @@ export function DateStatusSelector({ date }: DateStatusSelectorProps) {
           <SelectGroup>
             <SelectLabel>Date Status</SelectLabel>
             <SelectItem value="tentative">TENTATIVE</SelectItem>
-            <SelectItem value="confirmed" className="text-blue-900">
+            <SelectItem value="confirmed" className="text-dpblue">
               CONFIRMED
             </SelectItem>
             {past && (
-              <SelectItem value="completed" className="text-green-900">
+              <SelectItem value="completed" className="text-dpgreen">
                 COMPLETED
               </SelectItem>
             )}
-            <SelectItem value="canceled" className="text-red-900">
+            <SelectItem value="canceled" className="text-dpred">
               CANCELED
             </SelectItem>
             {past && (
-              <SelectItem value="no-show" className="text-red-900">
+              <SelectItem value="no-show" className="text-dpred">
                 NO SHOW
               </SelectItem>
             )}
