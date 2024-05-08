@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import { useState, createContext, useContext, useRef } from 'react';
-import { useOnClickOutside } from 'usehooks-ts';
-import { cn } from '@/lib/utils';
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { useState, createContext, useContext, useRef } from "react";
+import { useOnClickOutside } from "usehooks-ts";
+import { cn } from "@/lib/utils";
 
 const ActionContext = createContext({
   open: false,
@@ -46,8 +46,8 @@ export function ActionItems({ children }: { children: React.ReactNode }) {
       animate="animate"
       variants={staggerDown(context.open)}
       className={cn(
-        context.open ? '' : 'pointer-events-none',
-        'absolute z-10 mt-2 flex flex-col gap-1 right-0 items-end',
+        context.open ? "" : "pointer-events-none",
+        "absolute right-0 z-10 mt-2 flex flex-col items-end gap-2",
       )}
     >
       {children}
@@ -56,7 +56,7 @@ export function ActionItems({ children }: { children: React.ReactNode }) {
 }
 
 export function ActionTrigger({
-  children = 'Actions',
+  children = "Actions",
 }: {
   children?: React.ReactNode;
 }) {
@@ -75,7 +75,7 @@ export function ActionTrigger({
 
 type ActionButtonProps = {
   children: React.ReactNode;
-  props?: React.ComponentProps<'button'>;
+  props?: React.ComponentProps<"button">;
 };
 
 export function ActionMenu({ children, ...props }: ActionButtonProps) {

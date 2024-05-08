@@ -70,119 +70,134 @@ const formSchema = z.object({
 
 function DisplayForm({
   daddyData,
+  edit,
+  setEdit,
 }: {
   daddyData: DaddyWithInfos;
   edit: boolean;
+  setEdit: (edit: boolean) => void;
 }) {
   return (
     <motion.div>
-      <Card className="grid gap-4 border-none p-4 md:grid-cols-2">
-        <motion.div
-          className="flex grow flex-col gap-4"
-          variants={stagger}
-          initial="initial"
-          animate="animate"
+      <Card className="flex flex-col gap-4 border-none p-4 ">
+        <Button
+          onClick={() => setEdit(!edit)}
+          disabled={edit}
+          size="sm"
+          variant="secondary"
+          // className="w-fit place-self-end"
         >
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">Name / Nickname</p>
-              <Separator className="bg-primary/50" />
-              <p className="pt-2">{daddyData.name}</p>
-            </div>
-          </motion.div>
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">Profile Link</p>
-              <Separator className="bg-primary/50" />
+          <Pencil size={14} className="mr-2" />
+          EDIT INFOS
+        </Button>
+        <div className="grid gap-4 md:grid-cols-2">
+          <motion.div
+            className="flex grow flex-col gap-4"
+            variants={stagger}
+            initial="initial"
+            animate="animate"
+          >
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">Name / Nickname</p>
+                <Separator className="bg-primary/50" />
+                <p className="pt-2">{daddyData.name}</p>
+              </div>
+            </motion.div>
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">Profile Link</p>
+                <Separator className="bg-primary/50" />
 
-              {daddyData.profileLink ? (
-                <a
-                  className="block pt-2 underline"
-                  href={daddyData.profileLink}
-                >
-                  {daddyData.profileLink}
-                </a>
-              ) : (
-                <p className="pt-2">N/A</p>
-              )}
-            </div>
+                {daddyData.profileLink ? (
+                  <a
+                    className="block pt-2 underline"
+                    href={daddyData.profileLink}
+                  >
+                    {daddyData.profileLink}
+                  </a>
+                ) : (
+                  <p className="pt-2">N/A</p>
+                )}
+              </div>
+            </motion.div>
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">Gifting Method</p>
+                <Separator className="bg-primary/50" />
+                <p className="pt-2">{daddyData.giftingMethod || "N/A"}</p>
+              </div>
+            </motion.div>
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">Contact Info</p>
+                <Separator className="bg-primary/50" />
+                <p className="pt-2">{daddyData.contactInfo || "N/A"}</p>
+              </div>
+            </motion.div>
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">Location</p>
+                <Separator className="bg-primary/50" />
+                <p className="pt-2">{daddyData.location || "N/A"}</p>
+              </div>
+            </motion.div>
           </motion.div>
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">Gifting Method</p>
-              <Separator className="bg-primary/50" />
-              <p className="pt-2">{daddyData.giftingMethod || "N/A"}</p>
-            </div>
+          <motion.div
+            className="flex grow flex-col gap-4"
+            variants={stagger}
+            initial="initial"
+            animate="animate"
+          >
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">Birthday Date</p>
+                <Separator className="bg-primary/50" />
+                <p className="pt-2">
+                  {daddyData.birthdayDate
+                    ? format(daddyData.birthdayDate, "MMMM do")
+                    : "N/A"}
+                </p>
+              </div>
+            </motion.div>
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">Messaging App</p>
+                <Separator className="bg-primary/50" />
+                <p className="pt-2">{daddyData.messagingApp || "N/A"}</p>
+              </div>
+            </motion.div>
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">Notes</p>
+                <Separator className="bg-primary/50" />
+                <Markdown className="pt-2">
+                  {daddyData.notes || "No notes about this daddy yet"}
+                </Markdown>
+              </div>
+            </motion.div>
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">
+                  Earnings Estimate / Agreement per Date
+                </p>
+                <Separator className="bg-primary/50" />
+                <p className="pt-2">
+                  {daddyData.earningsEstimate
+                    ? `$${daddyData.earningsEstimate}`
+                    : "N/A"}
+                </p>
+              </div>
+            </motion.div>
+            <motion.div variants={stagger}>
+              <div className="space-y-1">
+                <p className="text-lg font-bold">Vibe Rating</p>
+                <Separator className="bg-primary/50" />
+                <p className="pt-2">{`${daddyData.vibeRating} / 5`}</p>
+              </div>
+            </motion.div>
           </motion.div>
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">Contact Info</p>
-              <Separator className="bg-primary/50" />
-              <p className="pt-2">{daddyData.contactInfo || "N/A"}</p>
-            </div>
-          </motion.div>
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">Location</p>
-              <Separator className="bg-primary/50" />
-              <p className="pt-2">{daddyData.location || "N/A"}</p>
-            </div>
-          </motion.div>
-        </motion.div>
-        <motion.div
-          className="flex grow flex-col gap-4"
-          variants={stagger}
-          initial="initial"
-          animate="animate"
-        >
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">Birthday Date</p>
-              <Separator className="bg-primary/50" />
-              <p className="pt-2">
-                {daddyData.birthdayDate
-                  ? format(daddyData.birthdayDate, "MMMM do")
-                  : "N/A"}
-              </p>
-            </div>
-          </motion.div>
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">Messaging App</p>
-              <Separator className="bg-primary/50" />
-              <p className="pt-2">{daddyData.messagingApp || "N/A"}</p>
-            </div>
-          </motion.div>
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">Notes</p>
-              <Separator className="bg-primary/50" />
-              <Markdown className="pt-2">
-                {daddyData.notes || "No notes about this daddy yet"}
-              </Markdown>
-            </div>
-          </motion.div>
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">
-                Earnings Estimate / Agreement per Date
-              </p>
-              <Separator className="bg-primary/50" />
-              <p className="pt-2">
-                {daddyData.earningsEstimate
-                  ? `$${daddyData.earningsEstimate}`
-                  : "N/A"}
-              </p>
-            </div>
-          </motion.div>
-          <motion.div variants={stagger}>
-            <div className="space-y-1">
-              <p className="text-lg font-bold">Vibe Rating</p>
-              <Separator className="bg-primary/50" />
-              <p className="pt-2">{`${daddyData.vibeRating} / 5`}</p>
-            </div>
-          </motion.div>
-        </motion.div>
+        </div>
       </Card>
     </motion.div>
   );
@@ -234,197 +249,223 @@ function EditForm({
 
   return (
     <motion.div>
-      <Card className="border-none p-4">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
-            <div className="grid gap-4 md:grid-cols-2">
-              <motion.div
-                className="flex grow flex-col gap-4"
-                variants={stagger}
-                initial="initial"
-                animate="animate"
-              >
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem className="grow">
-                        <FormLabel>Daddy&apos;s Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Name or nickname..." {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+      <Card>
+        <CardContent className="pt-4">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-4"
+            >
+              <div className="grid grow grid-cols-2 gap-4">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  className="grow"
+                  onClick={() => setEdit(false)}
+                >
+                  CANCEL
+                </Button>
+                <Button
+                  type="submit"
+                  variant="default"
+                  size="sm"
+                  className="grow"
+                  disabled={!form.formState.isDirty}
+                >
+                  SAVE
+                </Button>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                <motion.div
+                  className="flex grow flex-col gap-4"
+                  variants={stagger}
+                  initial="initial"
+                  animate="animate"
+                >
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem className="grow">
+                          <FormLabel>Daddy&apos;s Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Name or nickname..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="profileLink"
+                      render={({ field }) => (
+                        <FormItem className="grow">
+                          <FormLabel>Profile Link</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Link to Daddy's profile..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="giftingMethod"
+                      render={({ field }) => (
+                        <FormItem className="grow">
+                          <FormLabel>Gifting Method</FormLabel>
+                          <FormControl>
+                            <Input placeholder="" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="contactInfo"
+                      render={({ field }) => (
+                        <FormItem className="grow">
+                          <FormLabel>Contact Info</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Contact info..." {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="location"
+                      render={({ field }) => (
+                        <FormItem className="grow">
+                          <FormLabel>Location</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Location..." {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
                 </motion.div>
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="profileLink"
-                    render={({ field }) => (
-                      <FormItem className="grow">
-                        <FormLabel>Profile Link</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Link to Daddy's profile..."
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <motion.div
+                  className="flex grow flex-col gap-4"
+                  variants={stagger}
+                  initial="initial"
+                  animate="animate"
+                >
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="birthdayDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="mr-6">
+                            Birthday Date:{" "}
+                          </FormLabel>
+                          <FormControl className="w-max">
+                            <Input type="datetime-local" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="messagingApp"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Messaging App</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Messaging app..." {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="notes"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Notes</FormLabel>
+                          <FormControl>
+                            <Tiptap
+                              content={field.value}
+                              onChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="earningsEstimate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Earnings Estimate / Agreement per Date
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="Earnings estimate..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                  <motion.div variants={stagger}>
+                    <FormField
+                      control={form.control}
+                      name="vibeRating"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Vibe Rating (min: 1, max: 5)</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min={1}
+                              max={5}
+                              placeholder="Vibe rating..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
                 </motion.div>
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="giftingMethod"
-                    render={({ field }) => (
-                      <FormItem className="grow">
-                        <FormLabel>Gifting Method</FormLabel>
-                        <FormControl>
-                          <Input placeholder="" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="contactInfo"
-                    render={({ field }) => (
-                      <FormItem className="grow">
-                        <FormLabel>Contact Info</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Contact info..." {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="location"
-                    render={({ field }) => (
-                      <FormItem className="grow">
-                        <FormLabel>Location</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Location..." {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-              </motion.div>
-              <motion.div
-                className="flex grow flex-col gap-4"
-                variants={stagger}
-                initial="initial"
-                animate="animate"
-              >
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="birthdayDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="mr-6">Birthday Date: </FormLabel>
-                        <FormControl className="w-max">
-                          <Input type="datetime-local" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="messagingApp"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Messaging App</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Messaging app..." {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="notes"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Notes</FormLabel>
-                        <FormControl>
-                          <Tiptap
-                            content={field.value}
-                            onChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="earningsEstimate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Earnings Estimate / Agreement per Date
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Earnings estimate..."
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={stagger}>
-                  <FormField
-                    control={form.control}
-                    name="vibeRating"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Vibe Rating (min: 1, max: 5)</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min={1}
-                            max={5}
-                            placeholder="Vibe rating..."
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-              </motion.div>
-            </div>
-            <div className="flex grow flex-row items-end justify-end gap-2">
+              </div>
+              {/* <div className="flex grow flex-row items-end justify-end gap-2">
               <Button
                 type="button"
                 variant="secondary"
@@ -439,9 +480,10 @@ function EditForm({
               >
                 SAVE
               </Button>
-            </div>
-          </form>
-        </Form>
+            </div> */}
+            </form>
+          </Form>
+        </CardContent>
       </Card>
     </motion.div>
   );
@@ -459,7 +501,7 @@ function DaddyDisplayOrEditForm({
   return edit ? (
     <EditForm daddyData={daddyData} edit={edit} setEdit={setEdit} />
   ) : (
-    <DisplayForm daddyData={daddyData} edit={edit} />
+    <DisplayForm daddyData={daddyData} edit={edit} setEdit={setEdit} />
   );
 }
 
@@ -524,7 +566,7 @@ export default function DaddyPage({
         <ActionMenu>
           <ActionTrigger>ACTIONS</ActionTrigger>
           <ActionItems>
-            <ActionItem>
+            {/* <ActionItem>
               <Button
                 onClick={() => setEdit((editStatus) => !editStatus)}
                 disabled={edit}
@@ -533,7 +575,7 @@ export default function DaddyPage({
                 <Pencil size={14} className="mr-2" />
                 EDIT INFOS
               </Button>
-            </ActionItem>
+            </ActionItem> */}
             <ActionItem>
               <NewDateButton daddyId={daddy._id}>
                 <Plus size={16} className="mr-1" /> ADD DATE
