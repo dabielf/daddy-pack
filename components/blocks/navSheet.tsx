@@ -62,7 +62,7 @@ export function NavSheetTrigger() {
   return (
     <Sheet open={open} onOpenChange={() => setOpen(!open)}>
       <SheetTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" size="icon">
           <Menu size={24} />
         </Button>
       </SheetTrigger>
