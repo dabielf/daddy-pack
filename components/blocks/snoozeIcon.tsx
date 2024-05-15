@@ -15,7 +15,7 @@ export function SnoozeIcon({ size, ...props }: SnoozeIconProps) {
         height={size || 18}
       /> */}
       <svg
-        className={cn(props.className, "fill-primary-foreground/60")}
+        className={cn("fill-primary-foreground/60", props.className)}
         xmlns="http://www.w3.org/2000/svg"
         width={size || 16}
         height={size || 16}

@@ -46,6 +46,7 @@ import { toast } from "sonner";
 import Tiptap from "./tiptap";
 import { useConvexData } from "@/providers/convexDataContext";
 import { useState } from "react";
+import { SnoozeIcon } from "./snoozeIcon";
 
 const formSchema = z.object({
   numDays: z.coerce.number().min(0).max(120),
@@ -54,7 +55,11 @@ const formSchema = z.object({
 
 export function NewSnoozeButton({
   daddy,
-  children = "SNOOZE",
+  children = (
+    <span>
+      <SnoozeIcon className="block text-primary-foreground" size={20} /> SNOOZE
+    </span>
+  ),
 }: {
   daddy?: Doc<"daddies">;
   children?: React.ReactNode;
@@ -105,6 +110,7 @@ export function NewSnoozeButton({
         size={daddy ? "sm" : "default"}
         onClick={() => unsnoozeDaddy({ daddy: daddy._id })}
       >
+        <SnoozeIcon className="mr-1 block fill-primary-foreground" size={14} />{" "}
         UNSNOOZE
       </Button>
     );
@@ -116,6 +122,10 @@ export function NewSnoozeButton({
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger asChild>
           <Button className="w-fill" size={daddy ? "sm" : "default"}>
+            <SnoozeIcon
+              className="mr-1 block fill-primary-foreground"
+              size={14}
+            />{" "}
             EDIT SNOOZE STATUS
           </Button>
         </DialogTrigger>
@@ -194,13 +204,17 @@ export function NewSnoozeButton({
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger asChild>
         <Button className="w-fill" size={daddy ? "sm" : "default"}>
-          {children}
+          <SnoozeIcon
+            className="mr-1 block fill-primary-foreground"
+            size={14}
+          />{" "}
+          SNOOZE
         </Button>
       </DialogTrigger>
       <DialogPortal>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Snooze {daddy.name}</DialogTitle>
+            <DialogTitle>Snoozes {daddy.name}</DialogTitle>
             <DialogDescription>
               Choose hom many days before unsnooze (or leave at 0 to snooze
               until you choose to unsnooze)
