@@ -181,6 +181,7 @@ export const unsnoozeDaddy = mutation({
     return await ctx.db.patch(daddy, {
       snooze: false,
       unsnoozeScheduled: undefined,
+      unsnoozeDate: undefined,
     });
   },
 });
