@@ -1,8 +1,9 @@
-import { Star, Wallet, CircleAlert } from "lucide-react";
+import { Star, Wallet, CircleAlert, TriangleAlert } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { formatDistance, isThisWeek } from "date-fns";
+import { formatDistance, isAfter, isThisWeek } from "date-fns";
+
 import {
   Tooltip,
   TooltipContent,
@@ -64,10 +65,18 @@ function DateComingUp({ nextDate }: { nextDate?: number }) {
     });
   }
 
+  if (isAfter(new Date(nextDate), new Date())) {
+    return (
+      <div className="flex flex-row items-center gap-1">
+        <CircleAlert size={14} /> Date coming up{" "}
+        <span className={classnames(nextDate)}>{dateText}</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-row items-center gap-1">
-      <CircleAlert size={14} /> Date coming up{" "}
-      <span className={classnames(nextDate)}>{dateText}</span>
+    <div className="flex flex-row items-center gap-1 font-semibold text-primary">
+      <TriangleAlert size={14} /> Date to process: <span>{dateText}</span>
     </div>
   );
 }

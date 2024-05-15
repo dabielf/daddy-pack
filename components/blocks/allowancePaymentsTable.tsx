@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Form,
   FormControl,
@@ -14,7 +14,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   Dialog,
   DialogClose,
@@ -25,29 +25,29 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { TimePicker } from '@/components/ui/time-picker';
-import { Input } from '@/components/ui/input';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { formatDistance, format } from 'date-fns';
-import { useQuery, useMutation } from 'convex/react';
-import { api } from '@/convex/_generated/api';
-import { Doc, Id } from '@/convex/_generated/dataModel';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
-import { cn, getErrorMessage, dateTimeDate } from '@/lib/utils';
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { TimePicker } from "@/components/ui/time-picker";
+import { Input } from "@/components/ui/input";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { formatDistance, format } from "date-fns";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Doc, Id } from "@/convex/_generated/dataModel";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { cn, getErrorMessage, dateTimeDate } from "@/lib/utils";
 
-import Link from 'next/link';
-import { Button } from '../ui/button';
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 const formSchema = z.object({
   date: z.string(),
@@ -60,9 +60,9 @@ function EditDialog({
   payment,
   setCurrentPayment,
 }: {
-  daddy?: Doc<'daddies'>;
-  payment?: Doc<'allowancePayments'>;
-  setCurrentPayment: (payment: Doc<'allowancePayments'> | null) => void;
+  daddy?: Doc<"daddies">;
+  payment?: Doc<"allowancePayments">;
+  setCurrentPayment: (payment: Doc<"allowancePayments"> | null) => void;
 }) {
   const updateAllowancePayment = useMutation(
     api.allowances.updateAllowancePayment,
@@ -72,7 +72,7 @@ function EditDialog({
     defaultValues: {
       date: dateTimeDate(),
       amount: 0,
-      paymentMethod: '',
+      paymentMethod: "",
     },
   });
 
@@ -111,7 +111,7 @@ function EditDialog({
     <Dialog defaultOpen onOpenChange={() => setCurrentPayment(null)}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Gifting from {daddy?.name || 'Secret'}</DialogTitle>
+          <DialogTitle>Edit Gifting from {daddy?.name || "Secret"}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -121,7 +121,7 @@ function EditDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="mr-6">
-                    When was the gift made?{' '}
+                    When was the gift made?{" "}
                   </FormLabel>
                   <FormControl className="w-max">
                     <Input type="datetime-local" {...field} />
@@ -143,7 +143,7 @@ function EditDialog({
                       min={0}
                       placeholder="Ex: 1250..."
                       {...field}
-                      onChange={event => field.onChange(event.target.value)}
+                      onChange={(event) => field.onChange(event.target.value)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -160,7 +160,7 @@ function EditDialog({
                     <Input
                       placeholder="Ex: Cash, Venmo..."
                       {...field}
-                      onChange={event => field.onChange(event.target.value)}
+                      onChange={(event) => field.onChange(event.target.value)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -184,9 +184,9 @@ function DeleteDialog({
   toDeletePayment,
   setToDeletePayment,
 }: {
-  daddy?: Doc<'daddies'>;
-  toDeletePayment?: Doc<'allowancePayments'>;
-  setToDeletePayment: (payment: Doc<'allowancePayments'> | null) => void;
+  daddy?: Doc<"daddies">;
+  toDeletePayment?: Doc<"allowancePayments">;
+  setToDeletePayment: (payment: Doc<"allowancePayments"> | null) => void;
 }) {
   const deleteAllowancePayment = useMutation(
     api.allowances.deleteAllowancePayment,
@@ -213,7 +213,7 @@ function DeleteDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            Delete ${toDeletePayment.amount} Gift from {daddy?.name || 'Secret'}
+            Delete ${toDeletePayment.amount} Gift from {daddy?.name || "Secret"}
             ?
           </DialogTitle>
           <p className="text-sm text-muted-foreground">
@@ -248,14 +248,14 @@ export function AllowancePaymentsTable({
   allowance,
   payments,
 }: {
-  daddy: Doc<'daddies'>;
-  allowance: Doc<'allowances'>;
-  payments: Doc<'allowancePayments'>[];
+  daddy: Doc<"daddies">;
+  allowance: Doc<"allowances">;
+  payments: Doc<"allowancePayments">[];
 }) {
   const [currentPayment, setCurrentPayment] =
-    useState<Doc<'allowancePayments'> | null>(null);
+    useState<Doc<"allowancePayments"> | null>(null);
   const [toDeletePayment, setToDeletePayment] =
-    useState<Doc<'allowancePayments'> | null>(null);
+    useState<Doc<"allowancePayments"> | null>(null);
   return (
     <div>
       {currentPayment !== null && (
@@ -284,10 +284,10 @@ export function AllowancePaymentsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {payments.map(payment => (
+          {payments.map((payment) => (
             <TableRow key={payment._id}>
               <TableCell className="font-medium">
-                {format(payment.date, 'MM/dd/yyyy')}
+                {format(payment.date, "MM/dd/yyyy")}
               </TableCell>
 
               <TableCell>{payment.paymentMethod}</TableCell>
