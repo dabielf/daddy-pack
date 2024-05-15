@@ -40,7 +40,8 @@ export default defineSchema({
     allowanceAlert: v.optional(v.boolean()),
     daysToContact: v.optional(v.number()),
     snooze: v.optional(v.boolean()),
-    snoozeUntil: v.optional(v.number()),
+    unsnoozeScheduled: v.optional(v.id("_scheduled_functions")),
+    unsnoozeDate: v.optional(v.number()),
     archived: v.boolean(),
     archivedReason: v.optional(v.string()),
   })

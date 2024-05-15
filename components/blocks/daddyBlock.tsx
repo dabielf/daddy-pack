@@ -1,8 +1,9 @@
 import { Star, Wallet, CircleAlert, TriangleAlert } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SnoozeIcon } from "./snoozeIcon";
 
-import { formatDistance, isAfter, isThisWeek } from "date-fns";
+import { format, formatDistance, isAfter, isThisWeek } from "date-fns";
 
 import {
   Tooltip,
@@ -28,6 +29,25 @@ function StarRating({ stars = 0 }: { stars: number }) {
         />
       ))}
     </div>
+  );
+}
+
+function SnoozeIconWithTooltip({ daddy }: { daddy: Doc<"daddies"> }) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger>
+          <SnoozeIcon className="block text-primary-foreground" size={20} />
+        </TooltipTrigger>
+        <TooltipContent>
+          {daddy.unsnoozeDate ? (
+            <p>Snoozed until {format(new Date(daddy.unsnoozeDate), "PP")}</p>
+          ) : (
+            <p>Snooned until you unsnooze</p>
+          )}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -88,8 +108,13 @@ export default function DaddyBlock({ daddy }: { daddy: Doc<"daddies"> }) {
         <CardHeader className="flex flex-row justify-between space-y-0 pb-4">
           <CardTitle className="flex h-full flex-col justify-between text-xl font-medium">
             <div className="flex flex-row items-center gap-1 text-lg">
+              {daddy.snooze && <SnoozeIconWithTooltip daddy={daddy} />}
               {daddy.allowance && <AllowanceIcon />}
-              {daddy.name}
+              <span
+                className={cn(daddy.snooze ? "text-primary-foreground/60" : "")}
+              >
+                {daddy.name}
+              </span>
             </div>
             <StarRating stars={daddy.vibeRating || 0} />
           </CardTitle>

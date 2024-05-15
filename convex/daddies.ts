@@ -1,9 +1,11 @@
 import { v } from "convex/values";
-import { isAfter, isBefore } from "date-fns";
+import { Id } from "./_generated/dataModel";
+import { isAfter, isBefore, addDays } from "date-fns";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { getConvexMutationUser, getConvexQueryUser } from "./helpers";
 import { updateDatesDaddyNames } from "./dates";
 import { updateContactsDaddyNames } from "./contacts";
+import { internal } from "./_generated/api";
 
 export const deleteDaddy = mutation({
   args: { daddy: v.id("daddies") },
@@ -128,6 +130,67 @@ export const unarchiveDaddy = mutation({
     return await ctx.db.patch(daddy, {
       archived: false,
       archivedReason: undefined,
+    });
+  },
+});
+
+export const snoozeDaddy = mutation({
+  args: { daddy: v.id("daddies"), numDays: v.optional(v.number()) },
+  handler: async (ctx, { daddy, numDays }) => {
+    const user = await getConvexMutationUser(ctx);
+    if (!user) return null;
+
+    const daddyRecord = await ctx.db.get(daddy);
+    if (!daddyRecord) return null;
+
+    if (daddyRecord.unsnoozeScheduled) {
+      await ctx.scheduler.cancel(daddyRecord.unsnoozeScheduled);
+    }
+
+    if (numDays) {
+      const schedule: Id<"_scheduled_functions"> = await ctx.scheduler.runAt(
+        addDays(new Date(), numDays),
+        internal.daddies.unsnoozeDaddyInternal,
+        { daddy },
+      );
+      return await ctx.db.patch(daddy, {
+        snooze: true,
+        unsnoozeScheduled: schedule,
+        unsnoozeDate: addDays(new Date(), numDays).valueOf(),
+      });
+    }
+    return await ctx.db.patch(daddy, {
+      snooze: true,
+    });
+  },
+});
+
+export const unsnoozeDaddy = mutation({
+  args: { daddy: v.id("daddies") },
+  handler: async (ctx, { daddy }) => {
+    const user = await getConvexMutationUser(ctx);
+    if (!user) return null;
+
+    const daddyRecord = await ctx.db.get(daddy);
+    if (!daddyRecord) return null;
+
+    if (daddyRecord.unsnoozeScheduled) {
+      await ctx.scheduler.cancel(daddyRecord.unsnoozeScheduled);
+    }
+
+    return await ctx.db.patch(daddy, {
+      snooze: false,
+      unsnoozeScheduled: undefined,
+    });
+  },
+});
+
+export const unsnoozeDaddyInternal = internalMutation({
+  args: { daddy: v.id("daddies") },
+  handler: async (ctx, { daddy }) => {
+    return await ctx.db.patch(daddy, {
+      snooze: false,
+      unsnoozeScheduled: undefined,
     });
   },
 });

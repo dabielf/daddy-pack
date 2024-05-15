@@ -11,6 +11,7 @@ import {
 import EventLog from "@/components/blocks/eventLog";
 import { NewContactButton } from "@/components/blocks/newContactDialog";
 import { NewDateButton } from "@/components/blocks/newDateDialog";
+import { NewSnoozeButton } from "@/components/blocks/newSnoozeDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -51,10 +52,11 @@ import { z } from "zod";
 
 import Tiptap from "@/components/blocks/tiptap";
 import { Separator } from "@/components/ui/separator";
-import { getErrorMessage, dateTimeDate } from "@/lib/utils";
+import { getErrorMessage, dateTimeDate, cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { staggerUp as stagger } from "@/constants/animations";
 import { DaddyWithInfos } from "@/custom-types";
+import { Badge } from "@/components/ui/badge";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -558,7 +560,30 @@ export default function DaddyPage({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{daddy.name}</BreadcrumbPage>
+              <BreadcrumbPage
+                className={cn(
+                  daddy.snooze ? "text-primary-foreground/60" : "",
+                  "flex flex-row items-center gap-2",
+                )}
+              >
+                {daddy.name}
+                {daddy.snooze && daddy.unsnoozeDate && (
+                  <Badge
+                    variant="outline"
+                    className="border-primary-foreground/60 text-primary-foreground/60"
+                  >
+                    snoozed until {format(new Date(daddy.unsnoozeDate), "PP")}
+                  </Badge>
+                )}
+                {daddy.snooze && !daddy.unsnoozeDate && (
+                  <Badge
+                    variant="outline"
+                    className="border-primary-foreground/60 text-primary-foreground/60"
+                  >
+                    snoozed
+                  </Badge>
+                )}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -584,6 +609,9 @@ export default function DaddyPage({
               <NewContactButton daddyId={daddy._id}>
                 <Plus size={16} className="mr-1" /> ADD CONTACT
               </NewContactButton>
+            </ActionItem>
+            <ActionItem>
+              <NewSnoozeButton daddy={daddy} />
             </ActionItem>
             {!allowanceData && (
               <ActionItem>
