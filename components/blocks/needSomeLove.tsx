@@ -62,7 +62,7 @@ export function NeedSomeLove({ daddies }: NeedSomeLoveProps) {
             Last Contact: {formatMostRecentContact(daddy.mostRecentContactDate)}
           </div>
           <div className="text-sm">
-            Last Date: {formatMostRecentDate(daddy.mostRecentDate)}
+            Last Date: {formatMostRecentDate(daddy.mostRecentDateDate)}
           </div>
         </div>
         <div className="flex items-center justify-center">
