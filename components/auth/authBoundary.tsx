@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import { Authenticated, Unauthenticated } from 'convex/react';
+import { Authenticated, Unauthenticated } from "convex/react";
+import { SignInButton } from "@clerk/nextjs";
 
 export function AuthBoundary({
   children,
@@ -11,9 +12,15 @@ export function AuthBoundary({
     <>
       <Authenticated>{children}</Authenticated>
       <Unauthenticated>
-        <div className="flex grow justify-center items-center font-black">
-          Please Sign in <br />
-          to manage your daddies
+        <div className="flex grow items-center justify-center font-black">
+          <div>
+            Please{" "}
+            <span className="*:underline hover:text-primary">
+              <SignInButton />
+            </span>{" "}
+            <br />
+            to manage your daddies
+          </div>
         </div>
       </Unauthenticated>
     </>
