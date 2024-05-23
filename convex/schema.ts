@@ -18,6 +18,14 @@ export default defineSchema({
   userSettings: defineTable({
     daysBeforeContact: v.optional(v.number()),
   }),
+  apiKeys: defineTable({
+    key: v.string(),
+    userId: v.id("users"),
+    title: v.string(),
+    uses: v.number(),
+  })
+    .index("by_key", ["key"])
+    .index("by_userId", ["userId"]),
 
   // daddies: SA profile link, photo, contact info, location, messaging app (off site), date of initial contact, notes, estimate for per meet earnings, link this to date log, vibe rating over text (can compare this later if/when I meet them in person)
   daddies: defineTable({

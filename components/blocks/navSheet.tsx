@@ -6,18 +6,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useConvexAuth } from "convex/react";
 import { SignInButton, SignOutButton } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+
 import { usePathname, useSearchParams } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
