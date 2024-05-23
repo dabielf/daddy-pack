@@ -1,7 +1,12 @@
 import { v } from "convex/values";
 import { Id } from "./_generated/dataModel";
 import { isAfter, isBefore, addDays } from "date-fns";
-import { internalMutation, mutation, query } from "./_generated/server";
+import {
+  internalMutation,
+  internalQuery,
+  mutation,
+  query,
+} from "./_generated/server";
 import { getConvexMutationUser, getConvexQueryUser } from "./helpers";
 import { updateDatesDaddyNames } from "./dates";
 import { updateContactsDaddyNames } from "./contacts";
@@ -66,6 +71,24 @@ export const getDaddies = query({
   args: {},
   handler: async (ctx) => {
     const user = await getConvexQueryUser(ctx);
+
+    if (!user) return null;
+
+    const daddies = await ctx.db
+      .query("daddies")
+      .withIndex("by_user_archived", (q) =>
+        q.eq("user", user._id).eq("archived", false),
+      )
+      .collect();
+
+    return daddies;
+  },
+});
+
+export const getDaddiesApi = internalQuery({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    const user = await ctx.db.get(userId);
 
     if (!user) return null;
 

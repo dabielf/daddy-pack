@@ -1,6 +1,6 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import { internal } from "./_generated/api";
+import { internal, api } from "./_generated/api";
 import { Webhook } from "svix";
 import { WebhookEvent } from "@clerk/nextjs/server";
 
@@ -19,6 +19,31 @@ http.route({
       key: signature,
     });
     return Response.json({ user }, { status: 200 });
+  }),
+});
+
+http.route({
+  path: "/api/daddies",
+  method: "GET",
+  handler: httpAction(async (ctx, request) => {
+    const signature: string = request.headers.get("DP-Sig") as string;
+    if (!signature) {
+      return new Response("Missing DP-Sig key", { status: 400 });
+    }
+
+    const user = await ctx.runQuery(internal.users.getUserByApiKey, {
+      key: signature,
+    });
+
+    if (!user) {
+      return new Response("User not found", { status: 400 });
+    }
+
+    const daddies = await ctx.runQuery(internal.daddies.getDaddiesApi, {
+      userId: user?._id,
+    });
+
+    return Response.json({ daddies }, { status: 200 });
   }),
 });
 
