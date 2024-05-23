@@ -14,6 +14,11 @@ http.route({
     if (!signature) {
       return new Response("Missing DP-Sig key", { status: 400 });
     }
+
+    const user = ctx.runQuery(internal.users.getUserByApiKey, {
+      key: signature,
+    });
+    return new Response("Webhook Received", { status: 200 });
   }),
 });
 
