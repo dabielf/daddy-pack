@@ -15,7 +15,7 @@ http.route({
       return new Response("Missing DP-Sig key", { status: 400 });
     }
 
-    const user = ctx.runQuery(internal.users.getUserByApiKey, {
+    const user = await ctx.runQuery(internal.users.getUserByApiKey, {
       key: signature,
     });
     return Response.json({ user }, { status: 200 });
