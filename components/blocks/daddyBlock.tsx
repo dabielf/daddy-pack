@@ -1,6 +1,6 @@
 import { Star, Wallet, CircleAlert, TriangleAlert } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { SnoozeIcon } from "./snoozeIcon";
 
 import { format, formatDistance, isAfter, isThisWeek } from "date-fns";

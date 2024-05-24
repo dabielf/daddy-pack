@@ -16,7 +16,7 @@ export interface ConvexDataContextState {
   daddies: Doc<"daddies">[] | undefined | null;
   archivedDaddies: Doc<"daddies">[] | undefined | null;
   dates: Doc<"dates">[] | undefined | null;
-  contacts: Doc<"contacts">[] | undefined | null;
+  // contacts: Doc<"contacts">[] | undefined | null;
   allowancePayments: Doc<"allowancePayments">[] | undefined | null;
 }
 
@@ -25,7 +25,7 @@ export const ConvexDataContext = createContext<ConvexDataContextState>({
   daddies: undefined,
   archivedDaddies: undefined,
   dates: undefined,
-  contacts: undefined,
+  // contacts: undefined,
   allowancePayments: undefined,
 });
 
@@ -38,7 +38,7 @@ export const ConvexDataProvider = ({ children }: ConvexDataProviderProps) => {
   const daddies = useQuery(api.daddies.getDaddies);
   const archivedDaddies = useQuery(api.daddies.getArchivedDaddies);
   const dates = useQuery(api.dates.getDates);
-  const contacts = useQuery(api.contacts.getContacts);
+  // const contacts = useQuery(api.contacts.getContacts);
   const allowancePayments = useQuery(api.allowances.getAllowancePayments);
 
   const useConvexReactiveData = create(() => {
@@ -47,7 +47,7 @@ export const ConvexDataProvider = ({ children }: ConvexDataProviderProps) => {
       daddies,
       archivedDaddies,
       dates,
-      contacts,
+      // contacts,
       allowancePayments,
     };
   });
@@ -61,7 +61,7 @@ export const ConvexDataProvider = ({ children }: ConvexDataProviderProps) => {
           (state) => state.archivedDaddies,
         ),
         dates: useConvexReactiveData((state) => state.dates),
-        contacts: useConvexReactiveData((state) => state.contacts),
+        // contacts: useConvexReactiveData((state) => state.contacts),
         allowancePayments: useConvexReactiveData(
           (state) => state.allowancePayments,
         ),

@@ -1,8 +1,5 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-
 import { GiftsData } from "@/components/blocks/giftsData";
 import { NeedSomeLove } from "@/components/blocks/needSomeLove";
 import { UpcomingDates } from "./upcomingDates";
@@ -15,12 +12,12 @@ export function Dashboard() {
   // const contacts = useQuery(api.contacts.getContacts);
   // const allowancePayments = useQuery(api.allowances.getAllowancePayments);
   //
-  const { daddies, dates, contacts, allowancePayments, archivedDaddies } =
+  const { daddies, dates, allowancePayments, archivedDaddies } =
     useConvexData();
 
   // console.log(daddies, dates, contacts, allowancePayments, archivedDaddies);
 
-  if (!daddies || !dates || !contacts || !allowancePayments) return null;
+  if (!daddies || !dates || !allowancePayments) return null;
 
   return (
     <motion.div

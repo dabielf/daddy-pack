@@ -141,4 +141,25 @@ export default defineSchema({
     .index("by_user", ["user"])
     .index("by_daddy", ["daddy"])
     .index("by_date", ["date"]),
+  event: defineTable({
+    user: v.id("users"),
+    daddy: v.id("daddies"),
+    eventDaddy: v.optional(v.id("daddies")),
+    daddyName: v.optional(v.string()),
+    date: v.number(),
+    eventType: v.union(
+      v.literal("contact"),
+      v.literal("date"),
+      v.literal("addDaddy"),
+      v.literal("archiveDaddy"),
+      v.literal("unarchiveDaddy"),
+      v.literal("startAllowance"),
+      v.literal("stopAllowance"),
+      v.literal("allowanceGifted"),
+    ),
+    eventRef: v.optional(v.union(v.id("dates"), v.id("contacts"))),
+  })
+    .index("by_user", ["user"])
+    .index("by_daddy", ["daddy"])
+    .index("by_date", ["date"]),
 });
