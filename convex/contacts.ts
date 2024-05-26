@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { mutation, query, internalMutation } from "./_generated/server";
 import { getConvexMutationUser, getConvexQueryUser } from "./helpers";
 import { updateDaddyContactsData } from "./daddies";
+import { addUserEvent } from "./users";
 
 export const getContact = query({
   args: { contact: v.id("contacts") },
@@ -51,6 +52,14 @@ export const createContact = mutation({
     });
 
     await updateDaddyContactsData(ctx, { daddy });
+    await addUserEvent(ctx, {
+      userId: user._id,
+      eventDaddyId: daddy,
+      daddyName: daddyData.name,
+      eventRefDate: date,
+      eventType: "contact",
+      eventRef: contactId,
+    });
 
     return contactId;
   },

@@ -65,7 +65,9 @@ function DisplayForm({ dateData }: { dateData: Doc<"dates">; edit: boolean }) {
         <motion.div className="space-y-1" variants={stagger}>
           <p className="text-lg font-bold">Date</p>
           <Separator className="bg-primary/50" />
-          <p className="pt-2 font-semibold">{format(dateData.date, "Pp")}</p>
+          <p className="pt-2 font-semibold">
+            {format(dateData.date, "eeee, P p")}
+          </p>
         </motion.div>
         <motion.div className="space-y-1" variants={stagger}>
           <p className="text-lg font-bold">Location</p>
@@ -458,8 +460,8 @@ export default function DaddyPage({ params }: { params: { id: Id<"dates"> } }) {
                     addSuffix: true,
                   })}
                 </span>
-                <span className="text-xs md:text-sm">
-                  ( {format(date.date, "Pp")} )
+                <span className="ml-2 text-xs text-muted-foreground md:text-sm">
+                  {format(date.date, "eeee, P p")}
                 </span>
               </span>
             </BreadcrumbPage>

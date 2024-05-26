@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { getConvexQueryUser, getConvexMutationUser } from "./helpers";
 import { updateDaddyDatesData, updateDaddyLifetimeValue } from "./daddies";
+import { addUserEvent } from "./users";
 
 export const getDate = query({
   args: { date: v.id("dates") },
@@ -53,21 +54,16 @@ export const createDate = mutation({
     });
 
     await updateDaddyDatesData(ctx, { daddy });
-
-    return dateId;
-  },
-});
-
-export const cancelDate = mutation({
-  args: { dateId: v.id("dates") },
-  handler: async (ctx, { dateId }) => {
-    await ctx.db.patch(dateId, {
-      status: "canceled",
+    await addUserEvent(ctx, {
+      userId: user._id,
+      eventDaddyId: daddy,
+      daddyName: daddyName,
+      eventRefDate: date,
+      eventType: status == "tentative" ? "dateScheduled" : "dateConfirmed",
+      eventRef: dateId,
     });
 
-    const dateData = await ctx.db.get(dateId);
-    if (!dateData) return null;
-    await updateDaddyDatesData(ctx, { daddy: dateData.daddy });
+    return dateId;
   },
 });
 
@@ -83,13 +79,62 @@ export const updateDateStatus = mutation({
     ),
   },
   handler: async (ctx, { dateId, status }) => {
+    const dateRecord = await ctx.db.get(dateId);
+    if (!dateRecord) return null;
     await ctx.db.patch(dateId, {
       status,
     });
+    if (status == "confirmed") {
+      await addUserEvent(ctx, {
+        userId: dateRecord.user,
+        eventDaddyId: dateRecord.daddy,
+        daddyName: dateRecord.daddyName,
+        eventRefDate: dateRecord.date,
+        eventType: "dateConfirmed",
+        eventRef: dateId,
+      });
+    }
+    if (status == "completed") {
+      await addUserEvent(ctx, {
+        userId: dateRecord.user,
+        eventDaddyId: dateRecord.daddy,
+        daddyName: dateRecord.daddyName,
+        eventRefDate: dateRecord.date,
+        eventType: "dateProcessed",
+        eventRef: dateId,
+      });
+      await addUserEvent(ctx, {
+        userId: dateRecord.user,
+        eventDaddyId: dateRecord.daddy,
+        daddyName: dateRecord.daddyName,
+        eventRefDate: dateRecord.date,
+        eventDate: dateRecord.date,
+        eventType: "date",
+        eventRef: dateId,
+      });
+    }
+    if (status == "canceled") {
+      await addUserEvent(ctx, {
+        userId: dateRecord.user,
+        eventDaddyId: dateRecord.daddy,
+        daddyName: dateRecord.daddyName,
+        eventRefDate: dateRecord.date,
+        eventType: "dateCanceled",
+        eventRef: dateId,
+      });
+    }
+    if (status == "no-show") {
+      await addUserEvent(ctx, {
+        userId: dateRecord.user,
+        eventDaddyId: dateRecord.daddy,
+        daddyName: dateRecord.daddyName,
+        eventRefDate: dateRecord.date,
+        eventType: "dateNoShow",
+        eventRef: dateId,
+      });
+    }
 
-    const dateData = await ctx.db.get(dateId);
-    if (!dateData) return null;
-    await updateDaddyDatesData(ctx, { daddy: dateData.daddy });
+    await updateDaddyDatesData(ctx, { daddy: dateRecord.daddy });
   },
 });
 
@@ -129,6 +174,29 @@ export const updateDate = mutation({
       status,
     },
   ) => {
+    const dateRecord = await ctx.db.get(dateId);
+    if (!dateRecord) return null;
+
+    if (status == "completed") {
+      await addUserEvent(ctx, {
+        userId: dateRecord.user,
+        eventDaddyId: dateRecord.daddy,
+        daddyName: dateRecord.daddyName,
+        eventRefDate: date,
+        eventType: "dateProcessed",
+        eventRef: dateId,
+      });
+      await addUserEvent(ctx, {
+        userId: dateRecord.user,
+        eventDaddyId: dateRecord.daddy,
+        daddyName: dateRecord.daddyName,
+        eventRefDate: dateRecord.date,
+        eventDate: dateRecord.date,
+        eventType: "date",
+        eventRef: dateId,
+      });
+    }
+
     await ctx.db.patch(dateId, {
       date,
       location,

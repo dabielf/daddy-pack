@@ -20,6 +20,7 @@ const links = [
   { name: "Dashboard", href: "/" },
   { name: "Daddies", href: "/daddies" },
   { name: "Settings", href: "/settings" },
+  { name: "Timeline", href: "/timeline" },
 ];
 
 function SignOut() {

@@ -1,10 +1,11 @@
-import { v } from "convex/values";
+import { v, ConvexError } from "convex/values";
 import {
   internalMutation,
   query,
   mutation,
   internalQuery,
 } from "./_generated/server";
+import { paginationOptsValidator } from "convex/server";
 import { getConvexMutationUser, getConvexQueryUser } from "./helpers";
 
 export const updateOrCreateUser = internalMutation({
@@ -94,6 +95,59 @@ export const getUserByApiKey = internalQuery({
     const user = ctx.db.get(keyRecord.userId);
 
     return user;
+  },
+});
+
+export const getUserEvents = query({
+  args: { paginationOpts: paginationOptsValidator },
+  handler: async (ctx, { paginationOpts }) => {
+    const user = await getConvexQueryUser(ctx);
+    if (!user) throw new ConvexError("Unauthenticated");
+
+    const userEvents = await ctx.db
+      .query("events")
+      .withIndex("by_userId_eventDate", (q) => q.eq("userId", user._id))
+      .order("desc")
+      .paginate(paginationOpts);
+
+    return userEvents;
+  },
+});
+
+export const addUserEvent = internalMutation({
+  args: {
+    userId: v.id("users"),
+    eventDaddyId: v.optional(v.id("daddies")),
+    daddyName: v.optional(v.string()),
+    eventDate: v.optional(v.number()),
+    eventRefDate: v.optional(v.number()),
+    eventType: v.union(
+      v.literal("contact"),
+      v.literal("dateScheduled"),
+      v.literal("dateConfirmed"),
+      v.literal("date"),
+      v.literal("dateProcessed"),
+      v.literal("dateCanceled"),
+      v.literal("dateNoShow"),
+      v.literal("addDaddy"),
+      v.literal("archiveDaddy"),
+      v.literal("unarchiveDaddy"),
+      v.literal("startAllowance"),
+      v.literal("stopAllowance"),
+      v.literal("allowanceGifted"),
+    ),
+    eventRef: v.optional(v.union(v.id("dates"), v.id("contacts"))),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("events", {
+      userId: args.userId,
+      eventDaddyId: args.eventDaddyId || undefined,
+      daddyName: args.daddyName || undefined,
+      eventDate: args.eventDate || new Date().valueOf(),
+      eventRefDate: args.eventRefDate || undefined,
+      eventType: args.eventType,
+      eventRef: args.eventRef || undefined,
+    });
   },
 });
 

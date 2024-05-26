@@ -6,6 +6,7 @@ import {
   MessageSquareHeart,
   CalendarCheck2,
   CalendarMinus,
+  CircleAlert,
 } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
@@ -21,6 +22,59 @@ function formatDate(date: number) {
   });
 }
 
+function DisplayDate({ date }: { date: Doc<"dates"> }) {
+  return (
+    <Link href={`/dates/${date._id}`} className="group flex flex-row">
+      <div className="grow">
+        <div className="text-md font-semibold decoration-primary group-hover:underline">
+          {formatDate(date.date)}{" "}
+          <span className="text-sm font-light">- {format(date.date, "p")}</span>
+        </div>
+        <div className="text-sm font-medium">{date.daddyName}</div>
+      </div>
+      <div className="flex items-center justify-center">
+        <ChevronRight className="h-6 w-6 transition-all group-hover:scale-125 group-hover:text-primary" />
+      </div>
+    </Link>
+  );
+}
+
+export function ToProcessDates({ dates }: UpcomingDatesProps) {
+  const toProcessDates = dates
+    .filter((date) => date.status == "tentative" || date.status == "confirmed")
+    .filter((date) => new Date(date.date).getTime() < new Date().getTime());
+
+  return (
+    <Card className="h-fit">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-2xl font-semibold">
+          Dates to Process
+        </CardTitle>
+        <CircleAlert className="h-6 w-6 text-primary/80" />
+      </CardHeader>
+
+      <CardContent>
+        <Separator className="mb-4 bg-primary/50" />
+        {toProcessDates.length === 0 && (
+          <div className="flex h-[100px] flex-col items-center justify-center">
+            <div className="text-4xl">🎉</div>
+            <div className="text-lg">No dates to process!</div>
+          </div>
+        )}
+        {toProcessDates.length > 0 && (
+          <div className="mb-4">
+            <ul className="flex flex-col gap-2">
+              {toProcessDates.map((date) => (
+                <DisplayDate key={date._id} date={date} />
+              ))}
+            </ul>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 export function UpcomingDates({ dates }: UpcomingDatesProps) {
   // filter out dates that are in the past
   const upcomingDates = dates
@@ -34,25 +88,6 @@ export function UpcomingDates({ dates }: UpcomingDatesProps) {
   const tentativeDates = upcomingDates.filter(
     (date) => date.status !== "confirmed",
   );
-
-  function DisplayDate({ date }: { date: Doc<"dates"> }) {
-    return (
-      <Link href={`/dates/${date._id}`} className="group flex flex-row">
-        <div className="grow">
-          <div className="text-md font-semibold decoration-primary group-hover:underline">
-            {formatDate(date.date)}{" "}
-            <span className="text-sm font-light">
-              - {format(date.date, "p")}
-            </span>
-          </div>
-          <div className="text-sm font-medium">{date.daddyName}</div>
-        </div>
-        <div className="flex items-center justify-center">
-          <ChevronRight className="h-6 w-6 transition-all group-hover:scale-125 group-hover:text-primary" />
-        </div>
-      </Link>
-    );
-  }
 
   return (
     <Card className="h-fit">

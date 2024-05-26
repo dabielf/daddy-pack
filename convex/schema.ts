@@ -128,7 +128,8 @@ export default defineSchema({
     .index("by_daddy", ["daddy"])
     .index("by_date", ["date"])
     .index("by_status", ["status"])
-    .index("by_giftAmount", ["giftAmount"]),
+    .index("by_giftAmount", ["giftAmount"])
+    .index("by_user_status", ["user", "status"]),
   // Includes: user, daddy, date, notes
   contacts: defineTable({
     user: v.id("users"),
@@ -141,25 +142,31 @@ export default defineSchema({
     .index("by_user", ["user"])
     .index("by_daddy", ["daddy"])
     .index("by_date", ["date"]),
-  event: defineTable({
-    user: v.id("users"),
-    daddy: v.id("daddies"),
-    eventDaddy: v.optional(v.id("daddies")),
+  events: defineTable({
+    userId: v.id("users"),
+    eventDaddyId: v.optional(v.id("daddies")),
     daddyName: v.optional(v.string()),
-    date: v.number(),
+    eventDate: v.number(),
+    eventRefDate: v.optional(v.number()),
     eventType: v.union(
       v.literal("contact"),
+      v.literal("dateScheduled"),
+      v.literal("dateConfirmed"),
+      v.literal("dateProcessed"),
       v.literal("date"),
-      v.literal("addDaddy"),
-      v.literal("archiveDaddy"),
-      v.literal("unarchiveDaddy"),
-      v.literal("startAllowance"),
-      v.literal("stopAllowance"),
-      v.literal("allowanceGifted"),
+      v.literal("dateCanceled"),
+      v.literal("dateNoShow"),
+      v.literal("addDaddy"), //TODO
+      v.literal("archiveDaddy"), //TODO
+      v.literal("unarchiveDaddy"), //TODO
+      v.literal("startAllowance"), //TODO
+      v.literal("stopAllowance"), //TODO
+      v.literal("allowanceGifted"), //TODO
     ),
     eventRef: v.optional(v.union(v.id("dates"), v.id("contacts"))),
   })
-    .index("by_user", ["user"])
-    .index("by_daddy", ["daddy"])
-    .index("by_date", ["date"]),
+    .index("by_userId", ["userId"])
+    .index("by_eventDate", ["eventDate"])
+    .index("by_userId_eventDate", ["userId", "eventDate"])
+    .index("by_eventRef", ["eventRef"]),
 });

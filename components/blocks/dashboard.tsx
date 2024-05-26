@@ -2,7 +2,7 @@
 
 import { GiftsData } from "@/components/blocks/giftsData";
 import { NeedSomeLove } from "@/components/blocks/needSomeLove";
-import { UpcomingDates } from "./upcomingDates";
+import { UpcomingDates, ToProcessDates } from "./upcomingDates";
 import { motion } from "framer-motion";
 import { staggerUpDaddies as stagger } from "@/constants/animations";
 
@@ -15,8 +15,6 @@ export function Dashboard() {
   const { daddies, dates, allowancePayments, archivedDaddies } =
     useConvexData();
 
-  // console.log(daddies, dates, contacts, allowancePayments, archivedDaddies);
-
   if (!daddies || !dates || !allowancePayments) return null;
 
   return (
@@ -27,11 +25,9 @@ export function Dashboard() {
       animate="animate"
     >
       <motion.div variants={stagger}>
-        <UpcomingDates dates={dates} />
-      </motion.div>
-      <motion.div variants={stagger}>
         <NeedSomeLove daddies={daddies} />
       </motion.div>
+
       <motion.div variants={stagger}>
         <GiftsData
           daddies={daddies}
@@ -39,6 +35,10 @@ export function Dashboard() {
           dates={dates}
           allowancePayments={allowancePayments}
         />
+      </motion.div>
+      <motion.div variants={stagger} className="flex flex-col gap-6">
+        <ToProcessDates dates={dates} />
+        <UpcomingDates dates={dates} />
       </motion.div>
     </motion.div>
   );
