@@ -44,6 +44,8 @@ export function ToProcessDates({ dates }: UpcomingDatesProps) {
     .filter((date) => date.status == "tentative" || date.status == "confirmed")
     .filter((date) => new Date(date.date).getTime() < new Date().getTime());
 
+  if (!toProcessDates || toProcessDates.length == 0) return null;
+
   return (
     <Card className="h-fit">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
