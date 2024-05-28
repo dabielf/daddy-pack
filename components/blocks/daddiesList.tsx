@@ -203,7 +203,8 @@ export function DaddiesList() {
   const [orderType, setOrderType] = useState<string | undefined>(
     localOrderType,
   );
-  const { daddies } = useConvexData();
+  // const { daddies } = useConvexData();
+  const daddies = useQuery(api.daddies.getDaddies);
 
   const initialDaddies = orderDaddies(daddies, orderType);
   const [orderedDaddies, setOrderedDaddies] =
@@ -248,7 +249,7 @@ export function DaddiesList() {
         </div>
       </div>
       {(() => {
-        if (!daddies) {
+        if (!orderedDaddies) {
           return null;
         } else if (orderedDaddies?.length) {
           return (
